@@ -13,7 +13,7 @@ C:\Users\...\.platformio\packages\framework-arduinoespressif32\libraries\BLE\src
 #include <BLE2902.h>
 #include <string>
 
-uint8_t BRIGHTNESS = 125;
+uint8_t BRIGHTNESS = 50;
 
 bool displayOn = true;
 
@@ -152,8 +152,8 @@ void speedAdjust(float newSpeed) {
    }
 }
 
-void scaleAdjust(String jsonVal) {
-   deserializeJson(sendDoc, jsonVal);
+void scaleAdjust(String jsonReceived) {
+   deserializeJson(sendDoc, jsonReceived);
    float newScale = sendDoc["scale"];
    adjustScale = newScale;
    if (debug) {
@@ -161,9 +161,9 @@ void scaleAdjust(String jsonVal) {
       Serial.println(newScale);
    }
    confirmDoc["scale"] = adjustScale;
-   String jsonVal;
-   ArduinoJson::serializeJson(confirmDoc, jsonVal);
-   pScaleCharacteristic->setValue(String(jsonVal).c_str());
+   String confirmString;
+   ArduinoJson::serializeJson(confirmDoc, confirmString);
+   pScaleCharacteristic->setValue(confirmString);
    pScaleCharacteristic->notify();
 }
 
@@ -305,9 +305,9 @@ class ScaleCharacteristicCallbacks : public BLECharacteristicCallbacks {
          Serial.println(receivedValue);
        }
       sendDoc["scale"] = receivedValue;
-      String jsonVal;
-      ArduinoJson::serializeJson(sendDoc, jsonVal);
-      scaleAdjust(jsonVal);
+      String sendString;
+      ArduinoJson::serializeJson(sendDoc, sendString);
+      scaleAdjust(sendString);
     }
  }
 };
