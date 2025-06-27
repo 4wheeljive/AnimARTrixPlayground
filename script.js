@@ -209,11 +209,9 @@ function connectToDevice(){
                 return characteristic.readValue();
                 })
                 .then(value => {
-                console.log("Scale: ", value);
-                scaleValue.innerHTML = value;
-                //const decodedValue = new TextDecoder().decode(value);
-                //console.log("Scale: ", decodedValue);
-                //scaleValue.innerHTML = decodedValue;
+                const decodedValue = new TextDecoder().decode(value);
+                console.log("Scale: ", decodedValue);
+                scaleValue.innerHTML = decodedValue;
                 })
             
             service.getCharacteristic(ControlCharacteristic)
@@ -288,6 +286,8 @@ function handleSpeedCharacteristicChange(event){
 
 function handleScaleCharacteristicChange(event){
     const newValueReceived = new TextDecoder().decode(event.target.value);
+    //deserializeJson(sendDoc, jsonVal);
+    //float newScale = sendDoc["scale"];
     console.log("New scale: ", newValueReceived);
     scaleValue.innerHTML = newValueReceived;
 }
@@ -367,9 +367,8 @@ function writeScaleCharacteristic(value){
     if (bleServer && bleServer.connected) {
         bleServiceFound.getCharacteristic(ScaleCharacteristic)
         .then(characteristic => {
-            //const data = new Uint8Array([value]);
-            //return characteristic.writeValue(data);
-            return characteristic.writeValue(value);
+            const data = new Uint8Array([value]);
+            return characteristic.writeValue(data);
         })
         .then(() => {
             scaleValue.innerHTML = value;

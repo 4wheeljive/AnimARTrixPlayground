@@ -2,7 +2,7 @@
 
 #include "FastLED.h" 
 #include "fl/ui.h"
-//#include <ArduinoJson.h> 
+#include <ArduinoJson.h> 
 
 /* Be sure to set numHandles = 60 in this file:
 C:\Users\...\.platformio\packages\framework-arduinoespressif32\libraries\BLE\src\BLEServer.h
@@ -60,7 +60,7 @@ double initialFxIndex = 4;   // this should really be changed to uint8_t, but UI
 
 #else
 
-   //using namespace ArduinoJson;
+   using namespace ArduinoJson;
 
    uint8_t brightness = BRIGHTNESS;
    double fxIndex = initialFxIndex;        // this should really be changed to uint8_t, but UINumberField requires that it be a double
@@ -88,7 +88,8 @@ double initialFxIndex = 4;   // this should really be changed to uint8_t, but UI
    float adjustGreen = 1.f; // ("Green", 1, .1, 10, -1);   //multiplied
    float adjustBlue = 1.f; // ("Blue", 1, .1, 10, -1);  //multiplied
 
-   //ArduinoJson::JsonDocument doc;
+   ArduinoJson::JsonDocument sendDoc;
+   ArduinoJson::JsonDocument confirmDoc;
 
 #endif
 
@@ -151,14 +152,19 @@ void speedAdjust(float newSpeed) {
    }
 }
 
-void scaleAdjust(float newScale) {
+void scaleAdjust(String jsonVal) {
+   deserializeJson(sendDoc, jsonVal);
+   float newScale = sendDoc["scale"];
    adjustScale = newScale;
-   pScaleCharacteristic->setValue(adjustScale);
-   pScaleCharacteristic->notify();
    if (debug) {
       Serial.print("Scale: ");
-      Serial.println(adjustScale);
+      Serial.println(newScale);
    }
+   confirmDoc["scale"] = adjustScale;
+   String jsonVal;
+   ArduinoJson::serializeJson(confirmDoc, jsonVal);
+   pScaleCharacteristic->setValue(String(jsonVal).c_str());
+   pScaleCharacteristic->notify();
 }
 
 /*
@@ -298,8 +304,10 @@ class ScaleCharacteristicCallbacks : public BLECharacteristicCallbacks {
          Serial.print("Scale: ");
          Serial.println(receivedValue);
        }
-       adjustScale = receivedValue;
-       scaleAdjust(adjustScale);
+      sendDoc["scale"] = receivedValue;
+      String jsonVal;
+      ArduinoJson::serializeJson(sendDoc, jsonVal);
+      scaleAdjust(jsonVal);
     }
  }
 };
@@ -420,7 +428,7 @@ void bleSetup() {
                         BLECharacteristic::PROPERTY_NOTIFY
                      );
    pScaleCharacteristic->setCallbacks(new ScaleCharacteristicCallbacks());
-   pScaleCharacteristic->setValue(adjustScale);
+   pScaleCharacteristic->setValue(String(adjustScale).c_str());
    //pScaleCharacteristic->addDescriptor(new BLE2902());
    //pScaleDescriptor.setValue("Scale"); 
    
