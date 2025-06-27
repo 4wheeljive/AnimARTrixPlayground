@@ -1,38 +1,58 @@
-/// @file    Animartrix.ino
-/// @brief   Demo of the Animatrix effects
-/// @example Animartrix.ino
-///
-/// This sketch is fully compatible with the FastLED web compiler. To use it do the following:
-/// 1. Install Fastled: `pip install fastled`
-/// 2. cd into this examples page.
-/// 3. Run the FastLED web compiler at root: `fastled`
-/// 4. When the compiler is done a web page will open.
-///
-/// @author  Stefan Petrick
-/// @author  Zach Vorhies (FastLED adaptation)
-///
-
 /*
-This demo is best viewed using the FastLED compiler.
+My personal learning playground for working with:
+    FastLED Adapter for the animartrix fx library.
+    Copyright Stefen Petrick 2023.
+    Adapted to C++ by Netmindz 2023.
+    Adapted to FastLED by Zach Vorhies 2024.
+    For details on the animartrix library and licensing information, 
+    see https://github.com/FastLED/FastLED/blob/master/src/fx/2d/animartrix_detail.hpp
 
-Windows/MacOS binaries: https://github.com/FastLED/FastLED/releases
+This playground operates in one of two modes:
 
-Python
+    Using the FastLED web compiler and browser UI controls:
 
-Install: pip install fastled
-Run: fastled <this sketch directory>
-This will compile and preview the sketch in the browser, and enable
-all the UI elements you see below.
+        1.  Ensure you are set up to use FastLED compiler:
+            https://github.com/zackees/fastled-wasm/blob/main/README.md
+    
+        2.  Comment/uncomment the SCREEN_TEST defs below as follows:
 
+            #define SCREEN_TEST
+            //#undef SCREEN_TEST
 
+        3.  Run 'fastled' (without quotes) from a command line in the directory where your sketch is saved. 
 
-OVERVIEW:
-This is the famouse Animartrix demo by Stefan Petrick. The effects are generated
-using polor polar coordinates. The effects are very complex and powerful.
+    Driving an actual LED panel from an MCU, which this sketch sets up as a BLE server to enable web control:
+    
+        1.  Ensure your MCU is BLE capable and enabled. 
+
+        2.  The default number of handles (15) in BLEServer.h is too low to support the number of characteristics used.
+            Edit the following file to set numHandles = 60 :
+            C:\Users\...\.platformio\packages\framework-arduinoespressif32\libraries\BLE\src\BLEServer.h
+
+        3.  Comment/uncomment the SCREEN_TEST defs below as follows:
+
+            //#define SCREEN_TEST
+            #undef SCREEN_TEST
+
+        4.  Load https://4wheeljive.github.io/AnimARTrixPlayground/ from a Web BLE-capable browser.
+
+            NOTE:   On iOS devices, standard browsers (e.g., Safari, Chrome) do not currently support Web BLE.
+                    I've had success using the Bluefy browser:
+                    https://apps.apple.com/us/app/bluefy-web-ble-browser/id1492822055
+                    If Bluefy doesn't connect to your device on its own, the nRF Connect app might help:
+                    https://apps.apple.com/us/app/nrf-connect-for-mobile/id1054362403
+
+When running in the actual LED panel mode, this sketch can accommodate two different setups, 
+selected by defining/undefining BIG_BOARD below.
+
+When BIG_BOARD is defined:
+- Separate FastLED controllers are enabled for multiple pins to drive multiple panels/strips
+- LED mapping will likely need to be done by custom XYMap functions and arrays, which are enabled by default
+
+When BIG_BOARD is undefined:
+- One FastLED controller is used for single pin/panel/strip
+- Custom LED mapping may be unnecessary
 */
-
-
-
 
 #include <Arduino.h>
 #include <stdio.h>
@@ -41,7 +61,6 @@ using polor polar coordinates. The effects are very complex and powerful.
 #define FL_ANIMARTRIX_USES_FAST_MATH 1
 
 #include <FastLED.h>
-#include "fl/json.h"
 #include "fl/slice.h"
 #include "fx/fx_engine.h"
 
@@ -91,6 +110,8 @@ using polor polar coordinates. The effects are very complex and powerful.
 
 #else
 
+    #include "fl/json.h"
+
     // This is purely use for the web compiler to display the animartrix effects.
     // This small led was chosen because otherwise the bloom effect is too strong.
     #define LED_DIAMETER 0.15
@@ -137,6 +158,7 @@ using namespace fl;
         uint16_t myXYFunction(uint16_t x, uint16_t y, uint16_t width, uint16_t height);
 
         XYMap myXYmap = XYMap::constructWithUserFunction(WIDTH, HEIGHT, myXYFunction);
+        //XYMap myXYmap(WIDTH, HEIGHT, true); // use this XYMap instead of one immediately above to bypass custom mapping 
 
 #else
 
@@ -154,10 +176,8 @@ using namespace fl;
 Animartrix myAnimartrix(myXYmap, FIRST_ANIMATION);
 FxEngine fxEngine(NUM_LEDS);
 
-
 //**********************************************************************************************
 
-/*
 void setColorOrder(int value) {
     switch(value) {
         case 0: value = RGB; break;
@@ -169,7 +189,6 @@ void setColorOrder(int value) {
     }
     myAnimartrix.setColorOrder(static_cast<EOrder>(value));
 }
-*/
 
 //**********************************************************************************************
 
@@ -200,20 +219,6 @@ void setup() {
 
     fxEngine.addFx(myAnimartrix);
 
-    /*
-    colorOrder.onChanged([](int value) {
-        switch(value) {
-            case 0: value = RGB; break;
-            case 1: value = RBG; break;
-            case 2: value = GRB; break;
-            case 3: value = GBR; break;
-            case 4: value = BRG; break;
-            case 5: value = BGR; break;
-        }
-        myAnimartrix.setColorOrder(static_cast<EOrder>(value));
-    });
-    */
-
     //myAnimartrix.fxSet(5);
 
     #ifndef SCREEN_TEST
@@ -225,12 +230,6 @@ void setup() {
 //************************************************************************************************************
 
 void loop() {
-
-    /*
-    #ifndef SCREEN_TEST
-        server.handleClient();
-    #endif
-    */
     
     if (!displayOn){
       FastLED.clear();
@@ -240,6 +239,11 @@ void loop() {
         FastLED.setBrightness(brightness);
         fxEngine.setSpeed(timeSpeed);
         //myAnimartrix.fxSet(fxIndex);
+ 
+        if (colorOrderChanged){
+            setColorOrder(colorOrder);
+            colorOrderChanged = false;
+        }
 
         static auto lastFxIndex = -1;
         if (fxIndex != lastFxIndex) {
@@ -248,7 +252,6 @@ void loop() {
         }
         
         fxEngine.draw(millis(), leds);
-        
         
         if (rotateAnimations) {
             EVERY_N_SECONDS (SECONDS_PER_ANIMATION) { 

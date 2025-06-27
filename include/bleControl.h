@@ -1,7 +1,8 @@
 #pragma once
 
 #include "FastLED.h" 
-#include "fl/ui.h" 
+#include "fl/ui.h"
+//#include <ArduinoJson.h> 
 
 /* Be sure to set numHandles = 60 in this file:
 C:\Users\...\.platformio\packages\framework-arduinoespressif32\libraries\BLE\src\BLEServer.h
@@ -12,8 +13,6 @@ C:\Users\...\.platformio\packages\framework-arduinoespressif32\libraries\BLE\src
 #include <BLE2902.h>
 #include <string>
 
-using namespace fl;
-
 uint8_t BRIGHTNESS = 125;
 
 bool displayOn = true;
@@ -22,11 +21,15 @@ bool debug = true;
 
 bool nextFxIndexRandom = false;
 bool rotateAnimations = true;
+bool colorOrderChanged = false;
 double initialFxIndex = 4;   // this should really be changed to uint8_t, but UINumberField requires that it be a double
+
 
 // UI Elements *************************************************************************************
 
 #ifdef SCREEN_TEST
+
+   using namespace fl;
 
    UITitle title("AnimARTrix Playground");
    UIDescription description("Test of user-controlled inputs for selected Animartrix effects. @author of fx is StefanPetrick");
@@ -57,6 +60,8 @@ double initialFxIndex = 4;   // this should really be changed to uint8_t, but UI
 
 #else
 
+   //using namespace ArduinoJson;
+
    uint8_t brightness = BRIGHTNESS;
    double fxIndex = initialFxIndex;        // this should really be changed to uint8_t, but UINumberField requires that it be a double
    double colorOrder = 0;                   // this should really be changed to uint8_t, but UINumberField requires that it be a double
@@ -83,6 +88,8 @@ double initialFxIndex = 4;   // this should really be changed to uint8_t, but UI
    float adjustGreen = 1.f; // ("Green", 1, .1, 10, -1);   //multiplied
    float adjustBlue = 1.f; // ("Blue", 1, .1, 10, -1);  //multiplied
 
+   //ArduinoJson::JsonDocument doc;
+
 #endif
 
 //BLE configuration *************************************************************
@@ -103,11 +110,13 @@ bool wasConnected = false;
 #define SCALE_CHARACTERISTIC_UUID 		"19b10004-e8f2-537e-4f6c-d104768a1214"
 #define CONTROL_CHARACTERISTIC_UUID    "19b10005-e8f2-537e-4f6c-d104768a1214"
 
+/*
 BLEDescriptor pAnimationDescriptor(BLEUUID((uint16_t)0x2901));
 BLEDescriptor pColorDescriptor(BLEUUID((uint16_t)0x2902));
 BLEDescriptor pSpeedDescriptor(BLEUUID((uint16_t)0x2903));
 BLEDescriptor pScaleDescriptor(BLEUUID((uint16_t)0x2904));
 BLEDescriptor pControlDescriptor(BLEUUID((uint16_t)0x2905));
+*/
 
 // CONTROL FUNCTIONS ***************************************************************
 
@@ -123,6 +132,7 @@ void animationAdjust(double newAnimation) {
 
 void colorOrderAdjust(double newColorOrder) {
    colorOrder = newColorOrder;
+   colorOrderChanged = true;
    pColorCharacteristic->setValue(String(colorOrder).c_str());
    pColorCharacteristic->notify();
    if (debug) {
@@ -143,7 +153,7 @@ void speedAdjust(float newSpeed) {
 
 void scaleAdjust(float newScale) {
    adjustScale = newScale;
-   pScaleCharacteristic->setValue(String(adjustScale).c_str());
+   pScaleCharacteristic->setValue(adjustScale);
    pScaleCharacteristic->notify();
    if (debug) {
       Serial.print("Scale: ");
@@ -400,7 +410,7 @@ void bleSetup() {
    pSpeedCharacteristic->setCallbacks(new SpeedCharacteristicCallbacks());
    pSpeedCharacteristic->setValue(String(timeSpeed).c_str());
    pSpeedCharacteristic->addDescriptor(new BLE2902());
-   pSpeedDescriptor.setValue("Speed"); 
+   //pSpeedDescriptor.setValue("Speed"); 
 
 
    pScaleCharacteristic = pService->createCharacteristic(
@@ -410,9 +420,9 @@ void bleSetup() {
                         BLECharacteristic::PROPERTY_NOTIFY
                      );
    pScaleCharacteristic->setCallbacks(new ScaleCharacteristicCallbacks());
-   pScaleCharacteristic->setValue(String(adjustScale).c_str());
-   pScaleCharacteristic->addDescriptor(new BLE2902());
-   pScaleDescriptor.setValue("Scale"); 
+   pScaleCharacteristic->setValue(adjustScale);
+   //pScaleCharacteristic->addDescriptor(new BLE2902());
+   //pScaleDescriptor.setValue("Scale"); 
    
    pControlCharacteristic = pService->createCharacteristic(
                         CONTROL_CHARACTERISTIC_UUID,

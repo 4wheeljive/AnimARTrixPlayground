@@ -209,9 +209,11 @@ function connectToDevice(){
                 return characteristic.readValue();
                 })
                 .then(value => {
-                const decodedValue = new TextDecoder().decode(value);
-                console.log("Scale: ", decodedValue);
-                scaleValue.innerHTML = decodedValue;
+                console.log("Scale: ", value);
+                scaleValue.innerHTML = value;
+                //const decodedValue = new TextDecoder().decode(value);
+                //console.log("Scale: ", decodedValue);
+                //scaleValue.innerHTML = decodedValue;
                 })
             
             service.getCharacteristic(ControlCharacteristic)
@@ -365,8 +367,9 @@ function writeScaleCharacteristic(value){
     if (bleServer && bleServer.connected) {
         bleServiceFound.getCharacteristic(ScaleCharacteristic)
         .then(characteristic => {
-            const data = new Uint8Array([value]);
-            return characteristic.writeValue(data);
+            //const data = new Uint8Array([value]);
+            //return characteristic.writeValue(data);
+            return characteristic.writeValue(value);
         })
         .then(() => {
             scaleValue.innerHTML = value;
