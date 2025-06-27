@@ -90,7 +90,6 @@ double initialFxIndex = 4;   // this should really be changed to uint8_t, but UI
 BLEServer* pServer = NULL;
 BLECharacteristic* pAnimationCharacteristic = NULL;
 BLECharacteristic* pColorCharacteristic = NULL;
-//BLECharacteristic* pBrightnessCharacteristic = NULL;
 BLECharacteristic* pSpeedCharacteristic = NULL;
 BLECharacteristic* pScaleCharacteristic = NULL;
 BLECharacteristic* pControlCharacteristic = NULL;
@@ -102,17 +101,15 @@ bool wasConnected = false;
 #define COLOR_CHARACTERISTIC_UUID   	"19b10002-e8f2-537e-4f6c-d104768a1214"
 #define SPEED_CHARACTERISTIC_UUID      "19b10003-e8f2-537e-4f6c-d104768a1214"
 #define SCALE_CHARACTERISTIC_UUID 		"19b10004-e8f2-537e-4f6c-d104768a1214"
-//#define PALETTE_CHARACTERISTIC_UUID 	"19b10005-e8f2-537e-4f6c-d104768a1214"
-#define CONTROL_CHARACTERISTIC_UUID    "19b10006-e8f2-537e-4f6c-d104768a1214"
+#define CONTROL_CHARACTERISTIC_UUID    "19b10005-e8f2-537e-4f6c-d104768a1214"
 
-BLEDescriptor pAnimationDescriptor(BLEUUID((uint16_t)0x2900));
-BLEDescriptor pColorDescriptor(BLEUUID((uint16_t)0x2901));
-BLEDescriptor pSpeedDescriptor(BLEUUID((uint16_t)0x2902));
-BLEDescriptor pScaleDescriptor(BLEUUID((uint16_t)0x2903));
-//BLEDescriptor pPaletteDescriptor(BLEUUID((uint16_t)0x2904));
+BLEDescriptor pAnimationDescriptor(BLEUUID((uint16_t)0x2901));
+BLEDescriptor pColorDescriptor(BLEUUID((uint16_t)0x2902));
+BLEDescriptor pSpeedDescriptor(BLEUUID((uint16_t)0x2903));
+BLEDescriptor pScaleDescriptor(BLEUUID((uint16_t)0x2904));
 BLEDescriptor pControlDescriptor(BLEUUID((uint16_t)0x2905));
 
-//Control functions***************************************************************
+// CONTROL FUNCTIONS ***************************************************************
 
 void animationAdjust(double newAnimation) {
    fxIndex = newAnimation;
@@ -154,8 +151,8 @@ void scaleAdjust(float newScale) {
    }
 }
 
-
-/*void brightnessAdjust(uint8_t newBrightness) {
+/*
+void brightnessAdjust(uint8_t newBrightness) {
    BRIGHTNESS = newBrightness;
    //brightnessChanged = true;
    FastLED.setBrightness(BRIGHTNESS);
@@ -166,8 +163,7 @@ void scaleAdjust(float newScale) {
       Serial.println(BRIGHTNESS);
    }
 }
-   */
-
+*/
 
 /*
 void startWaves() {
@@ -182,10 +178,10 @@ void startWaves() {
    gCurrentPaletteNumber = addmod8( gCurrentPaletteNumber, 1, gGradientPaletteCount);
    gTargetPalette = gGradientPalettes[ gCurrentPaletteNumber ];
 }
-   */
+*/
 
 
-//Callbacks***********************************************************************
+// CALLBACKS ****************************************************************************
 
 class MyServerCallbacks: public BLEServerCallbacks {
   void onConnect(BLEServer* pServer) {
@@ -199,7 +195,6 @@ class MyServerCallbacks: public BLEServerCallbacks {
     wasConnected = true;
   }
 };
-
 
 class AnimationCharacteristicCallbacks : public BLECharacteristicCallbacks {
  void onWrite(BLECharacteristic *characteristic) {
@@ -254,7 +249,6 @@ class AnimationCharacteristicCallbacks : public BLECharacteristicCallbacks {
    }
 };
 
-
 class ColorCharacteristicCallbacks : public BLECharacteristicCallbacks {
  void onWrite(BLECharacteristic *characteristic) {
     String value = characteristic->getValue();
@@ -269,7 +263,6 @@ class ColorCharacteristicCallbacks : public BLECharacteristicCallbacks {
 	}
  }
 };
-
 
 class SpeedCharacteristicCallbacks : public BLECharacteristicCallbacks {
  void onWrite(BLECharacteristic *characteristic) {
@@ -286,7 +279,6 @@ class SpeedCharacteristicCallbacks : public BLECharacteristicCallbacks {
  }
 };
 
-
 class ScaleCharacteristicCallbacks : public BLECharacteristicCallbacks {
  void onWrite(BLECharacteristic *characteristic) {
     String value = characteristic->getValue();
@@ -301,7 +293,6 @@ class ScaleCharacteristicCallbacks : public BLECharacteristicCallbacks {
     }
  }
 };
-
 
 class ControlCharacteristicCallbacks : public BLECharacteristicCallbacks {
  void onWrite(BLECharacteristic *characteristic) {
@@ -373,92 +364,74 @@ class SpeedCharacteristicCallbacks : public BLECharacteristicCallbacks {
 
 void bleSetup() {
 
- BLEDevice::init("AnimARTrix Playground");
+   BLEDevice::init("AnimARTrix Playground");
 
- pServer = BLEDevice::createServer();
- pServer->setCallbacks(new MyServerCallbacks());
+   pServer = BLEDevice::createServer();
+   pServer->setCallbacks(new MyServerCallbacks());
 
- BLEService *pService = pServer->createService(SERVICE_UUID);
+   BLEService *pService = pServer->createService(SERVICE_UUID);
 
- pAnimationCharacteristic = pService->createCharacteristic(
-                      ANIMATION_CHARACTERISTIC_UUID,
-                      BLECharacteristic::PROPERTY_WRITE |
-					       BLECharacteristic::PROPERTY_READ |
-                      BLECharacteristic::PROPERTY_NOTIFY
-                    );
- pAnimationCharacteristic->setCallbacks(new AnimationCharacteristicCallbacks());
- pAnimationCharacteristic->setValue(String(fxIndex).c_str()); 
- pAnimationCharacteristic->addDescriptor(new BLE2902());
+   pAnimationCharacteristic = pService->createCharacteristic(
+                        ANIMATION_CHARACTERISTIC_UUID,
+                        BLECharacteristic::PROPERTY_WRITE |
+                        BLECharacteristic::PROPERTY_READ |
+                        BLECharacteristic::PROPERTY_NOTIFY
+                     );
+   pAnimationCharacteristic->setCallbacks(new AnimationCharacteristicCallbacks());
+   pAnimationCharacteristic->setValue(String(fxIndex).c_str()); 
+   pAnimationCharacteristic->addDescriptor(new BLE2902());
 
- pColorCharacteristic = pService->createCharacteristic(
-                      COLOR_CHARACTERISTIC_UUID,
-                      BLECharacteristic::PROPERTY_WRITE |
-					       BLECharacteristic::PROPERTY_READ |
-                      BLECharacteristic::PROPERTY_NOTIFY
-                    );
- pColorCharacteristic->setValue(String(colorOrder).c_str()); 
- pColorCharacteristic->setCallbacks(new ColorCharacteristicCallbacks());
- pColorCharacteristic->addDescriptor(new BLE2902());
+   pColorCharacteristic = pService->createCharacteristic(
+                        COLOR_CHARACTERISTIC_UUID,
+                        BLECharacteristic::PROPERTY_WRITE |
+                        BLECharacteristic::PROPERTY_READ |
+                        BLECharacteristic::PROPERTY_NOTIFY
+                     );
+   pColorCharacteristic->setValue(String(colorOrder).c_str()); 
+   pColorCharacteristic->setCallbacks(new ColorCharacteristicCallbacks());
+   pColorCharacteristic->addDescriptor(new BLE2902());
 
- pSpeedCharacteristic = pService->createCharacteristic(
-                      SPEED_CHARACTERISTIC_UUID,
-                      BLECharacteristic::PROPERTY_WRITE |
-                      BLECharacteristic::PROPERTY_READ |
-                      BLECharacteristic::PROPERTY_NOTIFY
-                    );
- pSpeedCharacteristic->setCallbacks(new SpeedCharacteristicCallbacks());
- pSpeedCharacteristic->setValue(String(timeSpeed).c_str());
- pSpeedCharacteristic->addDescriptor(new BLE2902());
- pSpeedDescriptor.setValue("Speed"); 
-
-
- pScaleCharacteristic = pService->createCharacteristic(
-                      SCALE_CHARACTERISTIC_UUID,
-                      BLECharacteristic::PROPERTY_READ |
-                      BLECharacteristic::PROPERTY_WRITE |
-                      BLECharacteristic::PROPERTY_NOTIFY
-                    );
- pScaleCharacteristic->setCallbacks(new ScaleCharacteristicCallbacks());
- //pScaleCharacteristic->setValue(String(gCurrentPaletteNumber).c_str());
- pScaleCharacteristic->addDescriptor(new BLE2902());
- pScaleDescriptor.setValue("Scale"); 
-
- 
- pControlCharacteristic = pService->createCharacteristic(
-                      CONTROL_CHARACTERISTIC_UUID,
-                      BLECharacteristic::PROPERTY_WRITE |
-					       BLECharacteristic::PROPERTY_READ |
-                      BLECharacteristic::PROPERTY_NOTIFY
-                    );
- pControlCharacteristic->setCallbacks(new ControlCharacteristicCallbacks());
- pControlCharacteristic->addDescriptor(new BLE2902());
+   pSpeedCharacteristic = pService->createCharacteristic(
+                        SPEED_CHARACTERISTIC_UUID,
+                        BLECharacteristic::PROPERTY_WRITE |
+                        BLECharacteristic::PROPERTY_READ |
+                        BLECharacteristic::PROPERTY_NOTIFY
+                     );
+   pSpeedCharacteristic->setCallbacks(new SpeedCharacteristicCallbacks());
+   pSpeedCharacteristic->setValue(String(timeSpeed).c_str());
+   pSpeedCharacteristic->addDescriptor(new BLE2902());
+   pSpeedDescriptor.setValue("Speed"); 
 
 
- /*
- pBrightnessCharacteristic = pService->createCharacteristic(
-                      BRIGHTNESS_CHARACTERISTIC_UUID,
-                      BLECharacteristic::PROPERTY_WRITE |
-                      BLECharacteristic::PROPERTY_READ |
-                      BLECharacteristic::PROPERTY_NOTIFY
-                    );
- pBrightnessCharacteristic->setCallbacks(new BrightnessCharacteristicCallbacks());
- pBrightnessCharacteristic->setValue(String(BRIGHTNESS).c_str()); 
- pBrightnessCharacteristic->addDescriptor(new BLE2902());
- pBrightnessDescriptor.setValue("Brightness");
- */
+   pScaleCharacteristic = pService->createCharacteristic(
+                        SCALE_CHARACTERISTIC_UUID,
+                        BLECharacteristic::PROPERTY_READ |
+                        BLECharacteristic::PROPERTY_WRITE |
+                        BLECharacteristic::PROPERTY_NOTIFY
+                     );
+   pScaleCharacteristic->setCallbacks(new ScaleCharacteristicCallbacks());
+   pScaleCharacteristic->setValue(String(adjustScale).c_str());
+   pScaleCharacteristic->addDescriptor(new BLE2902());
+   pScaleDescriptor.setValue("Scale"); 
+   
+   pControlCharacteristic = pService->createCharacteristic(
+                        CONTROL_CHARACTERISTIC_UUID,
+                        BLECharacteristic::PROPERTY_WRITE |
+                        BLECharacteristic::PROPERTY_READ |
+                        BLECharacteristic::PROPERTY_NOTIFY
+                     );
+   pControlCharacteristic->setCallbacks(new ControlCharacteristicCallbacks());
+   pControlCharacteristic->addDescriptor(new BLE2902());
 
+   //**********************************************************
 
+   pService->start();
 
-
-//**************************************************************************************
-
- pService->start();
-
- BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
- pAdvertising->addServiceUUID(SERVICE_UUID);
- pAdvertising->setScanResponse(false);
- pAdvertising->setMinPreferred(0x0);  // set value to 0x00 to not advertise this parameter
- BLEDevice::startAdvertising();
- if (debug) {Serial.println("Waiting a client connection to notify...");}
+   BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
+   pAdvertising->addServiceUUID(SERVICE_UUID);
+   pAdvertising->setScanResponse(false);
+   pAdvertising->setMinPreferred(0x0);  // set value to 0x00 to not advertise this parameter
+   BLEDevice::startAdvertising();
+   if (debug) {Serial.println("Waiting a client connection to notify...");}
 
 }
