@@ -98,7 +98,7 @@
 		event.preventDefault();
 		const newScale = scaleInput.value;
 		//console.log('New scale sent:', newScale);
-		writeSpeedCharacteristic(newScale);
+		writeScaleCharacteristic(newScale);
 		setScaleForm.reset();
 	});
 
