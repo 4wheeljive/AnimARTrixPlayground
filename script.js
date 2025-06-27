@@ -36,7 +36,7 @@
     var AnimationCharacteristic =   '19b10001-e8f2-537e-4f6c-d104768a1214';
     var ColorCharacteristic =       '19b10002-e8f2-537e-4f6c-d104768a1214';
     var SpeedCharacteristic =       '19b10003-e8f2-537e-4f6c-d104768a1214';
-	//var SpeedCharacteristic =       '19b10004-e8f2-537e-4f6c-d104768a1214';
+	var ScaleCharacteristic =       '19b10004-e8f2-537e-4f6c-d104768a1214';
     //var PaletteCharacteristic =     '19b10005-e8f2-537e-4f6c-d104768a1214';
     var ControlCharacteristic =     '19b10006-e8f2-537e-4f6c-d104768a1214';
  
@@ -46,8 +46,8 @@
     var bleServiceFound;
   	var animationCharacteristicFound;
 	var colorCharacteristicFound;
-	//var brightnessCharacteristicFound;
-    var speedCharacteristicFound;
+	var speedCharacteristicFound;
+    var scaleCharacteristicFound;
     //var paletteCharacteristicFound;
 	var controlCharacteristicFound;
 

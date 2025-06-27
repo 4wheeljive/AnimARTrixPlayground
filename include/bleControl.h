@@ -110,7 +110,7 @@ BLEDescriptor pColorDescriptor(BLEUUID((uint16_t)0x2901));
 BLEDescriptor pSpeedDescriptor(BLEUUID((uint16_t)0x2902));
 BLEDescriptor pScaleDescriptor(BLEUUID((uint16_t)0x2903));
 //BLEDescriptor pPaletteDescriptor(BLEUUID((uint16_t)0x2904));
-//BLEDescriptor pControlDescriptor(BLEUUID((uint16_t)0x2905));
+BLEDescriptor pControlDescriptor(BLEUUID((uint16_t)0x2905));
 
 //Control functions***************************************************************
 
@@ -134,19 +134,6 @@ void colorOrderAdjust(double newColorOrder) {
    }
 }
 
-/*void brightnessAdjust(uint8_t newBrightness) {
-   BRIGHTNESS = newBrightness;
-   //brightnessChanged = true;
-   FastLED.setBrightness(BRIGHTNESS);
-   pBrightnessCharacteristic->setValue(String(BRIGHTNESS).c_str());
-   pBrightnessCharacteristic->notify();
-   if (debug) {
-      Serial.print("Brightness: ");
-      Serial.println(BRIGHTNESS);
-   }
-}
-   */
-
 void speedAdjust(float newSpeed) {
    timeSpeed = newSpeed;
    pSpeedCharacteristic->setValue(String(timeSpeed).c_str());
@@ -166,6 +153,20 @@ void scaleAdjust(float newScale) {
       Serial.println(adjustScale);
    }
 }
+
+
+/*void brightnessAdjust(uint8_t newBrightness) {
+   BRIGHTNESS = newBrightness;
+   //brightnessChanged = true;
+   FastLED.setBrightness(BRIGHTNESS);
+   pBrightnessCharacteristic->setValue(String(BRIGHTNESS).c_str());
+   pBrightnessCharacteristic->notify();
+   if (debug) {
+      Serial.print("Brightness: ");
+      Serial.println(BRIGHTNESS);
+   }
+}
+   */
 
 
 /*
@@ -198,6 +199,7 @@ class MyServerCallbacks: public BLEServerCallbacks {
     wasConnected = true;
   }
 };
+
 
 class AnimationCharacteristicCallbacks : public BLECharacteristicCallbacks {
  void onWrite(BLECharacteristic *characteristic) {
@@ -252,6 +254,7 @@ class AnimationCharacteristicCallbacks : public BLECharacteristicCallbacks {
    }
 };
 
+
 class ColorCharacteristicCallbacks : public BLECharacteristicCallbacks {
  void onWrite(BLECharacteristic *characteristic) {
     String value = characteristic->getValue();
@@ -266,6 +269,59 @@ class ColorCharacteristicCallbacks : public BLECharacteristicCallbacks {
 	}
  }
 };
+
+
+class SpeedCharacteristicCallbacks : public BLECharacteristicCallbacks {
+ void onWrite(BLECharacteristic *characteristic) {
+    String value = characteristic->getValue();
+    if (value.length() > 0) {
+       double receivedValue = value[0]; 
+       if (debug) {
+         Serial.print("Speed adjust: ");
+         Serial.println(receivedValue);
+       }
+       timeSpeed = receivedValue;
+       speedAdjust(timeSpeed);
+    }
+ }
+};
+
+
+class ScaleCharacteristicCallbacks : public BLECharacteristicCallbacks {
+ void onWrite(BLECharacteristic *characteristic) {
+    String value = characteristic->getValue();
+    if (value.length() > 0) {
+       uint8_t receivedValue = value[0]; 
+       if (debug) {
+         Serial.print("Scale: ");
+         Serial.println(receivedValue);
+       }
+       adjustScale = receivedValue;
+       scaleAdjust(adjustScale);
+    }
+ }
+};
+
+
+class ControlCharacteristicCallbacks : public BLECharacteristicCallbacks {
+ void onWrite(BLECharacteristic *characteristic) {
+    String value = characteristic->getValue();
+    if (value.length() > 0) {
+      uint8_t receivedValue = value[0];
+      if (debug) {
+         Serial.print("Control: ");
+         Serial.println(receivedValue);
+       } 
+      if (receivedValue == 100) {
+         rotateAnimations = true;
+      }
+      if (receivedValue == 101) {
+         rotateAnimations = false;
+	  }
+    }
+ }
+};
+
 
 /*
 class BrightnessCharacteristicCallbacks : public BLECharacteristicCallbacks {
@@ -290,22 +346,6 @@ class BrightnessCharacteristicCallbacks : public BLECharacteristicCallbacks {
 };
 */
 
-class SpeedCharacteristicCallbacks : public BLECharacteristicCallbacks {
- void onWrite(BLECharacteristic *characteristic) {
-    String value = characteristic->getValue();
-    if (value.length() > 0) {
-       double receivedValue = value[0]; 
-       if (debug) {
-         Serial.print("Speed adjust: ");
-         Serial.println(receivedValue);
-       }
-       timeSpeed = receivedValue;
-       speedAdjust(timeSpeed);
-    }
- }
-};
-
-
 /*
 class SpeedCharacteristicCallbacks : public BLECharacteristicCallbacks {
  void onWrite(BLECharacteristic *characteristic) {
@@ -328,44 +368,6 @@ class SpeedCharacteristicCallbacks : public BLECharacteristicCallbacks {
  }
 };
 */
-
-
-class ScaleCharacteristicCallbacks : public BLECharacteristicCallbacks {
- void onWrite(BLECharacteristic *characteristic) {
-    String value = characteristic->getValue();
-    if (value.length() > 0) {
-       uint8_t receivedValue = value[0]; 
-       if (debug) {
-         Serial.print("Scale: ");
-         Serial.println(receivedValue);
-       }
-       adjustScale = receivedValue;
-       scaleAdjust(adjustScale);
-    }
- }
-};
-
-
-
-class ControlCharacteristicCallbacks : public BLECharacteristicCallbacks {
- void onWrite(BLECharacteristic *characteristic) {
-    String value = characteristic->getValue();
-    if (value.length() > 0) {
-      uint8_t receivedValue = value[0];
-      if (debug) {
-         Serial.print("Control: ");
-         Serial.println(receivedValue);
-       } 
-      if (receivedValue == 100) {
-         rotateAnimations = true;
-      }
-      if (receivedValue == 101) {
-         rotateAnimations = false;
-	  }
-    }
- }
-};
-
 
 //*******************************************************************************************
 
@@ -397,19 +399,6 @@ void bleSetup() {
  pColorCharacteristic->setValue(String(colorOrder).c_str()); 
  pColorCharacteristic->setCallbacks(new ColorCharacteristicCallbacks());
  pColorCharacteristic->addDescriptor(new BLE2902());
-
- /*
- pBrightnessCharacteristic = pService->createCharacteristic(
-                      BRIGHTNESS_CHARACTERISTIC_UUID,
-                      BLECharacteristic::PROPERTY_WRITE |
-                      BLECharacteristic::PROPERTY_READ |
-                      BLECharacteristic::PROPERTY_NOTIFY
-                    );
- pBrightnessCharacteristic->setCallbacks(new BrightnessCharacteristicCallbacks());
- pBrightnessCharacteristic->setValue(String(BRIGHTNESS).c_str()); 
- pBrightnessCharacteristic->addDescriptor(new BLE2902());
- pBrightnessDescriptor.setValue("Brightness");
- */
 
  pSpeedCharacteristic = pService->createCharacteristic(
                       SPEED_CHARACTERISTIC_UUID,
@@ -443,6 +432,22 @@ void bleSetup() {
                     );
  pControlCharacteristic->setCallbacks(new ControlCharacteristicCallbacks());
  pControlCharacteristic->addDescriptor(new BLE2902());
+
+
+ /*
+ pBrightnessCharacteristic = pService->createCharacteristic(
+                      BRIGHTNESS_CHARACTERISTIC_UUID,
+                      BLECharacteristic::PROPERTY_WRITE |
+                      BLECharacteristic::PROPERTY_READ |
+                      BLECharacteristic::PROPERTY_NOTIFY
+                    );
+ pBrightnessCharacteristic->setCallbacks(new BrightnessCharacteristicCallbacks());
+ pBrightnessCharacteristic->setValue(String(BRIGHTNESS).c_str()); 
+ pBrightnessCharacteristic->addDescriptor(new BLE2902());
+ pBrightnessDescriptor.setValue("Brightness");
+ */
+
+
 
 
 //**************************************************************************************

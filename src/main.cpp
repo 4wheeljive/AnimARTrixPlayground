@@ -50,8 +50,8 @@ using polor polar coordinates. The effects are very complex and powerful.
 
 //*********************************************
 
-#define BIG_BOARD
-//#undef BIG_BOARD
+//#define BIG_BOARD
+#undef BIG_BOARD
 
 //#define SCREEN_TEST
 #undef SCREEN_TEST
@@ -71,10 +71,10 @@ using polor polar coordinates. The effects are very complex and powerful.
     #define NUM_SEGMENTS 3
     #define NUM_LEDS_PER_SEGMENT 512
 #else 
-    #define HEIGHT 32 
-    #define WIDTH 32
+    #define HEIGHT 22 
+    #define WIDTH 22
     #define NUM_SEGMENTS 1
-    #define NUM_LEDS_PER_SEGMENT 1024
+    #define NUM_LEDS_PER_SEGMENT 484
 #endif
 
 //*********************************************
