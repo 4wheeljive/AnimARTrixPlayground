@@ -160,11 +160,15 @@ void scaleAdjust(String jsonReceived) {
       Serial.print("Scale: ");
       Serial.println(newScale);
    }
+   /*
    confirmDoc["scale"] = adjustScale;
    String confirmString;
    ArduinoJson::serializeJson(confirmDoc, confirmString);
    pScaleCharacteristic->setValue(confirmString);
+   */
+   pScaleCharacteristic->setValue(String(adjustScale).c_str());
    pScaleCharacteristic->notify();
+
 }
 
 /*
@@ -397,7 +401,7 @@ void bleSetup() {
                      );
    pAnimationCharacteristic->setCallbacks(new AnimationCharacteristicCallbacks());
    pAnimationCharacteristic->setValue(String(fxIndex).c_str()); 
-   pAnimationCharacteristic->addDescriptor(new BLE2902());
+   //pAnimationCharacteristic->addDescriptor(new BLE2902());
 
    pColorCharacteristic = pService->createCharacteristic(
                         COLOR_CHARACTERISTIC_UUID,
@@ -407,7 +411,7 @@ void bleSetup() {
                      );
    pColorCharacteristic->setValue(String(colorOrder).c_str()); 
    pColorCharacteristic->setCallbacks(new ColorCharacteristicCallbacks());
-   pColorCharacteristic->addDescriptor(new BLE2902());
+   //pColorCharacteristic->addDescriptor(new BLE2902());
 
    pSpeedCharacteristic = pService->createCharacteristic(
                         SPEED_CHARACTERISTIC_UUID,
@@ -417,7 +421,7 @@ void bleSetup() {
                      );
    pSpeedCharacteristic->setCallbacks(new SpeedCharacteristicCallbacks());
    pSpeedCharacteristic->setValue(String(timeSpeed).c_str());
-   pSpeedCharacteristic->addDescriptor(new BLE2902());
+   //pSpeedCharacteristic->addDescriptor(new BLE2902());
    //pSpeedDescriptor.setValue("Speed"); 
 
 
@@ -439,7 +443,7 @@ void bleSetup() {
                         BLECharacteristic::PROPERTY_NOTIFY
                      );
    pControlCharacteristic->setCallbacks(new ControlCharacteristicCallbacks());
-   pControlCharacteristic->addDescriptor(new BLE2902());
+   //pControlCharacteristic->addDescriptor(new BLE2902());
 
    //**********************************************************
 

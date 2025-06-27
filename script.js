@@ -285,9 +285,7 @@ function handleSpeedCharacteristicChange(event){
 }
 
 function handleScaleCharacteristicChange(event){
-    //const newValueReceived = new TextDecoder().decode(event.target.value);
-    deserializeJson(confirmDoc, confirmString);
-    const newValueReceived = confirmDoc["scale"]; 
+    const newValueReceived = new TextDecoder().decode(event.target.value);
     console.log("New scale: ", newValueReceived);
     scaleValue.innerHTML = newValueReceived;
 }

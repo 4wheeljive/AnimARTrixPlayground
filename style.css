@@ -31,6 +31,7 @@ body {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 .card {
+    color: #bebebe;
     background-color: rgb(72, 72, 72);
 }
 button {
