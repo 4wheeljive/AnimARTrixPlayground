@@ -37,7 +37,7 @@
     const bleStateContainer = document.getElementById('bleState');
 
     //Define BLE Device Specs
-    var deviceName ='Aurora Portal';
+    var deviceName ='AnimARTrix Playground';
     var bleService =                '19b10000-e8f2-537e-4f6c-d104768a1214';
     var ProgramCharacteristic =     '19b10001-e8f2-537e-4f6c-d104768a1214';
     var ModeCharacteristic =        '19b10002-e8f2-537e-4f6c-d104768a1214';
