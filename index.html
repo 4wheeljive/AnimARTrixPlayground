@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AnimARTrix Playground Control</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="UTF-8">
+</head>
+<body>
+     <div class="topnav">
+         <h1>AnimARTrix Playground Control</h1>
+     </div>
+     <div class="content">
+        <div class="card-grid">
+            <div class="card">
+                <p>
+                    <button id="connectBleButton" class="connectButton"> Connect</button>
+                    <button id="disconnectBleButton" class="disconnectButton"> Disconnect</button>
+                </p>
+                <p class="gray-label">Status: <strong><span id="bleState" style="color:#d13a30;">Disconnected</span></strong></p>
+            </div>
+        </div>
+
+		<div class="card-grid">
+            <div class="card">
+                 <h2>Animation</h2>
+				 <p>
+                    <button id="polarWavesButton" class="onButton">POLAR WAVES</button> 
+                    <button id="spiralusButton" class="onButton">SPIRALUS</button>
+					<button id="caleido1Button" class="onButton">CALEIDO1</button>
+					<button id="wavesButton" class="onButton">WAVES</button>
+                    <button id="chasingSpiralsButton" class="onButton">CHASING SPIRALS</button>
+                    <button id="ringsButton" class="onButton">RINGS</button>
+                    <button id="complexKaleidoButton" class="onButton">COMPLEX KALEIDO 6</button>
+                    <button id="experiment10Button" class="onButton">EXPERIMENT 10</button>
+                    <button id="experimentSM1Button" class="onButton">EXPERIMENT SM1</button>
+                    <button id="offButton" class="offButton">OFF</button>
+                 </p>
+                 <p class="gray-label">Current animation: <span id="animationValue"></span></p>
+            </div>
+ 
+            <div class="card">
+                <h2>Adjustments</h2>    
+                
+                <p>
+                    <label for="rotateAnimationCheckbox">Rotate animation:</label>
+                    <input type="checkbox" id="rotateAnimationCheckbox" checked>
+                </p>
+                 
+                 <p>
+					<form id="colorOrderForm">
+					 Color order number (0-5): <input type="number"  type="submit" id="colorOrderInput"  name="colorOrderInputName" min="0" max="5"/>
+					</form>
+				 </p>	
+				 <p class="gray-label">Current number: <span id="colorOrderValue"></span></p>
+            
+                  <p>
+					<form id="speedForm">
+					 Speed (-10 to +10): <input type="number"  type="submit" id="speedInput"  name="speedInputName" min="-10" max="10"/>
+					</form>
+				 </p>	
+				 <p class="gray-label">Current speed: <span id="speedValue"></span></p>           
+            
+            
+                </div>
+
+            <!--
+            <div class="card">
+                 <h2>Brightness</h2>
+				 <p>
+					 <button id="brighterButton" class="onButton">BRIGHTER</button>
+					 <button id="dimmerButton" class="offButton">DIMMER</button>
+				 </p>
+                 <p class="gray-label">Current brightness: <span id="brightnessValue"></span></p>
+			</div>
+
+			<div class="card">
+                 <h2>Speed</h2>
+				 <p>
+					 <button id="fasterButton" class="onButton">FASTER</button>
+					 <button id="slowerButton" class="offButton">SLOWER</button>
+                 
+				 </p>
+				 <p class="gray-label">Current speed: <span id="speedValue"></span></p>
+			</div>
+    -->	
+
+            <div class="card">
+                 <h2>Control</h2>
+				<!--
+                 <p>
+					 <button id="fancyButton" class="onButton">FANCY</button>
+				 </p>
+                  
+                
+                 <p>
+                    <label for="speedLowerSlider">Lower wave speed:</label>
+                    <input type="range" id="speedLowerSlider" min="0" max="1" step="0.01" value=".16">
+                    <span id="speedLowerValue">.16</span>
+                 </p>
+              
+                -->
+                 <p class="gray-label">Last control value: <span id="controlValue"></span></p>
+			</div>
+        
+
+	    </div>
+		
+		<p class="gray-label" ><i>Last value sent: <span id="valueSent"></span></i></p>
+    
+    </div>
+
+<script src="script.js"></script>
+</body>
+</html>
