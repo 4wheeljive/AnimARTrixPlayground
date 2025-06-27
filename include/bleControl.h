@@ -92,7 +92,7 @@ BLECharacteristic* pAnimationCharacteristic = NULL;
 BLECharacteristic* pColorCharacteristic = NULL;
 //BLECharacteristic* pBrightnessCharacteristic = NULL;
 BLECharacteristic* pSpeedCharacteristic = NULL;
-//BLECharacteristic* pPaletteCharacteristic = NULL;
+BLECharacteristic* pScaleCharacteristic = NULL;
 BLECharacteristic* pControlCharacteristic = NULL;
 bool deviceConnected = false;
 bool wasConnected = false;
@@ -101,14 +101,14 @@ bool wasConnected = false;
 #define ANIMATION_CHARACTERISTIC_UUID  "19b10001-e8f2-537e-4f6c-d104768a1214"
 #define COLOR_CHARACTERISTIC_UUID   	"19b10002-e8f2-537e-4f6c-d104768a1214"
 #define SPEED_CHARACTERISTIC_UUID      "19b10003-e8f2-537e-4f6c-d104768a1214"
-//#define SPEED_CHARACTERISTIC_UUID 		"19b10004-e8f2-537e-4f6c-d104768a1214"
+#define SCALE_CHARACTERISTIC_UUID 		"19b10004-e8f2-537e-4f6c-d104768a1214"
 //#define PALETTE_CHARACTERISTIC_UUID 	"19b10005-e8f2-537e-4f6c-d104768a1214"
 #define CONTROL_CHARACTERISTIC_UUID    "19b10006-e8f2-537e-4f6c-d104768a1214"
 
 BLEDescriptor pAnimationDescriptor(BLEUUID((uint16_t)0x2900));
 BLEDescriptor pColorDescriptor(BLEUUID((uint16_t)0x2901));
 BLEDescriptor pSpeedDescriptor(BLEUUID((uint16_t)0x2902));
-//BLEDescriptor pSpeedDescriptor(BLEUUID((uint16_t)0x2903));
+BLEDescriptor pScaleDescriptor(BLEUUID((uint16_t)0x2903));
 //BLEDescriptor pPaletteDescriptor(BLEUUID((uint16_t)0x2904));
 //BLEDescriptor pControlDescriptor(BLEUUID((uint16_t)0x2905));
 
@@ -156,6 +156,17 @@ void speedAdjust(double newSpeed) {
       Serial.println(timeSpeed);
    }
 }
+
+void scaleAdjust(double newScale) {
+   adjustScale = newScale;
+   pScaleCharacteristic->setValue(String(adjustScale).c_str());
+   pScaleCharacteristic->notify();
+   if (debug) {
+      Serial.print("Scale: ");
+      Serial.println(adjustScale);
+   }
+}
+
 
 /*
 void startWaves() {
@@ -318,23 +329,25 @@ class SpeedCharacteristicCallbacks : public BLECharacteristicCallbacks {
 };
 */
 
-/*
-class PaletteCharacteristicCallbacks : public BLECharacteristicCallbacks {
+
+class ScaleCharacteristicCallbacks : public BLECharacteristicCallbacks {
  void onWrite(BLECharacteristic *characteristic) {
     String value = characteristic->getValue();
     if (value.length() > 0) {
        uint8_t receivedValue = value[0]; 
        if (debug) {
-         Serial.print("Palette: ");
+         Serial.print("Scale: ");
          Serial.println(receivedValue);
        }
+       /*
        gTargetPalette = gGradientPalettes[ receivedValue ];
        pPaletteCharacteristic->setValue(String(receivedValue).c_str());
        pPaletteCharacteristic->notify();
+       */
     }
  }
 };
-*/
+
 
 
 class ControlCharacteristicCallbacks : public BLECharacteristicCallbacks {
@@ -412,18 +425,18 @@ void bleSetup() {
  pSpeedCharacteristic->addDescriptor(new BLE2902());
  pSpeedDescriptor.setValue("Speed"); 
 
-/*
-pPaletteCharacteristic = pService->createCharacteristic(
-                      PALETTE_CHARACTERISTIC_UUID,
+
+ pScaleCharacteristic = pService->createCharacteristic(
+                      SCALE_CHARACTERISTIC_UUID,
                       BLECharacteristic::PROPERTY_READ |
                       BLECharacteristic::PROPERTY_WRITE |
                       BLECharacteristic::PROPERTY_NOTIFY
                     );
- pPaletteCharacteristic->setCallbacks(new PaletteCharacteristicCallbacks());
- pPaletteCharacteristic->setValue(String(gCurrentPaletteNumber).c_str());
- pPaletteCharacteristic->addDescriptor(new BLE2902());
- pPaletteDescriptor.setValue("Palette"); 
-*/
+ pScaleCharacteristic->setCallbacks(new ScaleCharacteristicCallbacks());
+ //pScaleCharacteristic->setValue(String(gCurrentPaletteNumber).c_str());
+ pScaleCharacteristic->addDescriptor(new BLE2902());
+ pScaleDescriptor.setValue("Scale"); 
+
  
  pControlCharacteristic = pService->createCharacteristic(
                       CONTROL_CHARACTERISTIC_UUID,
