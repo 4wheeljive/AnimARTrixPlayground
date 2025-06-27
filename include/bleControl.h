@@ -114,7 +114,7 @@ BLEDescriptor pScaleDescriptor(BLEUUID((uint16_t)0x2903));
 
 //Control functions***************************************************************
 
-void animationAdjust(int newAnimation) {
+void animationAdjust(double newAnimation) {
    fxIndex = newAnimation;
    pAnimationCharacteristic->setValue(String(newAnimation).c_str());
    pAnimationCharacteristic->notify();
@@ -124,7 +124,7 @@ void animationAdjust(int newAnimation) {
    }
 }
 
-void colorOrderAdjust(int newColorOrder) {
+void colorOrderAdjust(double newColorOrder) {
    colorOrder = newColorOrder;
    pColorCharacteristic->setValue(String(colorOrder).c_str());
    pColorCharacteristic->notify();
@@ -147,7 +147,7 @@ void colorOrderAdjust(int newColorOrder) {
 }
    */
 
-void speedAdjust(double newSpeed) {
+void speedAdjust(float newSpeed) {
    timeSpeed = newSpeed;
    pSpeedCharacteristic->setValue(String(timeSpeed).c_str());
    pSpeedCharacteristic->notify();
@@ -157,7 +157,7 @@ void speedAdjust(double newSpeed) {
    }
 }
 
-void scaleAdjust(double newScale) {
+void scaleAdjust(float newScale) {
    adjustScale = newScale;
    pScaleCharacteristic->setValue(String(adjustScale).c_str());
    pScaleCharacteristic->notify();
@@ -339,11 +339,8 @@ class ScaleCharacteristicCallbacks : public BLECharacteristicCallbacks {
          Serial.print("Scale: ");
          Serial.println(receivedValue);
        }
-       /*
-       gTargetPalette = gGradientPalettes[ receivedValue ];
-       pPaletteCharacteristic->setValue(String(receivedValue).c_str());
-       pPaletteCharacteristic->notify();
-       */
+       adjustScale = receivedValue;
+       scaleAdjust(adjustScale);
     }
  }
 };
