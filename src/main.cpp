@@ -48,23 +48,48 @@ using polor polar coordinates. The effects are very complex and powerful.
 #include "myAnimartrix.hpp"
 #include "fl/ui.h"
 
+//*********************************************
+
 #define BIG_BOARD
+//#undef BIG_BOARD
+
 //#define SCREEN_TEST
+#undef SCREEN_TEST
 
 #define FIRST_ANIMATION RINGS
 #define SECONDS_PER_ANIMATION 10
 
+#define DATA_PIN_1 2
+
+//*********************************************
+
+#ifdef BIG_BOARD 
+    #define DATA_PIN_2 3
+    #define DATA_PIN_3 4
+    #define HEIGHT 32 
+    #define WIDTH 48
+    #define NUM_SEGMENTS 3
+    #define NUM_LEDS_PER_SEGMENT 512
+#else 
+    #define HEIGHT 32 
+    #define WIDTH 32
+    #define NUM_SEGMENTS 1
+    #define NUM_LEDS_PER_SEGMENT 1024
+#endif
+
+//*********************************************
+
 #ifndef SCREEN_TEST
-    
-    #ifdef BIG_BOARD
-        #include <matrixMap_32x48_3pin.h>
+
+    #include "bleControl.h"
+
+    #ifndef BIG_BOARD
+        #include <matrixMap_22x22.h>    
     #else
-        #include <matrixMap_22x22.h>
+        #include <matrixMap_32x48_3pin.h>    
     #endif
 
 #else
-
-    #include "bleControl.h"
 
     // This is purely use for the web compiler to display the animartrix effects.
     // This small led was chosen because otherwise the bloom effect is too strong.
@@ -72,24 +97,7 @@ using polor polar coordinates. The effects are very complex and powerful.
 
 #endif
 
-#define DATA_PIN_1 2
-
-#ifdef BIG_BOARD
-    #define DATA_PIN_2 3
-    #define DATA_PIN_3 4
-#endif
-
-#ifdef BIG_BOARD
-    #define HEIGHT 32 
-    #define WIDTH 48
-    #define NUM_SEGMENTS 3
-    #define NUM_LEDS_PER_SEGMENT 512
-#else
-    #define HEIGHT 32 
-    #define WIDTH 32
-    #define NUM_SEGMENTS 1
-    #define NUM_LEDS_PER_SEGMENT 1024
-#endif
+//*********************************************
 
 #define NUM_LEDS ( WIDTH * HEIGHT )
 
@@ -252,6 +260,27 @@ void loop() {
     }
     
     FastLED.show();
+
+    // BLE CONTROL....
+
+      // while connected
+      /*if (deviceConnected) {
+        if (brightnessChanged) { 
+          pBrightnessCharacteristic->notify();
+          brightnessChanged = false;
+        }
+      }*/
+
+      // upon disconnect
+      if (!deviceConnected && wasConnected) {
+        if (debug) {Serial.println("Device disconnected.");}
+        delay(500); // give the bluetooth stack the chance to get things ready
+        pServer->startAdvertising();
+        if (debug) {Serial.println("Start advertising");}
+        wasConnected = false;
+      }
+
+    // ..................
 
 }
 

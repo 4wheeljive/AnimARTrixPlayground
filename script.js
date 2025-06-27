@@ -1,59 +1,53 @@
  // DOM Elements
    
-	  const connectButton = document.getElementById('connectBleButton');
+	const connectButton = document.getElementById('connectBleButton');
     const disconnectButton = document.getElementById('disconnectBleButton');
-    
-	  const prideButton = document.getElementById('prideButton');
-	  const wavesButton = document.getElementById('wavesButton');
-	  const rainbowButton = document.getElementById('rainbowButton');
-    const bubbleButton = document.getElementById('bubbleButton');
-    const dotsButton = document.getElementById('dotsButton');
-    const fxWave2dButton = document.getElementById('fxWave2dButton');
-    const radiiButton = document.getElementById('radiiButton');
-    const cellsButton = document.getElementById('cellsButton');
-    const offButton = document.getElementById('offButton');
 
-    const octopusButton = document.getElementById('octopusButton');
-    const flowerButton = document.getElementById('flowerButton');
-    const lotusButton = document.getElementById('lotusButton');
-    const radialButton = document.getElementById('radialButton');
-	
+	const polarWavesButton = document.getElementById('polarWavesButton');
+	const spiralusButton = document.getElementById('spiralusButton');
+	const caleido1Button = document.getElementById('caleido1Button');
+    const wavesButton = document.getElementById('wavesButton');
+    const chasingSpiralsButton = document.getElementById('chasingSpiralsButton');
+    const ringsButton = document.getElementById('ringsButton');
+    const complexKaleidoButton = document.getElementById('complexKaleidoButton');
+    const experiment10Button = document.getElementById('experiment10Button');
+    const experimentSM1Button = document.getElementById('experimentSM1Button');
+    const offButton = document.getElementById('offButton');
+   
     //const fixedPaletteButton = document.getElementById('fixedPaletteButton');
     //const rotatePaletteButton = document.getElementById('rotatePaletteButton');
-    const rotatePaletteCheckbox = document.getElementById('rotatePaletteCheckbox');
+    const rotateAnimationCheckbox = document.getElementById('rotateAnimationCheckbox');
    
-    const setPalNumForm = document.getElementById('PalNumForm');
-    const PalNumInput = document.getElementById('PalNumInput');
-      
-    const brighterButton = document.getElementById('brighterButton');
-  	const dimmerButton = document.getElementById('dimmerButton');
-    const fasterButton = document.getElementById('fasterButton');
-	  const slowerButton = document.getElementById('slowerButton');
-	
-    const fancyButton = document.getElementById('fancyButton');
-//    const speedLowerSlider = document.getElementById('speedLowerSlider');
+    const setColorOrderForm = document.getElementById('colorOrderForm');
+    const colorOrderInput = document.getElementById('colorOrderInput');
 
-	  const latestValueSent = document.getElementById('valueSent');
+    const setSpeedForm = document.getElementById('speedForm');
+    const speedInput = document.getElementById('speedInput');
+   
+//  const speedLowerSlider = document.getElementById('speedLowerSlider');
+
+    const latestValueSent = document.getElementById('valueSent');
     const bleStateContainer = document.getElementById('bleState');
 
     //Define BLE Device Specs
     var deviceName ='AnimARTrix Playground';
     var bleService =                '19b10000-e8f2-537e-4f6c-d104768a1214';
-    var ProgramCharacteristic =     '19b10001-e8f2-537e-4f6c-d104768a1214';
-    var ModeCharacteristic =        '19b10002-e8f2-537e-4f6c-d104768a1214';
-    var BrightnessCharacteristic =  '19b10003-e8f2-537e-4f6c-d104768a1214';
-	var SpeedCharacteristic =       '19b10004-e8f2-537e-4f6c-d104768a1214';
-    var PaletteCharacteristic =     '19b10005-e8f2-537e-4f6c-d104768a1214';
+    var AnimationCharacteristic =   '19b10001-e8f2-537e-4f6c-d104768a1214';
+    var ColorCharacteristic =       '19b10002-e8f2-537e-4f6c-d104768a1214';
+    var SpeedCharacteristic =       '19b10003-e8f2-537e-4f6c-d104768a1214';
+	//var SpeedCharacteristic =       '19b10004-e8f2-537e-4f6c-d104768a1214';
+    //var PaletteCharacteristic =     '19b10005-e8f2-537e-4f6c-d104768a1214';
     var ControlCharacteristic =     '19b10006-e8f2-537e-4f6c-d104768a1214';
  
     //Global Variables to Handle Bluetooth
+    var bleDevice;
     var bleServer;
     var bleServiceFound;
-  	var programCharacteristicFound;
-	var modeCharacteristicFound;
-	var brightnessCharacteristicFound;
+  	var animationCharacteristicFound;
+	var colorCharacteristicFound;
+	//var brightnessCharacteristicFound;
     var speedCharacteristicFound;
-    var paletteCharacteristicFound;
+    //var paletteCharacteristicFound;
 	var controlCharacteristicFound;
 
     // Connect Button (search for BLE Devices only if BLE is available)
@@ -66,18 +60,20 @@
     // Disconnect Button
     disconnectButton.addEventListener('click', disconnectDevice);
 
-    // Write to the Program Characteristic
-    rainbowButton.addEventListener('click', () => writeProgramCharacteristic(1));
-    prideButton.addEventListener('click', () => writeProgramCharacteristic(2));
-	wavesButton.addEventListener('click', () => writeProgramCharacteristic(3));
-	bubbleButton.addEventListener('click', () => writeProgramCharacteristic(4));
-    dotsButton.addEventListener('click', () => writeProgramCharacteristic(5));
-    fxWave2dButton.addEventListener('click', () => writeProgramCharacteristic(6));
-    radiiButton.addEventListener('click', () => writeProgramCharacteristic(7));
-    cellsButton.addEventListener('click', () => writeProgramCharacteristic(8));
-    offButton.addEventListener('click', () => writeProgramCharacteristic(99));
+    // Write to the Animation Characteristic
+    polarWavesButton.addEventListener('click', () => writeAnimationCharacteristic(1));
+    spiralusButton.addEventListener('click', () => writeAnimationCharacteristic(2));
+	caleido1Button.addEventListener('click', () => writeAnimationCharacteristic(3));
+	wavesButton.addEventListener('click', () => writeAnimationCharacteristic(4));
+    chasingSpiralsButton.addEventListener('click', () => writeAnimationCharacteristic(5));
+    ringsButton.addEventListener('click', () => writeAnimationCharacteristic(6));
+    complexKaleidoButton.addEventListener('click', () => writeAnimationCharacteristic(7));
+    experiment10Button.addEventListener('click', () => writeAnimationCharacteristic(8));
+    experimentSM1Button.addEventListener('click', () => writeAnimationCharacteristic(9));
+    offButton.addEventListener('click', () => writeAnimationCharacteristic(99));
 	
-	// Write to the Mode Characteristic
+	/*
+    // Write to the Mode Characteristic
     octopusButton.addEventListener('click', () => writeModeCharacteristic(1));
     flowerButton.addEventListener('click', () => writeModeCharacteristic(2));
 	lotusButton.addEventListener('click', () => writeModeCharacteristic(3));
@@ -90,30 +86,40 @@
     // Write to the Speed Characteristic
     fasterButton.addEventListener('click', () => writeSpeedCharacteristic(1));
     slowerButton.addEventListener('click', () => writeSpeedCharacteristic(2));
-    	 
-	// Write to the Palette Characteristic
-	  setPalNumForm.addEventListener('submit', function(event) {
+    */
+    
+	// Write to the Color Characteristic
+	  setColorOrderForm.addEventListener('submit', function(event) {
 		event.preventDefault();
-		const newPalNum = PalNumInput.value;
-		console.log('New palette number:', newPalNum);
-		writePaletteCharacteristic(newPalNum);
-		setPalNumForm.reset();
+		const newColorOrder = colorOrderInput.value;
+		//  console.log('New color order number:', newColorOrder);
+		writeColorCharacteristic(newColorOrder);
+		setColorOrderForm.reset();
 	});
 
-    // Write to the Control Characteristic	
-	  fancyButton.addEventListener('click', () => writeControlCharacteristic(1));
-    //fixedPaletteButton.addEventListener('click', () => writeControlCharacteristic(101));
-    //rotatePaletteButton.addEventListener('click', () => writeControlCharacteristic(100));
+    // Write to the Speed Characteristic
+	  setSpeedForm.addEventListener('submit', function(event) {
+		event.preventDefault();
+		const newSpeed = speedInput.value;
+		//console.log('New speed sent:', newSpeed);
+		writeSpeedCharacteristic(newSpeed);
+		setSpeedForm.reset();
+	});
 
-    rotatePaletteCheckbox.addEventListener('change', () => {
-      if (rotatePaletteCheckbox.checked) {
-        writeControlCharacteristic(100);
-        //outputDiv.textContent = 'Checkbox is checked!';
-      } else {
-        writeControlCharacteristic(101);
-        //outputDiv.textContent = 'Checkbox is unchecked!';
-      }
-    });
+
+
+
+    // Write to the Control Characteristic	
+	  rotateAnimationCheckbox.addEventListener('change', () => {
+        if (rotateAnimationCheckbox.checked) {
+            writeControlCharacteristic(100);
+            //outputDiv.textContent = 'Checkbox is checked!';
+        } else {
+            writeControlCharacteristic(101);
+            //outputDiv.textContent = 'Checkbox is unchecked!';
+        }
+     });
+
 /*
     // Slider value change event
     speedLowerSlider.addEventListener('input', () => {
@@ -144,6 +150,7 @@
             optionalServices: [bleService]
         })
         .then(device => {
+            bleDevice = device;
             console.log('Device Selected:', device.name);
             bleStateContainer.innerHTML = 'Connected to ' + device.name;
             bleStateContainer.style.color = "#24af37";
@@ -164,35 +171,35 @@
 			     });
 			 });
 
-             service.getCharacteristic(ProgramCharacteristic)
+             service.getCharacteristic(AnimationCharacteristic)
 				.then(characteristic => {
-					programCharacteristicFound = characteristic;
-					characteristic.addEventListener('characteristicvaluechanged', handleProgramCharacteristicChange);
+					animationCharacteristicFound = characteristic;
+					characteristic.addEventListener('characteristicvaluechanged', handleAnimationCharacteristicChange);
 					characteristic.startNotifications();				
 					return characteristic.readValue();
 				 })
 				.then(value => {
 					//console.log("Read value: ", value);
 					const decodedValue = new TextDecoder().decode(value);
-					console.log("Program: ", decodedValue);
-					programValue.innerHTML = decodedValue;
+					console.log("Animation: ", decodedValue);
+					animationValue.innerHTML = decodedValue;
 			     })
 
-             service.getCharacteristic(ModeCharacteristic)
+             service.getCharacteristic(ColorCharacteristic)
 				.then(characteristic => {
-					modeCharacteristicFound = characteristic;
-					characteristic.addEventListener('characteristicvaluechanged', handleModeCharacteristicChange);
+					colorCharacteristicFound = characteristic;
+					characteristic.addEventListener('characteristicvaluechanged', handleColorCharacteristicChange);
 					characteristic.startNotifications();				
 					return characteristic.readValue();
 				 })
 				.then(value => {
 					//console.log("Read value: ", value);
 					const decodedValue = new TextDecoder().decode(value);
-					console.log("Mode: ", decodedValue);
-					modeValue.innerHTML = decodedValue;
+					console.log("Color: ", decodedValue);
+					colorOrderValue.innerHTML = decodedValue;
 			     })
 
-			 service.getCharacteristic(BrightnessCharacteristic)
+			 /*service.getCharacteristic(BrightnessCharacteristic)
 				.then(characteristic => {
 					brightnessCharacteristicFound = characteristic;
 					characteristic.addEventListener('characteristicvaluechanged', handleBrightnessCharacteristicChange);
@@ -204,7 +211,7 @@
 					console.log("Brightness: ", decodedValue);
 					brightnessValue.innerHTML = decodedValue;
 			     })	 
-		
+            */
 		     service.getCharacteristic(SpeedCharacteristic)
 				 .then(characteristic => {
 					speedCharacteristicFound = characteristic;
@@ -219,7 +226,7 @@
 					speedValue.innerHTML = decodedValue;
 				 })
 	
-		     service.getCharacteristic(PaletteCharacteristic)
+		    /* service.getCharacteristic(PaletteCharacteristic)
 				 .then(characteristic => {
 					paletteCharacteristicFound = characteristic;
 					characteristic.addEventListener('characteristicvaluechanged', handlePaletteCharacteristicChange);
@@ -232,8 +239,9 @@
 					console.log("Palette: ", decodedValue);
 					paletteValue.innerHTML = decodedValue;
 				 })
-	
-             service.getCharacteristic(ControlCharacteristic)
+            */	
+             
+                 service.getCharacteristic(ControlCharacteristic)
 				 .then(characteristic => {
 					controlCharacteristicFound = characteristic;
 					characteristic.addEventListener('characteristicvaluechanged', handleControlCharacteristicChange);
@@ -257,59 +265,61 @@
         console.log('Device Disconnected:', event.target.device.name);
         bleStateContainer.innerHTML = 'Device disconnected';
         bleStateContainer.style.color = "#d13a30";
-        connectToDevice();
+        setTimeout(() => {
+            connectToDevice();
+        }, 2000);
     }
 
-    function handleProgramCharacteristicChange(event){
+    function handleAnimationCharacteristicChange(event){
         const newValueReceived = new TextDecoder().decode(event.target.value);
-        console.log("Program changed: ", newValueReceived);
-        programValue.innerHTML = newValueReceived;
+        console.log("New fxIndex: ", newValueReceived);
+        animationValue.innerHTML = newValueReceived;
     }
 
-    function handleModeCharacteristicChange(event){
+    function handleColorCharacteristicChange(event){
         const newValueReceived = new TextDecoder().decode(event.target.value);
-        console.log("Mode changed: ", newValueReceived);
-        modeValue.innerHTML = newValueReceived;
+        console.log("New color order: ", newValueReceived);
+        colorOrderValue.innerHTML = newValueReceived;
     }
 
-    function handleBrightnessCharacteristicChange(event){
+    /*function handleBrightnessCharacteristicChange(event){
         const newValueReceived = new TextDecoder().decode(event.target.value);
         console.log("Brightness changed: ", newValueReceived);
         brightnessValue.innerHTML = newValueReceived;
-    }
+    }*/
 
     function handleSpeedCharacteristicChange(event){
         const newValueReceived = new TextDecoder().decode(event.target.value);
-        console.log("Speed changed: ", newValueReceived);
+        console.log("New speed: ", newValueReceived);
         speedValue.innerHTML = newValueReceived;
     }
 
-    function handlePaletteCharacteristicChange(event){
+    /*function handlePaletteCharacteristicChange(event){
         const newValueReceived = new TextDecoder().decode(event.target.value);
         console.log("Palette changed: ", newValueReceived);
         paletteValue.innerHTML = newValueReceived;
-    }
+    }*/
 
     function handleControlCharacteristicChange(event){
         const newValueReceived = new TextDecoder().decode(event.target.value);
-        console.log("Control changed: ", newValueReceived);
+        console.log("Control value received: ", newValueReceived);
         controlValue.innerHTML = newValueReceived;
     }
 
-    function writeProgramCharacteristic(value){
+    function writeAnimationCharacteristic(value){
         if (bleServer && bleServer.connected) {
-            bleServiceFound.getCharacteristic(ProgramCharacteristic)
+            bleServiceFound.getCharacteristic(AnimationCharacteristic)
             .then(characteristic => {
                 const data = new Uint8Array([value]);
                 return characteristic.writeValue(data);
             })
             .then(() => {
-                programValue.innerHTML = value;
+                animationValue.innerHTML = value;
                 latestValueSent.innerHTML = value;
-                console.log("Value written to Program characteristic:", value);
+                console.log("Value written to Animation characteristic:", value);
             })
             .catch(error => {
-                console.error("Error writing to Program characteristic: ", error);
+                console.error("Error writing to Animation characteristic: ", error);
             });
         } else {
             console.error ("Bluetooth is not connected. Cannot write to characteristic.")
@@ -317,21 +327,21 @@
         }
     }
 
-    function writeModeCharacteristic(value){
+    function writeColorCharacteristic(value){
         if (bleServer && bleServer.connected) {
-            bleServiceFound.getCharacteristic(ModeCharacteristic)
+            bleServiceFound.getCharacteristic(ColorCharacteristic)
             .then(characteristic => {
 //                console.log("Found Mode characteristic: ", characteristic.uuid);
                 const data = new Uint8Array([value]);
                 return characteristic.writeValue(data);
             })
             .then(() => {
-                modeValue.innerHTML = value;
+                colorOrderValue.innerHTML = value;
                 latestValueSent.innerHTML = value;
-                console.log("Value written to Mode characteristic:", value);
+                console.log("Value written to Color characteristic:", value);
             })
             .catch(error => {
-                console.error("Error writing to Mode characteristic: ", error);
+                console.error("Error writing to Color characteristic: ", error);
             });
         } else {
             console.error ("Bluetooth is not connected. Cannot write to characteristic.")
@@ -339,7 +349,8 @@
         }
     }
 
-	function writeBrightnessCharacteristic(value){
+	/*
+    function writeBrightnessCharacteristic(value){
         if (bleServer && bleServer.connected) {
             bleServiceFound.getCharacteristic(BrightnessCharacteristic)
             .then(characteristic => {
@@ -359,6 +370,7 @@
             window.alert("Bluetooth is not connected. Cannot write to characteristic. \n Connect to BLE first!")
         }
     }
+        */
 
     function writeSpeedCharacteristic(value){
         if (bleServer && bleServer.connected) {
@@ -381,7 +393,8 @@
         }
     }
 
-	function writePaletteCharacteristic(value){
+	/*
+    function writePaletteCharacteristic(value){
         if (bleServer && bleServer.connected) {
             bleServiceFound.getCharacteristic(PaletteCharacteristic)
             .then(characteristic => {
@@ -401,6 +414,7 @@
             window.alert("Bluetooth is not connected. Cannot write to characteristic. \n Connect to BLE first!")
         }
     }
+    */
 
     function writeControlCharacteristic(value){
         if (bleServer && bleServer.connected) {
@@ -423,6 +437,7 @@
         }
     }
 
+
     function disconnectDevice() {
         console.log("Disconnect Device.");
         bleServer.disconnect();
@@ -442,12 +457,6 @@
         var datetime = day + "/" + month + "/" + year + " at " + hours + ":" + minutes + ":" + seconds;
         return datetime;
     }
-
-
-
-
-
-
 
 
 
