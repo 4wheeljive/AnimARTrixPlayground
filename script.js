@@ -1,5 +1,4 @@
  // DOM Elements
- //test123
    
 	const connectButton = document.getElementById('connectBleButton');
     const disconnectButton = document.getElementById('disconnectBleButton');
@@ -15,8 +14,6 @@
     const experimentSM1Button = document.getElementById('experimentSM1Button');
     const offButton = document.getElementById('offButton');
    
-    //const fixedPaletteButton = document.getElementById('fixedPaletteButton');
-    //const rotatePaletteButton = document.getElementById('rotatePaletteButton');
     const rotateAnimationCheckbox = document.getElementById('rotateAnimationCheckbox');
    
     const setColorOrderForm = document.getElementById('colorOrderForm');
@@ -25,7 +22,12 @@
     const setSpeedForm = document.getElementById('speedForm');
     const speedInput = document.getElementById('speedInput');
    
-//  const speedLowerSlider = document.getElementById('speedLowerSlider');
+    const setScaleForm = document.getElementById('scaleForm');
+    const scaleInput = document.getElementById('scaleInput');
+
+    //const fixedPaletteButton = document.getElementById('fixedPaletteButton');
+    //const rotatePaletteButton = document.getElementById('rotatePaletteButton');
+    //const speedLowerSlider = document.getElementById('speedLowerSlider');
 
     const latestValueSent = document.getElementById('valueSent');
     const bleStateContainer = document.getElementById('bleState');
@@ -72,23 +74,7 @@
     experiment10Button.addEventListener('click', () => writeAnimationCharacteristic(8));
     experimentSM1Button.addEventListener('click', () => writeAnimationCharacteristic(9));
     offButton.addEventListener('click', () => writeAnimationCharacteristic(99));
-	
-	/*
-    // Write to the Mode Characteristic
-    octopusButton.addEventListener('click', () => writeModeCharacteristic(1));
-    flowerButton.addEventListener('click', () => writeModeCharacteristic(2));
-	lotusButton.addEventListener('click', () => writeModeCharacteristic(3));
-	radialButton.addEventListener('click', () => writeModeCharacteristic(4));
-    
-	// Write to the Brightness Characteristic	
-	brighterButton.addEventListener('click', () => writeBrightnessCharacteristic(1));
-    dimmerButton.addEventListener('click', () => writeBrightnessCharacteristic(2));
-    
-    // Write to the Speed Characteristic
-    fasterButton.addEventListener('click', () => writeSpeedCharacteristic(1));
-    slowerButton.addEventListener('click', () => writeSpeedCharacteristic(2));
-    */
-    
+	    
 	// Write to the Color Characteristic
 	  setColorOrderForm.addEventListener('submit', function(event) {
 		event.preventDefault();
@@ -107,7 +93,14 @@
 		setSpeedForm.reset();
 	});
 
-
+    // Write to the Scale Characteristic
+	  setScaleForm.addEventListener('submit', function(event) {
+		event.preventDefault();
+		const newScale = scaleInput.value;
+		//console.log('New scale sent:', newScale);
+		writeSpeedCharacteristic(newScale);
+		setScaleForm.reset();
+	});
 
 
     // Write to the Control Characteristic	
@@ -131,6 +124,24 @@
         //  outputDiv.textContent = `Slider value changed to: ${speedLowerSlider.value}`;
     });
 */
+
+	/*
+    // Write to the Mode Characteristic
+    octopusButton.addEventListener('click', () => writeModeCharacteristic(1));
+    flowerButton.addEventListener('click', () => writeModeCharacteristic(2));
+	lotusButton.addEventListener('click', () => writeModeCharacteristic(3));
+	radialButton.addEventListener('click', () => writeModeCharacteristic(4));
+    
+	// Write to the Brightness Characteristic	
+	brighterButton.addEventListener('click', () => writeBrightnessCharacteristic(1));
+    dimmerButton.addEventListener('click', () => writeBrightnessCharacteristic(2));
+    
+    // Write to the Speed Characteristic
+    fasterButton.addEventListener('click', () => writeSpeedCharacteristic(1));
+    slowerButton.addEventListener('click', () => writeSpeedCharacteristic(2));
+    */
+
+
 
 	// Check if BLE is available in your Browser
     function isWebBluetoothEnabled() {
@@ -227,20 +238,20 @@
 					speedValue.innerHTML = decodedValue;
 				 })
 	
-		    /* service.getCharacteristic(PaletteCharacteristic)
+		     service.getCharacteristic(ScaleCharacteristic)
 				 .then(characteristic => {
-					paletteCharacteristicFound = characteristic;
-					characteristic.addEventListener('characteristicvaluechanged', handlePaletteCharacteristicChange);
+					scaleCharacteristicFound = characteristic;
+					characteristic.addEventListener('characteristicvaluechanged', handleScaleCharacteristicChange);
 					characteristic.startNotifications();	
 					return characteristic.readValue();
 				 })
 				 .then(value => {
 					//console.log("Read value: ", value);
 					const decodedValue = new TextDecoder().decode(value);
-					console.log("Palette: ", decodedValue);
-					paletteValue.innerHTML = decodedValue;
+					console.log("Scale: ", decodedValue);
+					scaleValue.innerHTML = decodedValue;
 				 })
-            */	
+         
              
                  service.getCharacteristic(ControlCharacteristic)
 				 .then(characteristic => {
@@ -295,11 +306,11 @@
         speedValue.innerHTML = newValueReceived;
     }
 
-    /*function handlePaletteCharacteristicChange(event){
+    function handleScaleCharacteristicChange(event){
         const newValueReceived = new TextDecoder().decode(event.target.value);
-        console.log("Palette changed: ", newValueReceived);
-        paletteValue.innerHTML = newValueReceived;
-    }*/
+        console.log("New scale: ", newValueReceived);
+        scaleValue.innerHTML = newValueReceived;
+    }
 
     function handleControlCharacteristicChange(event){
         const newValueReceived = new TextDecoder().decode(event.target.value);
@@ -317,7 +328,7 @@
             .then(() => {
                 animationValue.innerHTML = value;
                 latestValueSent.innerHTML = value;
-                console.log("Value written to Animation characteristic:", value);
+                console.log("Value written to Animation characteristic: ", value);
             })
             .catch(error => {
                 console.error("Error writing to Animation characteristic: ", error);
@@ -332,17 +343,58 @@
         if (bleServer && bleServer.connected) {
             bleServiceFound.getCharacteristic(ColorCharacteristic)
             .then(characteristic => {
-//                console.log("Found Mode characteristic: ", characteristic.uuid);
                 const data = new Uint8Array([value]);
                 return characteristic.writeValue(data);
             })
             .then(() => {
                 colorOrderValue.innerHTML = value;
                 latestValueSent.innerHTML = value;
-                console.log("Value written to Color characteristic:", value);
+                console.log("Value written to Color characteristic: ", value);
             })
             .catch(error => {
                 console.error("Error writing to Color characteristic: ", error);
+            });
+        } else {
+            console.error ("Bluetooth is not connected. Cannot write to characteristic.")
+            window.alert("Bluetooth is not connected. Cannot write to characteristic. \n Connect to BLE first!")
+        }
+    }
+
+    function writeSpeedCharacteristic(value){
+        if (bleServer && bleServer.connected) {
+            bleServiceFound.getCharacteristic(SpeedCharacteristic)
+            .then(characteristic => {
+                const data = new Uint8Array([value]);
+                return characteristic.writeValue(data);
+            })
+            .then(() => {
+                speedValue.innerHTML = value;
+                latestValueSent.innerHTML = value;
+                console.log("Value written to Speed characteristic: ", value);
+            })
+            .catch(error => {
+                console.error("Error writing to Speed characteristic: ", error);
+            });
+        } else {
+            console.error ("Bluetooth is not connected. Cannot write to characteristic.")
+            window.alert("Bluetooth is not connected. Cannot write to characteristic. \n Connect to BLE first!")
+        }
+    }
+
+    function writeScaleCharacteristic(value){
+        if (bleServer && bleServer.connected) {
+            bleServiceFound.getCharacteristic(ScaleCharacteristic)
+            .then(characteristic => {
+                const data = new Uint8Array([value]);
+                return characteristic.writeValue(data);
+            })
+            .then(() => {
+                scaleValue.innerHTML = value;
+                latestValueSent.innerHTML = value;
+                console.log("Value written to Scale characteristic: ", value);
+            })
+            .catch(error => {
+                console.error("Error writing to Scale characteristic: ", error);
             });
         } else {
             console.error ("Bluetooth is not connected. Cannot write to characteristic.")
@@ -371,28 +423,7 @@
             window.alert("Bluetooth is not connected. Cannot write to characteristic. \n Connect to BLE first!")
         }
     }
-        */
-
-    function writeSpeedCharacteristic(value){
-        if (bleServer && bleServer.connected) {
-            bleServiceFound.getCharacteristic(SpeedCharacteristic)
-            .then(characteristic => {
-                const data = new Uint8Array([value]);
-                return characteristic.writeValue(data);
-            })
-            .then(() => {
-                speedValue.innerHTML = value;
-                latestValueSent.innerHTML = value;
-                console.log("Value written to Speed characteristic:", value);
-            })
-            .catch(error => {
-                console.error("Error writing to Speed characteristic: ", error);
-            });
-        } else {
-            console.error ("Bluetooth is not connected. Cannot write to characteristic.")
-            window.alert("Bluetooth is not connected. Cannot write to characteristic. \n Connect to BLE first!")
-        }
-    }
+    */
 
 	/*
     function writePaletteCharacteristic(value){

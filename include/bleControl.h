@@ -291,7 +291,7 @@ class ScaleCharacteristicCallbacks : public BLECharacteristicCallbacks {
  void onWrite(BLECharacteristic *characteristic) {
     String value = characteristic->getValue();
     if (value.length() > 0) {
-       uint8_t receivedValue = value[0]; 
+       float receivedValue = value[0]; 
        if (debug) {
          Serial.print("Scale: ");
          Serial.println(receivedValue);
