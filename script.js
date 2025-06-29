@@ -24,9 +24,8 @@ const speedInput = document.getElementById('speedInput');
 const setScaleForm = document.getElementById('scaleForm');
 const scaleInput = document.getElementById('scaleInput');
 
-//const fixedPaletteButton = document.getElementById('fixedPaletteButton');
-//const rotatePaletteButton = document.getElementById('rotatePaletteButton');
-//const speedLowerSlider = document.getElementById('speedLowerSlider');
+const formSliderA = document.getElementById('formSliderA');
+const inputSliderA = document.getElementById('inputSliderA');
 
 const latestValueSent = document.getElementById('valueSent');
 const bleStateContainer = document.getElementById('bleState');
@@ -39,8 +38,9 @@ var ColorCharacteristic =       '19b10002-e8f2-537e-4f6c-d104768a1214';
 var SpeedCharacteristic =       '19b10003-e8f2-537e-4f6c-d104768a1214';
 var ScaleCharacteristic =       '19b10004-e8f2-537e-4f6c-d104768a1214';
 var ControlCharacteristic =     '19b10005-e8f2-537e-4f6c-d104768a1214';
+var SliderCharacteristic =      '19b10006-e8f2-537e-4f6c-d104768a1214';
 
-//Global Variables to Handle Bluetooth
+//Declare Global Variables to Handle Bluetooth
 var bleDevice;
 var bleServer;
 var bleServiceFound;
@@ -49,6 +49,7 @@ var colorCharacteristicFound;
 var speedCharacteristicFound;
 var scaleCharacteristicFound;
 var controlCharacteristicFound;
+var sliderCharacteristicFound;
 
 // ADD EVENT LISTENERS *************************************************************
 
@@ -60,7 +61,7 @@ var controlCharacteristicFound;
 // Disconnect Button
     disconnectButton.addEventListener('click', disconnectDevice);
 
-// Animation Characteristic Inputs
+// Animation Characteristic Inputs (Buttons)
     polarWavesButton.addEventListener('click', () => writeAnimationCharacteristic(1));
     spiralusButton.addEventListener('click', () => writeAnimationCharacteristic(2));
     caleido1Button.addEventListener('click', () => writeAnimationCharacteristic(3));
@@ -72,7 +73,7 @@ var controlCharacteristicFound;
     experimentSM1Button.addEventListener('click', () => writeAnimationCharacteristic(9));
     offButton.addEventListener('click', () => writeAnimationCharacteristic(99));
         
-// Color Characteristic Inputs
+// Color Characteristic Input (Number)
     setColorOrderForm.addEventListener('submit', function(event) {
         event.preventDefault();
         const newColorOrder = colorOrderInput.value;
@@ -81,16 +82,16 @@ var controlCharacteristicFound;
         setColorOrderForm.reset();
     });
 
-// Speed Characteristic Inputs
+// Speed Characteristic Input (Number..eventually->Slider)
     setSpeedForm.addEventListener('submit', function(event) {
         event.preventDefault();
         const newSpeed = speedInput.value;
         //console.log('New speed sent:', newSpeed);
         writeSpeedCharacteristic(newSpeed);
-    setSpeedForm.reset();
+        setSpeedForm.reset();
     });
 
-// Scale Characteristic Inputs
+// Scale Characteristic Input (Number..eventually->Slider)
     setScaleForm.addEventListener('submit', function(event) {
         event.preventDefault();
         const newScale = scaleInput.value;
@@ -109,16 +110,19 @@ var controlCharacteristicFound;
         }
     });
 
-/*
-// Slider value change event
-    speedLowerSlider.addEventListener('input', () => {
-        const newSpeedLower = speedLowerSlider.value;
-        console.log('New speed lower:', newSpeedLower);
-        writePaletteCharacteristic(newSpeedLower);
-        //  sliderValueSpan.textContent = speedLowerSlider.value;
-        //  outputDiv.textContent = `Slider value changed to: ${speedLowerSlider.value}`;
+
+// SliderA Input (Slider)
+    formSliderA.addEventListener('input', function(event) {
+        event.preventDefault();
+        const elementID = inputSliderA.id;
+        const elementValue = inputSliderA.value;
+        const sendString = null;
+        sendDoc["id"] = elementID;
+        sendDoc["value"] = elementValue;
+        serializeJson(sendDoc, sendString);
+        writeSliderCharacteristic(sendString);
     });
-*/
+
 
 // BLE CONNECTION *******************************************************************************
 
@@ -296,6 +300,14 @@ function handleControlCharacteristicChange(event){
     controlValue.innerHTML = newValueReceived;
 }
 
+
+function handleSliderCharacteristicChange(event){
+    const newValueReceived = new TextDecoder().decode(event.target.value);
+    console.log("New slider: ", newValueReceived);
+    valueSliderA.innerHTML = newValueReceived;
+}
+
+
 // WRITE TO CHARACTERISTIC FUNCTIONS *************************************************
 
 function writeAnimationCharacteristic(value){
@@ -402,81 +414,24 @@ function writeControlCharacteristic(value){
     }
 }
 
-/*
-function writeBrightnessCharacteristic(value){
+function writeSliderCharacteristic(value){
     if (bleServer && bleServer.connected) {
-        bleServiceFound.getCharacteristic(BrightnessCharacteristic)
+        bleServiceFound.getCharacteristic(SliderCharacteristic)
         .then(characteristic => {
-            const data = new Uint8Array([value]);
-            return characteristic.writeValue(data);
+            return characteristic.writeValue(value);
         })
         .then(() => {
-            brightnessValue.innerHTML = value;
+            //testValue.innerHTML = value;
             latestValueSent.innerHTML = value;
-            console.log("Value written to Brightness characteristic:", value);
+            console.log("Value written to Slider characteristic: ", value);
         })
         .catch(error => {
-            console.error("Error writing to Brightness characteristic: ", error);
+            console.error("Error writing to Slider characteristic: ", error);
         });
     } else {
         console.error ("Bluetooth is not connected. Cannot write to characteristic.")
         window.alert("Bluetooth is not connected. Cannot write to characteristic. \n Connect to BLE first!")
     }
 }
-*/
-
-/*
-function writePaletteCharacteristic(value){
-    if (bleServer && bleServer.connected) {
-        bleServiceFound.getCharacteristic(PaletteCharacteristic)
-        .then(characteristic => {
-            const data = new Uint8Array([value]);
-            return characteristic.writeValue(data);
-        })
-        .then(() => {
-            paletteValue.innerHTML = value;
-            latestValueSent.innerHTML = value;
-            console.log("Value written to Palette characteristic:", value);
-        })
-        .catch(error => {
-            console.error("Error writing to the Palette characteristic: ", error);
-        });
-    } else {
-        console.error ("Bluetooth is not connected. Cannot write to characteristic.")
-        window.alert("Bluetooth is not connected. Cannot write to characteristic. \n Connect to BLE first!")
-    }
-}
-*/
 
 
-
-
-/*
-document.addEventListener('DOMContentLoaded', () => {
-const myButton = document.getElementById('myButton');
-const mySlider = document.getElementById('mySlider');
-const sliderValueSpan = document.getElementById('sliderValue');
-const myCheckbox = document.getElementById('myCheckbox');
-const outputDiv = document.getElementById('output');
-
-// Button click event
-myButton.addEventListener('click', () => {
-outputDiv.textContent = 'Button clicked!';
-});
-
-// Slider value change event
-mySlider.addEventListener('input', () => {
-sliderValueSpan.textContent = mySlider.value;
-outputDiv.textContent = `Slider value changed to: ${mySlider.value}`;
-});
-
-// Checkbox state change event
-myCheckbox.addEventListener('change', () => {
-if (myCheckbox.checked) {
-    outputDiv.textContent = 'Checkbox is checked!';
-} else {
-    outputDiv.textContent = 'Checkbox is unchecked!';
-}
-});
-});
-*/

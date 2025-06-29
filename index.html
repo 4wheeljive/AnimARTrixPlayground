@@ -49,67 +49,35 @@
                  
                 <p>
 					<form id="colorOrderForm">
-				    	Color order number (0-5): <input type="number"  type="submit" id="colorOrderInput"  name="colorOrderInputName" min="0" max="5"/>
-					</form>
+				    	Color order number (0-5): <input type="number"  type="submit" id="colorOrderInput"  name="colorOrderInputName"  min="0" max="5"/>
+				
+                    </form>
 				</p>	
 				<p class="gray-label">Current number: <span id="colorOrderValue"></span></p>
 
                 <p>
 				    <form id="speedForm">
-					    Speed (0.1 to 10.0): <input type="number"  type="submit" id="speedInput"  name="speedInputName" min=".1" max="10" step=".1"/>
-					</form>
+					    Speed (0.1 to 10.0): <input type="number"  type="submit" id="speedInput" name="speedInputName" min=".1" max="10" step=".1"/>
+				    </form>
 				</p>
                 <p class="gray-label">Current speed: <span id="speedValue"></span></p>           
             
                 <p>
 					<form id="scaleForm">
-					    Scale (0.3 to 3.0): <input type="number"  type="submit" id="scaleInput"  name="scaleInputName" min=".3" max="3" step=".1"/>
-					</form>
+					    Scale (0.3 to 3.0): <input type="number"  type="submit" id="scaleInput" name="scaleInputName"  min=".3" max="3" step=".1"/>
+                    </form>
 				</p>
                 <p class="gray-label">Current scale: <span id="scaleValue"></span></p>
-                
-            </div>
+                            
+                <p>
+                    <form id="formSliderA">
+                        <label for="SliderA">Slider A:</label>
+                        <input type="range" id="inputSliderA" name="inputSliderA" min=".1" max="10" step="0.1" value="1.00">
+                        <span id="valueSliderA">1.00</span>
+                    </form>
+                </p>
 
-            <!--
-            <div class="card">
-                 <h2>Brightness</h2>
-				 <p>
-					 <button id="brighterButton" class="onButton">BRIGHTER</button>
-					 <button id="dimmerButton" class="offButton">DIMMER</button>
-				 </p>
-                 <p class="gray-label">Current brightness: <span id="brightnessValue"></span></p>
-			</div>
-
-			<div class="card">
-                 <h2>Speed</h2>
-				 <p>
-					 <button id="fasterButton" class="onButton">FASTER</button>
-					 <button id="slowerButton" class="offButton">SLOWER</button>
-                 
-				 </p>
-				 <p class="gray-label">Current speed: <span id="speedValue"></span></p>
-			</div>
-            -->	
-            <!--
-            <div class="card">
-                 <h2>Control</h2>
-				
-                 <p>
-					 <button id="fancyButton" class="onButton">FANCY</button>
-				 </p>
-                 
-                
-                 <p>
-                    <label for="speedLowerSlider">Lower wave speed:</label>
-                    <input type="range" id="speedLowerSlider" min="0" max="1" step="0.01" value=".16">
-                    <span id="speedLowerValue">.16</span>
-                 </p>
-              
-                
-                 <p class="gray-label">Last control value: <span id="controlValue"></span></p>
-		
             </div>
-        	--> 
 
 	    </div>
 		

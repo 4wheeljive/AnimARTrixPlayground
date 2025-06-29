@@ -60,7 +60,7 @@ double initialFxIndex = 4;   // this should really be changed to uint8_t, but UI
 
 #else
 
-   using namespace ArduinoJson;
+  // using namespace ArduinoJson;
 
    uint8_t brightness = BRIGHTNESS;
    double fxIndex = initialFxIndex;        // this should really be changed to uint8_t, but UINumberField requires that it be a double
@@ -88,8 +88,8 @@ double initialFxIndex = 4;   // this should really be changed to uint8_t, but UI
    float adjustGreen = 1.f; // ("Green", 1, .1, 10, -1);   //multiplied
    float adjustBlue = 1.f; // ("Blue", 1, .1, 10, -1);  //multiplied
 
-   ArduinoJson::JsonDocument sendDoc;
-   ArduinoJson::JsonDocument confirmDoc;
+  // ArduinoJson::JsonDocument sendDoc;
+  // ArduinoJson::JsonDocument confirmDoc;
 
 #endif
 
@@ -101,6 +101,7 @@ BLECharacteristic* pColorCharacteristic = NULL;
 BLECharacteristic* pSpeedCharacteristic = NULL;
 BLECharacteristic* pScaleCharacteristic = NULL;
 BLECharacteristic* pControlCharacteristic = NULL;
+//BLECharacteristic* pSliderCharacteristic = NULL;
 bool deviceConnected = false;
 bool wasConnected = false;
 
@@ -110,6 +111,7 @@ bool wasConnected = false;
 #define SPEED_CHARACTERISTIC_UUID      "19b10003-e8f2-537e-4f6c-d104768a1214"
 #define SCALE_CHARACTERISTIC_UUID 		"19b10004-e8f2-537e-4f6c-d104768a1214"
 #define CONTROL_CHARACTERISTIC_UUID    "19b10005-e8f2-537e-4f6c-d104768a1214"
+//#define SLIDER_CHARACTERISTIC_UUID     "19b10006-e8f2-537e-4f6c-d104768a1214"
 
 /*
 BLEDescriptor pAnimationDescriptor(BLEUUID((uint16_t)0x2901));
@@ -123,83 +125,70 @@ BLEDescriptor pControlDescriptor(BLEUUID((uint16_t)0x2905));
 
 void animationAdjust(double newAnimation) {
    fxIndex = newAnimation;
-   pAnimationCharacteristic->setValue(String(newAnimation).c_str());
-   pAnimationCharacteristic->notify();
    if (debug) {
       Serial.print("Animation: ");
       Serial.println(newAnimation);
-   }
+   }   
+   pAnimationCharacteristic->setValue(String(newAnimation).c_str());
+   pAnimationCharacteristic->notify();
 }
 
 void colorOrderAdjust(double newColorOrder) {
    colorOrder = newColorOrder;
-   colorOrderChanged = true;
-   pColorCharacteristic->setValue(String(colorOrder).c_str());
-   pColorCharacteristic->notify();
    if (debug) {
       Serial.print("Color order: ");
       Serial.println(colorOrder);
    }
+   colorOrderChanged = true;
+   pColorCharacteristic->setValue(String(colorOrder).c_str());
+   pColorCharacteristic->notify();
 }
 
 void speedAdjust(float newSpeed) {
    timeSpeed = newSpeed;
-   pSpeedCharacteristic->setValue(String(timeSpeed).c_str());
-   pSpeedCharacteristic->notify();
    if (debug) {
       Serial.print("Speed: ");
       Serial.println(timeSpeed);
    }
+   pSpeedCharacteristic->setValue(String(timeSpeed).c_str());
+   pSpeedCharacteristic->notify();
 }
 
-void scaleAdjust(String jsonReceived) {
-   deserializeJson(sendDoc, jsonReceived);
-   float newScale = sendDoc["scale"];
+void scaleAdjust(float newScale) {
    adjustScale = newScale;
    if (debug) {
       Serial.print("Scale: ");
       Serial.println(newScale);
    }
-   /*
-   confirmDoc["scale"] = adjustScale;
-   String confirmString;
-   ArduinoJson::serializeJson(confirmDoc, confirmString);
-   pScaleCharacteristic->setValue(confirmString);
-   */
+   //deserializeJson(sendDoc, jsonReceived);
+   //float newScale = sendDoc["scale"];
    pScaleCharacteristic->setValue(String(adjustScale).c_str());
    pScaleCharacteristic->notify();
-
 }
+
 
 /*
-void brightnessAdjust(uint8_t newBrightness) {
-   BRIGHTNESS = newBrightness;
-   //brightnessChanged = true;
-   FastLED.setBrightness(BRIGHTNESS);
-   pBrightnessCharacteristic->setValue(String(BRIGHTNESS).c_str());
-   pBrightnessCharacteristic->notify();
-   if (debug) {
-      Serial.print("Brightness: ");
-      Serial.println(BRIGHTNESS);
-   }
-}
-*/
+void sliderAdjust(String jsonReceived) {
 
-/*
-void startWaves() {
-   if (rotateWaves) { gCurrentPaletteNumber = random(0,gGradientPaletteCount); }
-   CRGBPalette16 gCurrentPalette( gGradientPalettes[gCurrentPaletteNumber] );
-   pPaletteCharacteristic->setValue(String(gCurrentPaletteNumber).c_str());
-   pPaletteCharacteristic->notify();
-   if (debug) {
-      Serial.print("Color palette: ");
-      Serial.println(gCurrentPaletteNumber);
-   }
-   gCurrentPaletteNumber = addmod8( gCurrentPaletteNumber, 1, gGradientPaletteCount);
-   gTargetPalette = gGradientPalettes[ gCurrentPaletteNumber ];
-}
-*/
+   deserializeJson(sendDoc, jsonReceived);
+   float newScale = sendDoc["scale"];
+   adjustScale = newScale;
 
+   if (debug) {
+      Serial.print("Scale: ");
+      Serial.println(newScale);
+   }
+
+   pScaleCharacteristic->setValue(String(adjustScale).c_str());
+   pScaleCharacteristic->notify();
+}
+
+//   confirmDoc["scale"] = adjustScale;
+//   String confirmString;
+//   ArduinoJson::serializeJson(confirmDoc, confirmString);
+//   pScaleCharacteristic->setValue(confirmString);
+
+*/
 
 // CALLBACKS ****************************************************************************
 
@@ -288,7 +277,7 @@ class SpeedCharacteristicCallbacks : public BLECharacteristicCallbacks {
  void onWrite(BLECharacteristic *characteristic) {
     String value = characteristic->getValue();
     if (value.length() > 0) {
-       double receivedValue = value[0]; 
+       float receivedValue = value[0]; 
        if (debug) {
          Serial.print("Speed adjust: ");
          Serial.println(receivedValue);
@@ -308,11 +297,16 @@ class ScaleCharacteristicCallbacks : public BLECharacteristicCallbacks {
          Serial.print("Scale: ");
          Serial.println(receivedValue);
        }
-      sendDoc["scale"] = receivedValue;
-      String sendString;
-      ArduinoJson::serializeJson(sendDoc, sendString);
-      scaleAdjust(sendString);
-    }
+       scaleAdjust(receivedValue);
+
+       /*
+       sendDoc["scale"] = receivedValue;
+       String sendString;
+       ArduinoJson::serializeJson(sendDoc, sendString);
+       scaleAdjust(sendString);
+       */
+   
+   }
  }
 };
 
@@ -335,52 +329,38 @@ class ControlCharacteristicCallbacks : public BLECharacteristicCallbacks {
  }
 };
 
-
 /*
-class BrightnessCharacteristicCallbacks : public BLECharacteristicCallbacks {
+class SliderCharacteristicCallbacks : public BLECharacteristicCallbacks {
  void onWrite(BLECharacteristic *characteristic) {
     String value = characteristic->getValue();
     if (value.length() > 0) {
-       uint8_t receivedValue = value[0]; 
+         String receivedString = value[0];
+         ArduinoJson::deserializeJson(sendDoc, receivedString);
+        = elementID = sendDoc["id"] ;
+        float elementValue = sendDoc["value"];
+      
+      
+      float receivedValue = value[0]; 
+
        if (debug) {
-         Serial.print("Brightness adjust: ");
+         Serial.print("Test: ");
          Serial.println(receivedValue);
        }
-       if (receivedValue == 1) {
-          uint8_t newBrightness = min(BRIGHTNESS + brightnessInc,255);
-          brightnessAdjust(newBrightness);
-       }
-       if (receivedValue == 2) {
-          uint8_t newBrightness = max(BRIGHTNESS - brightnessInc,0);
-          brightnessAdjust(newBrightness);
-       }
-    }
+             
+       
+       sendDoc["scale"] = receivedValue;
+       String sendString;
+       ArduinoJson::serializeJson(sendDoc, sendString);
+       
+       sliderAdjust(sendString);
+       
+   
+   }
  }
 };
 */
 
-/*
-class SpeedCharacteristicCallbacks : public BLECharacteristicCallbacks {
- void onWrite(BLECharacteristic *characteristic) {
-    String value = characteristic->getValue();
-    if (value.length() > 0) {
-       uint8_t receivedValue = value[0]; 
-       if (debug) {
-         Serial.print("Speed adjust: ");
-         Serial.println(receivedValue);
-       }
-       if (receivedValue == 1) {
-          uint8_t newSpeed = min(SPEED+1,10);
-          speedAdjust(newSpeed);
-       }
-       if (receivedValue == 2) {
-          uint8_t newSpeed = max(SPEED-1,0);
-          speedAdjust(newSpeed);
-       }
-    }
- }
-};
-*/
+
 
 //*******************************************************************************************
 
@@ -424,7 +404,6 @@ void bleSetup() {
    //pSpeedCharacteristic->addDescriptor(new BLE2902());
    //pSpeedDescriptor.setValue("Speed"); 
 
-
    pScaleCharacteristic = pService->createCharacteristic(
                         SCALE_CHARACTERISTIC_UUID,
                         BLECharacteristic::PROPERTY_READ |
@@ -444,6 +423,18 @@ void bleSetup() {
                      );
    pControlCharacteristic->setCallbacks(new ControlCharacteristicCallbacks());
    //pControlCharacteristic->addDescriptor(new BLE2902());
+
+   /*
+   pSliderCharacteristic = pService->createCharacteristic(
+                        SLIDER_CHARACTERISTIC_UUID,
+                        BLECharacteristic::PROPERTY_WRITE |
+                        BLECharacteristic::PROPERTY_READ |
+                        BLECharacteristic::PROPERTY_NOTIFY
+                     );
+   pSliderCharacteristic->setCallbacks(new SliderCharacteristicCallbacks());
+   pSliderCharacteristic->setValue(String(adjustScale).c_str());
+   //pControlCharacteristic->addDescriptor(new BLE2902());
+   */
 
    //**********************************************************
 
