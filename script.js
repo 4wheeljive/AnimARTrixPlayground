@@ -17,6 +17,9 @@ const bleStateContainer = document.getElementById('bleState');
 
 var sendString = " ";
 
+var sendDoc;
+var confirmDoc;
+
 //Define BLE Device Specs
 var deviceName ='json Playground';
 var bleService =                '19b10000-e8f2-537e-4f6c-d104768a1214';
