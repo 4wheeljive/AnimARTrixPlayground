@@ -1,7 +1,6 @@
 #pragma once
 
 #include "FastLED.h" 
-#include "fl/ui.h"
 #include <ArduinoJson.h> 
 
 /* Be sure to set numHandles = 60 in this file:
@@ -19,11 +18,9 @@ bool displayOn = true;
 
 bool debug = true;
 
-bool nextFxIndexRandom = false;
 bool rotateAnimations = true;
-bool colorOrderChanged = false;
-double initialFxIndex = 4;   // this should really be changed to uint8_t, but UINumberField requires that it be a double
 
+void colorChase();
 
 // UI Elements *************************************************************************************
 
@@ -60,12 +57,10 @@ double initialFxIndex = 4;   // this should really be changed to uint8_t, but UI
 
 #else
 
-  // using namespace ArduinoJson;
+   using namespace ArduinoJson;
 
+   uint8_t hue = 0;
    uint8_t brightness = BRIGHTNESS;
-   double fxIndex = initialFxIndex;        // this should really be changed to uint8_t, but UINumberField requires that it be a double
-   double colorOrder = 0;                   // this should really be changed to uint8_t, but UINumberField requires that it be a double
-
    float timeSpeed = 1.f; //("Speed", 1, .1, 10, -1) multiplied
 
    float adjustRatiosBase = 0.0f; //("Ratios: Base", 0, -1, 1, -1);  // added/subtracted
@@ -88,42 +83,42 @@ double initialFxIndex = 4;   // this should really be changed to uint8_t, but UI
    float adjustGreen = 1.f; // ("Green", 1, .1, 10, -1);   //multiplied
    float adjustBlue = 1.f; // ("Blue", 1, .1, 10, -1);  //multiplied
 
-  // ArduinoJson::JsonDocument sendDoc;
-  // ArduinoJson::JsonDocument confirmDoc;
+   ArduinoJson::JsonDocument sendDoc;
+   ArduinoJson::JsonDocument confirmDoc;
 
 #endif
 
 //BLE configuration *************************************************************
 
 BLEServer* pServer = NULL;
-BLECharacteristic* pAnimationCharacteristic = NULL;
-BLECharacteristic* pColorCharacteristic = NULL;
-BLECharacteristic* pSpeedCharacteristic = NULL;
-BLECharacteristic* pScaleCharacteristic = NULL;
-BLECharacteristic* pControlCharacteristic = NULL;
+//BLECharacteristic* pButtonCharacteristic = NULL;
+//BLECharacteristic* pCheckboxCharacteristic = NULL;
+BLECharacteristic* pNumberCharacteristic = NULL;
 //BLECharacteristic* pSliderCharacteristic = NULL;
 bool deviceConnected = false;
 bool wasConnected = false;
 
 #define SERVICE_UUID                  	"19b10000-e8f2-537e-4f6c-d104768a1214"
-#define ANIMATION_CHARACTERISTIC_UUID  "19b10001-e8f2-537e-4f6c-d104768a1214"
-#define COLOR_CHARACTERISTIC_UUID   	"19b10002-e8f2-537e-4f6c-d104768a1214"
-#define SPEED_CHARACTERISTIC_UUID      "19b10003-e8f2-537e-4f6c-d104768a1214"
-#define SCALE_CHARACTERISTIC_UUID 		"19b10004-e8f2-537e-4f6c-d104768a1214"
-#define CONTROL_CHARACTERISTIC_UUID    "19b10005-e8f2-537e-4f6c-d104768a1214"
-//#define SLIDER_CHARACTERISTIC_UUID     "19b10006-e8f2-537e-4f6c-d104768a1214"
+//#define BUTTON_CHARACTERISTIC_UUID     "19b10001-e8f2-537e-4f6c-d104768a1214"
+//#define CHECKBOX_CHARACTERISTIC_UUID   "19b10002-e8f2-537e-4f6c-d104768a1214"
+#define NUMBER_CHARACTERISTIC_UUID     "19b10003-e8f2-537e-4f6c-d104768a1214"
+//#define SLIDER_CHARACTERISTIC_UUID     "19b10004-e8f2-537e-4f6c-d104768a1214"
 
-/*
-BLEDescriptor pAnimationDescriptor(BLEUUID((uint16_t)0x2901));
-BLEDescriptor pColorDescriptor(BLEUUID((uint16_t)0x2902));
-BLEDescriptor pSpeedDescriptor(BLEUUID((uint16_t)0x2903));
-BLEDescriptor pScaleDescriptor(BLEUUID((uint16_t)0x2904));
-BLEDescriptor pControlDescriptor(BLEUUID((uint16_t)0x2905));
-*/
+String elementID;
+uint8_t elementValue;
+String numberValue;
 
 // CONTROL FUNCTIONS ***************************************************************
 
-void animationAdjust(double newAnimation) {
+
+void processNumber(String receivedID, uint8_t receivedValue ) {
+   if (receivedID == "hueInput" ) {
+      hue = receivedValue;
+   }
+}
+
+
+/*void animationAdjust(double newAnimation) {
    fxIndex = newAnimation;
    if (debug) {
       Serial.print("Animation: ");
@@ -133,45 +128,11 @@ void animationAdjust(double newAnimation) {
    pAnimationCharacteristic->notify();
 }
 
-void colorOrderAdjust(double newColorOrder) {
-   colorOrder = newColorOrder;
-   if (debug) {
-      Serial.print("Color order: ");
-      Serial.println(colorOrder);
-   }
-   colorOrderChanged = true;
-   pColorCharacteristic->setValue(String(colorOrder).c_str());
-   pColorCharacteristic->notify();
-}
 
-void speedAdjust(float newSpeed) {
-   timeSpeed = newSpeed;
-   if (debug) {
-      Serial.print("Speed: ");
-      Serial.println(timeSpeed);
-   }
-   pSpeedCharacteristic->setValue(String(timeSpeed).c_str());
-   pSpeedCharacteristic->notify();
-}
-
-void scaleAdjust(float newScale) {
-   adjustScale = newScale;
-   if (debug) {
-      Serial.print("Scale: ");
-      Serial.println(newScale);
-   }
-   //deserializeJson(sendDoc, jsonReceived);
-   //float newScale = sendDoc["scale"];
-   pScaleCharacteristic->setValue(String(adjustScale).c_str());
-   pScaleCharacteristic->notify();
-}
-
-
-/*
 void sliderAdjust(String jsonReceived) {
 
    deserializeJson(sendDoc, jsonReceived);
-   float newScale = sendDoc["scale"];
+   uint8_t newHue = sendDoc["scale"];
    adjustScale = newScale;
 
    if (debug) {
@@ -190,6 +151,7 @@ void sliderAdjust(String jsonReceived) {
 
 */
 
+
 // CALLBACKS ****************************************************************************
 
 class MyServerCallbacks: public BLEServerCallbacks {
@@ -205,118 +167,40 @@ class MyServerCallbacks: public BLEServerCallbacks {
   }
 };
 
-class AnimationCharacteristicCallbacks : public BLECharacteristicCallbacks {
+/*
+class ButtonCharacteristicCallbacks : public BLECharacteristicCallbacks {
  void onWrite(BLECharacteristic *characteristic) {
     String value = characteristic->getValue();
     if (value.length() > 0) {
        uint8_t receivedValue = value[0];
        if (debug) {
-         Serial.print("Animation: ");
+         Serial.print("Button: ");
          Serial.println(receivedValue);
        }
        
        if (receivedValue != 99) {
        
-         if (receivedValue == 1) { //polar waves
-            fxIndex = 0;
-         }
-         if (receivedValue == 2) { // spiralus
-            fxIndex = 1;
-         }
-         if (receivedValue == 3) { // caleido1
-            fxIndex = 2;
-         }
-         if (receivedValue == 4) { // waves
-            fxIndex = 3;
-         }
-         if (receivedValue == 5) { // chasing spirals
-            fxIndex = 4;
-         }
-         if (receivedValue == 6) { // rings
-            fxIndex = 5;
-         }
-         if (receivedValue == 7) { // complex kaleido 6 
-            fxIndex = 6;
-         }
-         if (receivedValue == 8) { // experiment 10
-            fxIndex = 7;
-         }
-         if (receivedValue == 9) { // experiment sm1
-            fxIndex = 8;
-         }
+          if (receivedValue == 1) { }
          
-         displayOn = true;
-         animationAdjust(fxIndex);
-       
+          displayOn = true;
+              
        }
 
-       if (receivedValue == 99) { //off
-          displayOn = false;
-       }
+          if (receivedValue == 99) { //off
+             displayOn = false;
+         }
 	
       }
    }
 };
 
-class ColorCharacteristicCallbacks : public BLECharacteristicCallbacks {
- void onWrite(BLECharacteristic *characteristic) {
-    String value = characteristic->getValue();
-    if (value.length() > 0) {
-       int receivedValue = value[0]; 
-       if (debug) {
-         Serial.print("Color order: ");
-         Serial.println(receivedValue);
-       }
-       colorOrder = receivedValue;
-       colorOrderAdjust(colorOrder);
-	}
- }
-};
-
-class SpeedCharacteristicCallbacks : public BLECharacteristicCallbacks {
- void onWrite(BLECharacteristic *characteristic) {
-    String value = characteristic->getValue();
-    if (value.length() > 0) {
-       float receivedValue = value[0]; 
-       if (debug) {
-         Serial.print("Speed adjust: ");
-         Serial.println(receivedValue);
-       }
-       timeSpeed = receivedValue;
-       speedAdjust(timeSpeed);
-    }
- }
-};
-
-class ScaleCharacteristicCallbacks : public BLECharacteristicCallbacks {
- void onWrite(BLECharacteristic *characteristic) {
-    String value = characteristic->getValue();
-    if (value.length() > 0) {
-       float receivedValue = value[0]; 
-       if (debug) {
-         Serial.print("Scale: ");
-         Serial.println(receivedValue);
-       }
-       scaleAdjust(receivedValue);
-
-       /*
-       sendDoc["scale"] = receivedValue;
-       String sendString;
-       ArduinoJson::serializeJson(sendDoc, sendString);
-       scaleAdjust(sendString);
-       */
-   
-   }
- }
-};
-
-class ControlCharacteristicCallbacks : public BLECharacteristicCallbacks {
+class CheckboxCharacteristicCallbacks : public BLECharacteristicCallbacks {
  void onWrite(BLECharacteristic *characteristic) {
     String value = characteristic->getValue();
     if (value.length() > 0) {
       uint8_t receivedValue = value[0];
       if (debug) {
-         Serial.print("Control: ");
+         Serial.print("Checkbox: ");
          Serial.println(receivedValue);
        } 
       if (receivedValue == 100) {
@@ -329,36 +213,41 @@ class ControlCharacteristicCallbacks : public BLECharacteristicCallbacks {
  }
 };
 
-/*
-class SliderCharacteristicCallbacks : public BLECharacteristicCallbacks {
- void onWrite(BLECharacteristic *characteristic) {
-    String value = characteristic->getValue();
-    if (value.length() > 0) {
-         String receivedString = value[0];
-         ArduinoJson::deserializeJson(sendDoc, receivedString);
-        = elementID = sendDoc["id"] ;
-        float elementValue = sendDoc["value"];
-      
-      
-      float receivedValue = value[0]; 
 
-       if (debug) {
-         Serial.print("Test: ");
-         Serial.println(receivedValue);
-       }
-             
-       
-       sendDoc["scale"] = receivedValue;
-       String sendString;
-       ArduinoJson::serializeJson(sendDoc, sendString);
-       
-       sliderAdjust(sendString);
-       
-   
+class SliderCharacteristicCallbacks : public BLECharacteristicCallbacks {
+   void onWrite(BLECharacteristic *characteristic) {
+      String receivedString = characteristic->getValue();
+      if (receivedString.length() > 0) {
+         if (debug) {
+            Serial.print("Received String: ");
+            Serial.println(receivedString);
+         }
+         ArduinoJson::deserializeJson(sendDoc, receivedString);
+         String receivedID = sendDoc["id"] ;
+         uint8_t receivedValue = sendDoc["value"];
+         processSlider(receivedID, receivedValue);
+      }
    }
- }
 };
 */
+
+
+class NumberCharacteristicCallbacks : public BLECharacteristicCallbacks {
+   void onWrite(BLECharacteristic *characteristic) {
+      String receivedString = characteristic->getValue();
+      if (receivedString.length() > 0) {
+         if (debug) {
+            Serial.print("Received String: ");
+            Serial.println(receivedString);
+         }
+         ArduinoJson::deserializeJson(sendDoc, receivedString);
+         String receivedID = sendDoc["id"] ;
+         uint8_t receivedValue = sendDoc["value"];
+         processNumber(receivedID, receivedValue);
+      }
+   }
+};
+
 
 
 
@@ -366,75 +255,52 @@ class SliderCharacteristicCallbacks : public BLECharacteristicCallbacks {
 
 void bleSetup() {
 
-   BLEDevice::init("AnimARTrix Playground");
+   BLEDevice::init("json Playground");
 
    pServer = BLEDevice::createServer();
    pServer->setCallbacks(new MyServerCallbacks());
 
    BLEService *pService = pServer->createService(SERVICE_UUID);
 
-   pAnimationCharacteristic = pService->createCharacteristic(
-                        ANIMATION_CHARACTERISTIC_UUID,
-                        BLECharacteristic::PROPERTY_WRITE |
-                        BLECharacteristic::PROPERTY_READ |
-                        BLECharacteristic::PROPERTY_NOTIFY
-                     );
-   pAnimationCharacteristic->setCallbacks(new AnimationCharacteristicCallbacks());
-   pAnimationCharacteristic->setValue(String(fxIndex).c_str()); 
-   //pAnimationCharacteristic->addDescriptor(new BLE2902());
 
-   pColorCharacteristic = pService->createCharacteristic(
-                        COLOR_CHARACTERISTIC_UUID,
+  /* pButtonCharacteristic = pService->createCharacteristic(
+                        BUTTON_CHARACTERISTIC_UUID,
                         BLECharacteristic::PROPERTY_WRITE |
                         BLECharacteristic::PROPERTY_READ |
                         BLECharacteristic::PROPERTY_NOTIFY
                      );
-   pColorCharacteristic->setValue(String(colorOrder).c_str()); 
-   pColorCharacteristic->setCallbacks(new ColorCharacteristicCallbacks());
-   //pColorCharacteristic->addDescriptor(new BLE2902());
-
-   pSpeedCharacteristic = pService->createCharacteristic(
-                        SPEED_CHARACTERISTIC_UUID,
-                        BLECharacteristic::PROPERTY_WRITE |
-                        BLECharacteristic::PROPERTY_READ |
-                        BLECharacteristic::PROPERTY_NOTIFY
-                     );
-   pSpeedCharacteristic->setCallbacks(new SpeedCharacteristicCallbacks());
-   pSpeedCharacteristic->setValue(String(timeSpeed).c_str());
-   //pSpeedCharacteristic->addDescriptor(new BLE2902());
-   //pSpeedDescriptor.setValue("Speed"); 
-
-   pScaleCharacteristic = pService->createCharacteristic(
-                        SCALE_CHARACTERISTIC_UUID,
-                        BLECharacteristic::PROPERTY_READ |
-                        BLECharacteristic::PROPERTY_WRITE |
-                        BLECharacteristic::PROPERTY_NOTIFY
-                     );
-   pScaleCharacteristic->setCallbacks(new ScaleCharacteristicCallbacks());
-   pScaleCharacteristic->setValue(String(adjustScale).c_str());
-   //pScaleCharacteristic->addDescriptor(new BLE2902());
-   //pScaleDescriptor.setValue("Scale"); 
+      pButtonCharacteristic->setCallbacks(new ButtonCharacteristicCallbacks());
+      pButtonCharacteristic->setValue(String(fxIndex).c_str()); 
    
-   pControlCharacteristic = pService->createCharacteristic(
-                        CONTROL_CHARACTERISTIC_UUID,
+   
+   pCheckboxCharacteristic = pService->createCharacteristic(
+                        CHECKBOX_CHARACTERISTIC_UUID,
                         BLECharacteristic::PROPERTY_WRITE |
                         BLECharacteristic::PROPERTY_READ |
                         BLECharacteristic::PROPERTY_NOTIFY
                      );
-   pControlCharacteristic->setCallbacks(new ControlCharacteristicCallbacks());
-   //pControlCharacteristic->addDescriptor(new BLE2902());
-
-   /*
-   pSliderCharacteristic = pService->createCharacteristic(
+      pCheckboxCharacteristic->setCallbacks(new CheckboxCharacteristicCallbacks());
+ 
+   
+ 
+      pSliderCharacteristic = pService->createCharacteristic(
                         SLIDER_CHARACTERISTIC_UUID,
                         BLECharacteristic::PROPERTY_WRITE |
                         BLECharacteristic::PROPERTY_READ |
                         BLECharacteristic::PROPERTY_NOTIFY
                      );
-   pSliderCharacteristic->setCallbacks(new SliderCharacteristicCallbacks());
-   pSliderCharacteristic->setValue(String(adjustScale).c_str());
-   //pControlCharacteristic->addDescriptor(new BLE2902());
-   */
+      pSliderCharacteristic->setCallbacks(new SliderCharacteristicCallbacks());
+      pSliderCharacteristic->setValue(String(adjustScale).c_str());
+      */
+
+      pNumberCharacteristic = pService->createCharacteristic(
+                        NUMBER_CHARACTERISTIC_UUID,
+                        BLECharacteristic::PROPERTY_WRITE |
+                        BLECharacteristic::PROPERTY_READ |
+                        BLECharacteristic::PROPERTY_NOTIFY
+                     );
+      pNumberCharacteristic->setCallbacks(new NumberCharacteristicCallbacks());
+      pNumberCharacteristic->setValue(String(numberValue).c_str());
 
    //**********************************************************
 
