@@ -74,7 +74,8 @@ var numberCharacteristicFound;
         const elementValue = inputHue.value;
         sendDoc["id"] = elementID;
         sendDoc["value"] = elementValue;
-        serializeJson(sendDoc, sendString);
+        sendString = JSON.stringify(sendDoc);
+        //serializeJson(sendDoc, sendString);
         writeNumberCharacteristic(sendString);
     });
 
