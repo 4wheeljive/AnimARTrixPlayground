@@ -24,29 +24,34 @@
 		<div class="card-grid">
             <div class="card">
                  <h2>Animation</h2>
-				 <p>
-                    <button id="polarWavesButton" class="onButton">POLAR WAVES</button> 
-                    <button id="spiralusButton" class="onButton">SPIRALUS</button>
-					<button id="caleido1Button" class="onButton">CALEIDO1</button>
-					<button id="wavesButton" class="onButton">WAVES</button>
-                    <button id="chasingSpiralsButton" class="onButton">CHASING SPIRALS</button>
-                    <button id="ringsButton" class="onButton">RINGS</button>
-                    <button id="complexKaleidoButton" class="onButton">COMPLEX KALEIDO 6</button>
-                    <button id="experiment10Button" class="onButton">EXPERIMENT 10</button>
-                    <button id="experimentSM1Button" class="onButton">EXPERIMENT SM1</button>
-                    <button id="offButton" class="offButton">OFF</button>
-                 </p>
-                 <p class="gray-label">Current animation: <span id="animationValue"></span></p>
+				 <form id="formAnimation">
+                    <p>
+                        <button id="polarWavesButton" class="onButton">POLAR WAVES</button> 
+                        <button id="spiralusButton" class="onButton">SPIRALUS</button>
+                        <button id="caleido1Button" class="onButton">CALEIDO1</button>
+                        <button id="wavesButton" class="onButton">WAVES</button>
+                        <button id="chasingSpiralsButton" class="onButton">CHASING SPIRALS</button>
+                        <button id="ringsButton" class="onButton">RINGS</button>
+                        <button id="complexKaleidoButton" class="onButton">COMPLEX KALEIDO 6</button>
+                        <button id="experiment10Button" class="onButton">EXPERIMENT 10</button>
+                        <button id="experimentSM1Button" class="onButton">EXPERIMENT SM1</button>
+                        <button id="offButton" class="offButton">OFF</button>
+                    </p>
+                    <p class="gray-label">Current animation: <span id="animationValue"></span></p>
+                 </form>
             </div>
  
             <div class="card">
-                <h2>Adjustments</h2>    
+                <h2>Adjustments</h2>
                 
-                <p>
-                    <label for="rotateAnimationCheckbox">Rotate animation:</label>
-                    <input type="checkbox" id="rotateAnimationCheckbox" checked>
-                </p>
+                <form>
+                    <p>
+                        <label for="rotateAnimationCheckbox">Rotate animation:</label>
+                        <input type="checkbox" id="rotateAnimationCheckbox" checked>
+                    </p>
+                </form>
                  
+                
                 <p>
 					<form id="colorOrderForm">
 				    	Color order number (0-5): <input type="number"  type="submit" id="colorOrderInput"  name="colorOrderInputName"  min="0" max="5"/>
