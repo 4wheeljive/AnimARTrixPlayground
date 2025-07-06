@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AnimARTrix Playground Control</title>
+    <title>json Playground Control</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="style.css">
     <meta charset="UTF-8">
 </head>
 <body>
      <div class="topnav">
-         <h1>AnimARTrix Playground Control</h1>
+         <h1>json Playground Control</h1>
      </div>
      <div class="content">
         <div class="card-grid">
@@ -21,7 +21,8 @@
             </div>
         </div>
 
-		<div class="card-grid">
+		<!--
+        <div class="card-grid">
             <div class="card">
                  <h2>Animation</h2>
 				 <form id="formAnimation">
@@ -40,10 +41,14 @@
                     <p class="gray-label">Current animation: <span id="animationValue"></span></p>
                  </form>
             </div>
- 
+        -->
             <div class="card">
                 <h2>Adjustments</h2>
+<<<<<<< HEAD
                 
+=======
+                <!-- 
+>>>>>>> 69d3dd0714351aca5c492ed7c87b18c99ca4ad71
                 <form>
                     <p>
                         <label for="rotateAnimationCheckbox">Rotate animation:</label>
@@ -51,7 +56,11 @@
                     </p>
                 </form>
                  
+<<<<<<< HEAD
                 
+=======
+               
+>>>>>>> 69d3dd0714351aca5c492ed7c87b18c99ca4ad71
                 <p>
 					<form id="colorOrderForm">
 				    	Color order number (0-5): <input type="number"  type="submit" id="colorOrderInput"  name="colorOrderInputName"  min="0" max="5"/>
@@ -66,22 +75,27 @@
 				    </form>
 				</p>
                 <p class="gray-label">Current speed: <span id="speedValue"></span></p>           
-            
+               --> 
                 <p>
-					<form id="scaleForm">
-					    Scale (0.3 to 3.0): <input type="number"  type="submit" id="scaleInput" name="scaleInputName"  min=".3" max="3" step=".1"/>
+					<form id="formHue">
+					    <p>
+                            <label for="inputHue">Hue (0 to 255): </label>
+                            <input type="number"  type="submit" id="inputHue" name="inputHue"  min="0" max="255" step="1"/>
+                        </p>>
+                        <p class="gray-label">Current hue: <span id="valueHue"></span></p>
                     </form>
 				</p>
-                <p class="gray-label">Current scale: <span id="scaleValue"></span></p>
-                            
+               
+                                    
+                <!--
                 <p>
                     <form id="formSliderA">
                         <label for="SliderA">Slider A:</label>
-                        <input type="range" id="inputSliderA" name="inputSliderA" min=".1" max="10" step="0.1" value="1.00">
+                        <input type="range" id="inputVal" name="inputVal" min="0" max="255" step="1" value="0">
                         <span id="valueSliderA">1.00</span>
                     </form>
                 </p>
-
+                -->
             </div>
 
 	    </div>

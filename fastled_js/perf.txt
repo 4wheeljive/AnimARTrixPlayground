@@ -1,2 +1,0 @@
-Compile lock time: 0.00s
-Compile time: 0.78s
