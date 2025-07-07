@@ -254,15 +254,16 @@ function handleNumberCharacteristicChange(event){
 
 // WRITE TO CHARACTERISTIC FUNCTIONS *************************************************
 
-function writeButtonCharacteristic(sendBuffer){
+function writeButtonCharacteristic(value){
     if (bleServer && bleServer.connected) {
         bleServiceFound.getCharacteristic(ButtonCharacteristic)
         .then(characteristic => {
-            return characteristic.writeValue(sendBuffer);
+            const data = new Uint8Array([value]);
+            return characteristic.writeValue(data);
         })
         .then(() => {
-            const decodedBuffer = new TextDecoder().decode(sendBuffer);
-            console.log("Value written to Button characteristic: ", decodedBuffer);
+            //const decodedBuffer = new TextDecoder().decode(sendBuffer);
+            console.log("Value written to Button characteristic: ", value);
         })
         .catch(error => {
             console.error("Error writing to Button characteristic: ", error);
@@ -274,15 +275,15 @@ function writeButtonCharacteristic(sendBuffer){
     }
 }
 
-function writeCheckboxCharacteristic(sendBuffer){
+function writeCheckboxCharacteristic(value){
     if (bleServer && bleServer.connected) {
         bleServiceFound.getCharacteristic(CheckboxCharacteristic)
         .then(characteristic => {
-            return characteristic.writeValue(sendBuffer);
+            return characteristic.writeValue(valueue);
         })
         .then(() => {
-            const decodedBuffer = new TextDecoder().decode(sendBuffer);
-            console.log("Value written to Checkbox characteristic: ", decodedBuffer);
+            //const decodedBuffer = new TextDecoder().decode(sendBuffer);
+            console.log("Value written to Checkbox characteristic: ", value);
         })
         .catch(error => {
             console.error("Error writing to Checkbox characteristic: ", error);

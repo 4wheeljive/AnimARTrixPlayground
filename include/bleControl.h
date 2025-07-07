@@ -7,15 +7,11 @@
 C:\Users\...\.platformio\packages\framework-arduinoespressif32\libraries\BLE\src\BLEServer.h
 */
 
-
 #include <BLEDevice.h>
 #include <BLEServer.h>
 #include <BLEUtils.h>
 #include <BLE2902.h>
 #include <string>
-
-//uint8_t gHue = 0;
-//uint8_t gHueDelta = 1;
 
 bool displayOn = true;
 bool debug = true;
@@ -141,8 +137,6 @@ void animationAdjust(double newAnimation) {
    }
 }
 
-
-
 void sendReceiptNumber(String receivedID, uint8_t receivedValue) {
    // Prepare the JSON document to send
    sendDoc.clear();
@@ -166,9 +160,6 @@ void sendReceiptNumber(String receivedID, uint8_t receivedValue) {
       Serial.println(receivedValue);
    }
 }
-
-
-
 
 void processNumber(String receivedID, uint8_t receivedValue ) {
 
