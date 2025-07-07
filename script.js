@@ -38,7 +38,7 @@ var sentValue = 1.0;
 */
 
 //Define BLE Device Specs
-var deviceName ='json Playground';
+var deviceName ='AnimARTrix Playground';
 var bleService =                '19b10000-e8f2-537e-4f6c-d104768a1214';
 var ButtonCharacteristic =      '19b10001-e8f2-537e-4f6c-d104768a1214';
 var CheckboxCharacteristic =    '19b10002-e8f2-537e-4f6c-d104768a1214';
