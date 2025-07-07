@@ -2,43 +2,72 @@
 const connectButton = document.getElementById('connectBleButton');
 const disconnectButton = document.getElementById('disconnectBleButton');
 
-//const onButton = document.getElementById('onButton');
-//const offButton = document.getElementById('offButton');
 
-//const rotateAnimationCheckbox = document.getElementById('rotateAnimationCheckbox');
+const polarWavesButton = document.getElementById('polarWavesButton');
+const spiralusButton = document.getElementById('spiralusButton');
+const caleido1Button = document.getElementById('caleido1Button');
+const wavesButton = document.getElementById('wavesButton');
+const chasingSpiralsButton = document.getElementById('chasingSpiralsButton');
+const ringsButton = document.getElementById('ringsButton');
+const complexKaleidoButton = document.getElementById('complexKaleidoButton');
+const experiment10Button = document.getElementById('experiment10Button');
+const experimentSM1Button = document.getElementById('experimentSM1Button');
+const offButton = document.getElementById('offButton');
 
-const formHue = document.getElementById('formHue');
-const inputHue = document.getElementById('inputHue');
-const valueHue = document.getElementById('valueHue');
+const formSpeed = document.getElementById('formSpeed');
+const inputSpeed = document.getElementById('inputSpeed');
+const valueSpeed = document.getElementById('valueSpeed');
 
+const formBrightness = document.getElementById('formBrightness');
+const inputBrightness = document.getElementById('inputBrightness');
+const valueBrightness = document.getElementById('valueBrightness');
 
 const latestValueSent = document.getElementById('valueSent');
 const bleStateContainer = document.getElementById('bleState');
 
+/*
 var sendString = " ";
 
-const sendDoc = {
+var sendDoc = {
     "id" : "placeholderID",
-    "value" : "placeholdervalue"
+    "value" : 1.0
 }
+
+var sentID = "placeholderID";
+var sentValue = 1.0;
+*/
 
 //Define BLE Device Specs
 var deviceName ='json Playground';
 var bleService =                '19b10000-e8f2-537e-4f6c-d104768a1214';
-//var ButtonCharacteristic =      '19b10001-e8f2-537e-4f6c-d104768a1214';
-//var CheckboxCharacteristic =    '19b10002-e8f2-537e-4f6c-d104768a1214';
+var ButtonCharacteristic =      '19b10001-e8f2-537e-4f6c-d104768a1214';
+var CheckboxCharacteristic =    '19b10002-e8f2-537e-4f6c-d104768a1214';
 var NumberCharacteristic =      '19b10003-e8f2-537e-4f6c-d104768a1214';
-//var SliderCharacteristic =      '19b10004-e8f2-537e-4f6c-d104768a1214';
-
 
 //Declare Global Variables to Handle Bluetooth
 var bleDevice;
 var bleServer;
 var bleServiceFound;
-//var buttonCharacteristicFound;
-//var checkboxCharacteristicFound;
-//var sliderCharacteristicFound;
+var buttonCharacteristicFound;
+var checkboxCharacteristicFound;
 var numberCharacteristicFound;
+
+
+// Utility functions to convert between String and ArrayBuffer
+
+function str2ab(str) {
+    var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
+    var bufView = new Uint8Array(buf);
+    for (var i=0, strLen=str.length; i < strLen; i++) {
+    bufView[i] = str.charCodeAt(i);
+    }
+    return buf;
+}
+
+function ab2str(buf) {
+    return String.fromCharCode.apply(null, new Uint8Array(buf));
+}
+
 
 // ADD EVENT LISTENERS *************************************************************
 
@@ -49,48 +78,55 @@ var numberCharacteristicFound;
 
 // Disconnect Button
     disconnectButton.addEventListener('click', disconnectDevice);
-/*
-// Button Characteristic Inputs (Buttons)
-    onButton.addEventListener('click', () => writeButtonCharacteristic(1));
-    offButton.addEventListener('click', () => writeButtonCharacteristic(99));
-        
 
-// Checkbox Characteristic Inputs	
+
+// Animation Selection (Buttons)
+    polarWavesButton.addEventListener('click', () => writeButtonCharacteristic(1));
+    spiralusButton.addEventListener('click', () => writeButtonCharacteristic(2));
+    caleido1Button.addEventListener('click', () => writeButtonCharacteristic(3));
+    wavesButton.addEventListener('click', () => writeButtonCharacteristic(4));
+    chasingSpiralsButton.addEventListener('click', () => writeButtonCharacteristic(5));
+    ringsButton.addEventListener('click', () => writeButtonCharacteristic(6));
+    complexKaleidoButton.addEventListener('click', () => writeButtonCharacteristic(7));
+    experiment10Button.addEventListener('click', () => writeButtonCharacteristic(8));
+    experimentSM1Button.addEventListener('click', () => writeButtonCharacteristic(9));
+    offButton.addEventListener('click', () => writeButtonCharacteristic(99));
+
+// Speed Input (Number)
+    formSpeed.addEventListener('submit', function(event) {
+        event.preventDefault();
+        var sendDoc = {
+            "id" : inputSpeed.id,
+            "value" : inputSpeed.value
+        }
+        sendString = JSON.stringify(sendDoc);
+        sendBuffer = str2ab(sendString);        
+        writeNumberCharacteristic(sendBuffer);
+    });
+
+// Brightness Input (Number)
+    formBrightness.addEventListener('submit', function(event) {
+        event.preventDefault();
+        var sendDoc = {
+            "id" : inputBrightness.id,
+            "value" : inputBrightness.value
+        }
+        sendString = JSON.stringify(sendDoc);
+        sendBuffer = str2ab(sendString);        
+        writeNumberCharacteristic(sendBuffer);
+    });
+
+
+// Rotate Animation Toggle (Checkbox)
     rotateAnimationCheckbox.addEventListener('change', () => {
         if (rotateAnimationCheckbox.checked) {
-            writeControlCharacteristic(100);
+            writeCheckboxCharacteristic(100);
         }
         else { 
-            writeControlCharacteristic(101); 
+            writeCheckboxCharacteristic(101); 
         }
     });
 
-*/
-
-// NumberA Input (Number)
-    formHue.addEventListener('submit', function(event) {
-        event.preventDefault();
-        const elementID = inputHue.id;
-        const elementValue = inputHue.value;
-        sendDoc["id"] = elementID;
-        sendDoc["value"] = elementValue;
-        sendString = JSON.stringify(sendDoc);
-        //serializeJson(sendDoc, sendString);
-        writeNumberCharacteristic(sendString);
-    });
-
-/*
-// SliderA Input (Slider)
-    formSliderA.addEventListener('input', function(event) {
-        event.preventDefault();
-        const elementID = inputHue.id;
-        const elementValue = inputHue.value;
-        sendDoc["id"] = elementID;
-        sendDoc["value"] = elementValue;
-        serializeJson(sendDoc, sendString);
-        writeSliderCharacteristic(sendString);
-    });
-*/
 
 // BLE CONNECTION *******************************************************************************
 
@@ -134,75 +170,41 @@ function connectToDevice(){
                 });
             });
 
-            /*
             service.getCharacteristic(ButtonCharacteristic)
             .then(characteristic => {
                 buttonCharacteristicFound = characteristic;
                 characteristic.addEventListener('characteristicvaluechanged', handleButtonCharacteristicChange);
                 characteristic.startNotifications();				
-                return characteristic.readValue();
-                })
-            //.then(value => {
-            //    const decodedValue = new TextDecoder().decode(value);
-            //    console.log("Animation: ", decodedValue);
-            //    animationValue.innerHTML = decodedValue;
-            //    })
-            */
-            
-            service.getCharacteristic(NumberCharacteristic)
-            .then(characteristic => {
-                numberCharacteristicFound = characteristic;
-                characteristic.addEventListener('characteristicvaluechanged', handleNumberCharacteristicChange);
-                characteristic.startNotifications();				
-                return characteristic.readValue();
-                })
-            .then(value => {
-                const decodedValue = new TextDecoder().decode(value);
-                console.log("Number: ", decodedValue);
-                valueHue.innerHTML = decodedValue;
+                //return characteristic.readValue();
                 })
 
-            /*
             service.getCharacteristic(CheckboxCharacteristic)
             .then(characteristic => {
                 checkboxCharacteristicFound = characteristic;
                 characteristic.addEventListener('characteristicvaluechanged', handleCheckboxCharacteristicChange);
                 characteristic.startNotifications();				
-                return characteristic.readValue();
-                })
-            //.then(value => {
-            //    const decodedValue = new TextDecoder().decode(value);
-            //    console.log("Color: ", decodedValue);
-            //    colorOrderValue.innerHTML = decodedValue;
-            //    })
-
-            service.getCharacteristic(SpeedCharacteristic)
-                .then(characteristic => {
-                speedCharacteristicFound = characteristic;
-                characteristic.addEventListener('characteristicvaluechanged', handleSpeedCharacteristicChange);
-                characteristic.startNotifications();	
-                return characteristic.readValue();
-                })
-                .then(value => {
-                const decodedValue = new TextDecoder().decode(value);
-                console.log("Speed: ", decodedValue);
-                speedValue.innerHTML = decodedValue;
+                //return characteristic.readValue();
                 })
 
-            service.getCharacteristic(ScaleCharacteristic)
-                .then(characteristic => {
-                scaleCharacteristicFound = characteristic;
-                characteristic.addEventListener('characteristicvaluechanged', handleScaleCharacteristicChange);
-                characteristic.startNotifications();	
-                return characteristic.readValue();
+            service.getCharacteristic(NumberCharacteristic)
+            .then(characteristic => {
+                numberCharacteristicFound = characteristic;
+                characteristic.addEventListener('characteristicvaluechanged', handleNumberCharacteristicChange);
+                characteristic.startNotifications();				
+                //return characteristic.readValue();
                 })
-                .then(value => {
-                const decodedValue = new TextDecoder().decode(value);
-                console.log("Scale: ", decodedValue);
-                scaleValue.innerHTML = decodedValue;
+            /*
+            .then(value => {
+				receivedString = new TextDecoder().decode(value);; //ab2str(value);
+				receivedDoc = JSON.parse(receivedString);
+				//receivedID = receivedDoc.id;
+				//receivedValue = receivedDoc.value;
+				console.log("Number characteristic received: ", receivedDoc.id, ": ", receivedDoc.value);
+				valueHue.innerHTML = receivedDoc.value;
+                //const decodedValue = new TextDecoder().decode(value);
+                //console.log("Number: ", decodedValue);
                 })
-            
-        */ 
+            */
     })
 }
 
@@ -227,137 +229,87 @@ function disconnectDevice() {
 
 // HANDLE CHARACTERISTIC CHANGE FUNCTIONS *************************************************************
 
-/*function handleAnimationCharacteristicChange(event){
+
+function handleButtonCharacteristicChange(event){
     const newValueReceived = new TextDecoder().decode(event.target.value);
-    console.log("New fxIndex: ", newValueReceived);
-    animationValue.innerHTML = newValueReceived;
+    console.log("Number received: ", newValueReceived);
+    //valueSliderA.innerHTML = newValueReceived;
+    // parse and set different updates for different elements
 }
 
-function handleColorCharacteristicChange(event){
+function handleCheckboxCharacteristicChange(event){
     const newValueReceived = new TextDecoder().decode(event.target.value);
-    console.log("New color order: ", newValueReceived);
-    colorOrderValue.innerHTML = newValueReceived;
+    console.log("Number received: ", newValueReceived);
+    //valueSliderA.innerHTML = newValueReceived;
+    // parse and set different updates for different elements
 }
-
-function handleSpeedCharacteristicChange(event){
-    const newValueReceived = new TextDecoder().decode(event.target.value);
-    console.log("New speed: ", newValueReceived);
-    speedValue.innerHTML = newValueReceived;
-}
-
-function handleScaleCharacteristicChange(event){
-    const newValueReceived = new TextDecoder().decode(event.target.value);
-    console.log("New scale: ", newValueReceived);
-    scaleValue.innerHTML = newValueReceived;
-}
-
-function handleControlCharacteristicChange(event){
-    const newValueReceived = new TextDecoder().decode(event.target.value);
-    console.log("Control value received: ", newValueReceived);
-    controlValue.innerHTML = newValueReceived;
-}
-
-
-function handleSliderCharacteristicChange(event){
-    const newValueReceived = new TextDecoder().decode(event.target.value);
-    console.log("New slider: ", newValueReceived);
-    valueSliderA.innerHTML = newValueReceived;
-}
-*/
 
 function handleNumberCharacteristicChange(event){
     const newValueReceived = new TextDecoder().decode(event.target.value);
     console.log("Number received: ", newValueReceived);
     //valueSliderA.innerHTML = newValueReceived;
-
     // parse and set different updates for different elements
 }
 
 
-
-
-
 // WRITE TO CHARACTERISTIC FUNCTIONS *************************************************
-/*
-function writeButtonCharacteristic(value){
+
+function writeButtonCharacteristic(sendBuffer){
     if (bleServer && bleServer.connected) {
         bleServiceFound.getCharacteristic(ButtonCharacteristic)
         .then(characteristic => {
-            const data = new Uint8Array([value]);
-            return characteristic.writeValue(data);
+            return characteristic.writeValue(sendBuffer);
         })
         .then(() => {
-        //    animationValue.innerHTML = value;
-        //    latestValueSent.innerHTML = value;
-            console.log("Value written to Button characteristic: ", value);
+            const decodedBuffer = new TextDecoder().decode(sendBuffer);
+            console.log("Value written to Button characteristic: ", decodedBuffer);
         })
         .catch(error => {
             console.error("Error writing to Button characteristic: ", error);
         });
-    } else {
+    } 
+    else {
         console.error ("Bluetooth is not connected. Cannot write to characteristic.")
         window.alert("Bluetooth is not connected. Cannot write to characteristic. \n Connect to BLE first!")
     }
 }
 
-function writeCheckboxCharacteristic(value){
+function writeCheckboxCharacteristic(sendBuffer){
     if (bleServer && bleServer.connected) {
         bleServiceFound.getCharacteristic(CheckboxCharacteristic)
         .then(characteristic => {
-            const data = new Uint8Array([value]);
-            return characteristic.writeValue(data);
+            return characteristic.writeValue(sendBuffer);
         })
         .then(() => {
-        //    latestValueSent.innerHTML = value;
-            console.log("Value written to Checkbox characteristic:", value);
+            const decodedBuffer = new TextDecoder().decode(sendBuffer);
+            console.log("Value written to Checkbox characteristic: ", decodedBuffer);
         })
         .catch(error => {
-            console.error("Error writing to the Checkbox characteristic: ", error);
+            console.error("Error writing to Checkbox characteristic: ", error);
         });
-    } else {
+    } 
+    else {
         console.error ("Bluetooth is not connected. Cannot write to characteristic.")
         window.alert("Bluetooth is not connected. Cannot write to characteristic. \n Connect to BLE first!")
     }
 }
 
-function writeSliderCharacteristic(value){
-    if (bleServer && bleServer.connected) {
-        bleServiceFound.getCharacteristic(SliderCharacteristic)
-        .then(characteristic => {
-            return characteristic.writeValue(value);
-        })
-        .then(() => {
-            //testValue.innerHTML = value;
-            //latestValueSent.innerHTML = value;
-            console.log("Value written to Slider characteristic: ", value);
-        })
-        .catch(error => {
-            console.error("Error writing to Slider characteristic: ", error);
-        });
-    } else {
-        console.error ("Bluetooth is not connected. Cannot write to characteristic.")
-        window.alert("Bluetooth is not connected. Cannot write to characteristic. \n Connect to BLE first!")
-    }
-}
-*/
-
-function writeNumberCharacteristic(value){
+function writeNumberCharacteristic(sendBuffer){
     if (bleServer && bleServer.connected) {
         bleServiceFound.getCharacteristic(NumberCharacteristic)
         .then(characteristic => {
-            return characteristic.writeValue(value);
+            return characteristic.writeValue(sendBuffer);
         })
         .then(() => {
-            //testValue.innerHTML = value;
-            //latestValueSent.innerHTML = value;
-            console.log("Value written to Number characteristic: ", value);
+            const decodedBuffer = new TextDecoder().decode(sendBuffer);
+            console.log("Value written to Number characteristic: ", decodedBuffer);
         })
         .catch(error => {
             console.error("Error writing to Number characteristic: ", error);
         });
-    } else {
+    } 
+    else {
         console.error ("Bluetooth is not connected. Cannot write to characteristic.")
         window.alert("Bluetooth is not connected. Cannot write to characteristic. \n Connect to BLE first!")
     }
 }
-

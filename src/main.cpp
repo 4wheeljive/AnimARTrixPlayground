@@ -1,17 +1,82 @@
+/*
+My personal learning playground for working with:
+    FastLED Adapter for the animartrix fx library.
+    Copyright Stefen Petrick 2023.
+    Adapted to C++ by Netmindz 2023.
+    Adapted to FastLED by Zach Vorhies 2024.
+    For details on the animartrix library and licensing information, 
+    see https://github.com/FastLED/FastLED/blob/master/src/fx/2d/animartrix_detail.hpp
+
+This playground operates in one of two modes:
+
+    Using the FastLED web compiler and browser UI controls:
+
+        1.  Ensure you are set up to use FastLED compiler:
+            https://github.com/zackees/fastled-wasm/blob/main/README.md
+    
+        2.  Comment/uncomment the SCREEN_TEST defs below as follows:
+
+            #define SCREEN_TEST
+            //#undef SCREEN_TEST
+
+        3.  Run 'fastled' (without quotes) from a command line in the directory where your sketch is saved. 
+
+    Driving an actual LED panel from an MCU, which this sketch sets up as a BLE server to enable web control:
+    
+        1.  Ensure your MCU is BLE capable and enabled. 
+
+        2.  The default number of handles (15) in BLEServer.h is too low to support the number of characteristics used.
+            Edit the following file to set numHandles = 60 :
+            C:\Users\...\.platformio\packages\framework-arduinoespressif32\libraries\BLE\src\BLEServer.h
+
+        3.  Comment/uncomment the SCREEN_TEST defs below as follows:
+
+            //#define SCREEN_TEST
+            #undef SCREEN_TEST
+
+        4.  Load https://4wheeljive.github.io/AnimARTrixPlayground/ from a Web BLE-capable browser.
+
+            NOTE:   On iOS devices, standard browsers (e.g., Safari, Chrome) do not currently support Web BLE.
+                    I've had success using the Bluefy browser:
+                    https://apps.apple.com/us/app/bluefy-web-ble-browser/id1492822055
+                    If Bluefy doesn't connect to your device on its own, the nRF Connect app might help:
+                    https://apps.apple.com/us/app/nrf-connect-for-mobile/id1054362403
+
+When running in the actual LED panel mode, this sketch can accommodate two different setups, 
+selected by defining/undefining BIG_BOARD below.
+
+When BIG_BOARD is defined:
+- Separate FastLED controllers are enabled for multiple pins to drive multiple panels/strips
+- LED mapping will likely need to be done by custom XYMap functions and arrays, which are enabled by default
+
+When BIG_BOARD is undefined:
+- One FastLED controller is used for single pin/panel/strip
+- Custom LED mapping may be unnecessary
+*/
 
 #include <Arduino.h>
 #include <stdio.h>
 #include <string>
 
+#define FL_ANIMARTRIX_USES_FAST_MATH 1
+
 #include <FastLED.h>
+#include "fl/slice.h"
+#include "fx/fx_engine.h"
+
+#include "myAnimartrix.hpp"
+#include "fl/ui.h"
 
 //*********************************************
 
-#define BIG_BOARD
-//#undef BIG_BOARD
+//#define BIG_BOARD
+#undef BIG_BOARD
 
 //#define SCREEN_TEST
 #undef SCREEN_TEST
+
+#define FIRST_ANIMATION RINGS
+#define SECONDS_PER_ANIMATION 10
 
 #define DATA_PIN_1 2
 
@@ -29,7 +94,6 @@
     #define WIDTH 22
     #define NUM_SEGMENTS 1
     #define NUM_LEDS_PER_SEGMENT 484
-
 #endif
 
 //*********************************************
@@ -44,6 +108,14 @@
         #include <matrixMap_32x48_3pin.h>    
     #endif
 
+#else
+
+    #include "fl/json.h"
+
+    // This is purely use for the web compiler to display the animartrix effects.
+    // This small led was chosen because otherwise the bloom effect is too strong.
+    #define LED_DIAMETER 0.15
+
 #endif
 
 //*********************************************
@@ -53,10 +125,6 @@
 CRGB leds[NUM_LEDS];
 
 using namespace fl;
-
-//bool displayOn = true;
-//uint8_t BRIGHTNESS = 50;
-
 
 // MAPPINGS **********************************************************************************
 
@@ -105,17 +173,22 @@ using namespace fl;
 
 //************************************************************************************************************
 
-void colorChase() {
-    for ( uint8_t y = 0 ; y < HEIGHT ; y++ ) {
-        for ( uint8_t x = 0 ; x < WIDTH ; x++ ) {
-            ledNum = loc2indProgByRow[y][x];
-            leds[ledNum] = CHSV(hue,255,255);
-            //FastLED.delay(5);
-        }
-        FastLED.show();
-   }
-}
+Animartrix myAnimartrix(myXYmap, FIRST_ANIMATION);
+FxEngine fxEngine(NUM_LEDS);
+
 //**********************************************************************************************
+
+void setColorOrder(int value) {
+    switch(value) {
+        case 0: value = RGB; break;
+        case 1: value = RBG; break;
+        case 2: value = GRB; break;
+        case 3: value = GBR; break;
+        case 4: value = BRG; break;
+        case 5: value = BGR; break;
+    }
+    myAnimartrix.setColorOrder(static_cast<EOrder>(value));
+}
 
 //**********************************************************************************************
 
@@ -144,6 +217,10 @@ void setup() {
         .setCorrection(TypicalLEDStrip);
     #endif
 
+    fxEngine.addFx(myAnimartrix);
+
+    //myAnimartrix.fxSet(5);
+
     #ifndef SCREEN_TEST
         bleSetup();
     #endif
@@ -152,32 +229,62 @@ void setup() {
 
 //************************************************************************************************************
 
-
-
-
-
 void loop() {
     
-    if (!displayOn) {
+    if (!displayOn){
       FastLED.clear();
     }
     else {
-      FastLED.setBrightness(BRIGHTNESS);
-      colorChase();
-    }
+
+        FastLED.setBrightness(BRIGHTNESS);
+        fxEngine.setSpeed(timeSpeed);
+        //myAnimartrix.fxSet(fxIndex);
+ 
+        if (colorOrderChanged){
+            setColorOrder(colorOrder);
+            colorOrderChanged = false;
+        }
+
+        static auto lastFxIndex = -1;
+        if (fxIndex != lastFxIndex) {
+            lastFxIndex = fxIndex;
+            myAnimartrix.fxSet(fxIndex);
+        }
         
-    //FastLED.show();
-    
-    /*
-    // BLE maintenance
-    if (!deviceConnected && wasConnected) {
-    if (debug) {Serial.println("Device disconnected.");}
-    delay(500); // give the bluetooth stack the chance to get things ready
-    pServer->startAdvertising();
-    if (debug) {Serial.println("Start advertising");}
-    wasConnected = false;
+        fxEngine.draw(millis(), leds);
+        
+        if (rotateAnimations) {
+            EVERY_N_SECONDS (SECONDS_PER_ANIMATION) { 
+                if (nextFxIndexRandom) {fxIndex = random(0, NUM_ANIMATIONS - 1);}
+                else {fxIndex += 1 % (NUM_ANIMATIONS - 1);}
+            }
+        }
+        
     }
-    */
+    
+    FastLED.show();
+
+    // BLE CONTROL....
+
+      // while connected
+      /*if (deviceConnected) {
+        if (brightnessChanged) { 
+          pBrightnessCharacteristic->notify();
+          brightnessChanged = false;
+        }
+      }*/
+
+      // upon disconnect
+      if (!deviceConnected && wasConnected) {
+        if (debug) {Serial.println("Device disconnected.");}
+        delay(500); // give the bluetooth stack the chance to get things ready
+        pServer->startAdvertising();
+        if (debug) {Serial.println("Start advertising");}
+        wasConnected = false;
+      }
+
+    // ..................
+
 }
 
 //************************************************************************************************************

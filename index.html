@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>json Playground Control</title>
+    <title>AnimARTrix Playground Control</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="style.css">
     <meta charset="UTF-8">
 </head>
 <body>
      <div class="topnav">
-         <h1>json Playground Control</h1>
+         <h1>AnimARTrix Playground Control</h1>
      </div>
      <div class="content">
         <div class="card-grid">
@@ -21,8 +21,7 @@
             </div>
         </div>
 
-		<!--
-        <div class="card-grid">
+		<div class="card-grid">
             <div class="card">
                  <h2>Animation</h2>
 				 <form id="formAnimation">
@@ -41,7 +40,7 @@
                     <p class="gray-label">Current animation: <span id="animationValue"></span></p>
                  </form>
             </div>
-        -->
+      
             <div class="card">
                 <h2>Adjustments</h2>    
                 
@@ -51,21 +50,6 @@
                 </p>
                  
                 <p>
-					<form id="colorOrderForm">
-				    	Color order number (0-5): <input type="number"  type="submit" id="colorOrderInput"  name="colorOrderInputName"  min="0" max="5"/>
-				
-                    </form>
-				</p>	
-				<p class="gray-label">Current number: <span id="colorOrderValue"></span></p>
-
-                <p>
-				    <form id="speedForm">
-					    Speed (0.1 to 10.0): <input type="number"  type="submit" id="speedInput" name="speedInputName" min=".1" max="10" step=".1"/>
-				    </form>
-				</p>
-                <p class="gray-label">Current speed: <span id="speedValue"></span></p>           
-               --> 
-                <p>
 					<form id="formHue">
 					    <p>
                             <label for="inputHue">Hue (0 to 255): </label>
@@ -74,8 +58,37 @@
                         <p class="gray-label">Current hue: <span id="valueHue"></span></p>
                     </form>
 				</p>
+
+                <p>
+					<form id="formColorOrder">
+					    <p>
+                            <label for="inputColorOrder">Color order (0 to 5): </label>
+                            <input type="number"  type="submit" id="inputColorOrder" name="inputColorOrder"  min="0" max="5" step="1"/>
+                        </p>>
+                        <p class="gray-label">Current color order: <span id="valueColorOrder"></span></p>
+                    </form>
+				</p>
+                
+                <p>
+					<form id="formSpeed">
+					    <p>
+                            <label for="inputSpeed">Speed (0 to 255): </label>
+                            <input type="number"  type="submit" id="inputSpeed" name="inputSpeed"  min="0" max="255" step="1"/>
+                        </p>>
+                        <p class="gray-label">Current speed: <span id="valueSpeed"></span></p>
+                    </form>
+				</p>
                
-                                    
+                <p>
+					<form id="formBrightness">
+					    <p>
+                            <label for="inputBrightness">Brightness (0 to 255): </label>
+                            <input type="number"  type="submit" id="inputBrightness" name="inputBrightness"  min="0" max="255" step="1"/>
+                        </p>>
+                        <p class="gray-label">Current brightness: <span id="valueBrightness"></span></p>
+                    </form>
+				</p>
+
                 <!--
                 <p>
                     <form id="formSliderA">
