@@ -34,8 +34,17 @@ const formRatiosDiff = document.getElementById('formRatiosDiff');
 const inputRatiosDiff = document.getElementById('inputRatiosDiff');
 const valueRatiosDiff = document.getElementById('valueRatiosDiff');
 
+const formOffsetsBase = document.getElementById('formOffsetsBase');
+const inputOffsetsBase = document.getElementById('inputOffsetsBase');
+const valueOffsetsBase = document.getElementById('valueOffsetsBase');
+const formOffsetsDiff = document.getElementById('formOffsetsDiff');
+const inputOffsetsDiff = document.getElementById('inputOffsetsDiff');
+const valueOffsetsDiff = document.getElementById('valueOffsetsDiff');
+
 const latestValueSent = document.getElementById('valueSent');
 const bleStateContainer = document.getElementById('bleState');
+
+const debounceDelay = 300;
 
 //Define BLE Device Specs
 var deviceName ='AnimARTrix Playground';
@@ -53,7 +62,9 @@ var checkboxCharacteristicFound;
 var numberCharacteristicFound;
 
 
-// Utility functions to convert between String and ArrayBuffer
+// UTILITY FUNCTIONS *******************************************************************
+
+// Convert between String and ArrayBuffer
 
 function str2ab(str) {
     var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
@@ -68,6 +79,29 @@ function ab2str(buf) {
     return String.fromCharCode.apply(null, new Uint8Array(buf));
 }
 
+// Debounce sliders
+
+function debounce(sendNumberCharacteristic, inputID, inputValue) {
+    let timer;
+    return function(inputID, inputValue) {
+        clearTimeout(timer);
+        timer = setTimeout(() => 
+            { sendNumberCharacteristic(inputID, inputValue); }, debounceDelay );
+    };
+}
+
+// Create a send buffer for the NumberCharacteristic
+
+function sendNumberCharacteristic(inputID, inputValue) {
+        var sendDoc = {
+            "id" : inputID,
+            "value" : inputValue
+        }
+        sendString = JSON.stringify(sendDoc);
+        sendBuffer = str2ab(sendString);        
+        writeNumberCharacteristic(sendBuffer);
+}
+
 
 // ADD EVENT LISTENERS *************************************************************
 
@@ -78,7 +112,6 @@ function ab2str(buf) {
 
 // Disconnect Button
     disconnectButton.addEventListener('click', disconnectDevice);
-
 
 // Animation Selection (Buttons)
     polarWavesButton.addEventListener('click', () => writeButtonCharacteristic(1));
@@ -107,6 +140,8 @@ function ab2str(buf) {
 // Brightness Input (Number)
     formBrightness.addEventListener('submit', function(event) {
         event.preventDefault();
+        sendNumberCharacteristic(inputBrightness.id, inputBrightness.value);
+        /*
         var sendDoc = {
             "id" : inputBrightness.id,
             "value" : inputBrightness.value
@@ -114,8 +149,8 @@ function ab2str(buf) {
         sendString = JSON.stringify(sendDoc);
         sendBuffer = str2ab(sendString);        
         writeNumberCharacteristic(sendBuffer);
+        */
     });
-
 
 // Color Order Input (Number)
     formColorOrder.addEventListener('submit', function(event) {
@@ -128,8 +163,6 @@ function ab2str(buf) {
         sendBuffer = str2ab(sendString);        
         writeNumberCharacteristic(sendBuffer);
     });
-
-
 
 // Rotate Animation Toggle (Checkbox)
     rotateAnimationCheckbox.addEventListener('change', () => {
@@ -141,7 +174,6 @@ function ab2str(buf) {
         }
     });
 
-
 // Color Order Input (Number)
     formColorOrder.addEventListener('submit', function(event) {
         event.preventDefault();
@@ -153,7 +185,6 @@ function ab2str(buf) {
         sendBuffer = str2ab(sendString);        
         writeNumberCharacteristic(sendBuffer);
     });
-
 
 // Ratios Base Input (Number)
     formRatiosBase.addEventListener('submit', function(event) {
@@ -167,7 +198,6 @@ function ab2str(buf) {
         writeNumberCharacteristic(sendBuffer);
     });
 
-
 // Ratios Diff Input (Number)
     formRatiosDiff.addEventListener('submit', function(event) {
         event.preventDefault();
@@ -180,8 +210,11 @@ function ab2str(buf) {
         writeNumberCharacteristic(sendBuffer);
     });
 
-
-
+// Offsets Base Input (Number)
+    const debouncedOffsetsBase = debounce(sendNumberCharacteristic, inputOffsetsBase.id, inputOffsetsBase.value);
+    inputOffsetsBase.addEventListener('input', (event) => {
+        debouncedOffsetsBase(event.target.value);
+    });
 
 
 // BLE CONNECTION *******************************************************************************

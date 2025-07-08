@@ -168,6 +168,8 @@ void inputSwitcher(String receivedID) {
       if (receivedID == "inputColorOrder") {switchNumber = 3;};
       if (receivedID == "inputRatiosBase") {switchNumber = 4;};
       if (receivedID == "inputRatiosDiff") {switchNumber = 5;};
+      if (receivedID == "inputOffsetsBase") {switchNumber = 6;};
+      if (receivedID == "inputOffsetsDiff") {switchNumber = 7;};
    }
 
 void processNumber(String receivedID, float receivedValue ) {
@@ -207,6 +209,17 @@ void processNumber(String receivedID, float receivedValue ) {
          //sendReceiptNumber(elementID, receivedValue);
          break;
 
+      case 6:
+         adjustOffsetsBase = receivedValue;
+         elementID = "inputOffsetsBase";
+         //sendReceiptNumber(elementID, receivedValue);
+         break;
+
+      case 7:
+         adjustOffsetsBase = receivedValue;
+         elementID = "inputOffsetsBase";
+         //sendReceiptNumber(elementID, receivedValue);
+         break;
 
       default:
          Serial.println("Unknown input");

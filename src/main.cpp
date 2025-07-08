@@ -69,8 +69,8 @@ When BIG_BOARD is undefined:
 
 //*********************************************
 
-#define BIG_BOARD
-//#undef BIG_BOARD
+//#define BIG_BOARD
+#undef BIG_BOARD
 
 //#define SCREEN_TEST
 #undef SCREEN_TEST
