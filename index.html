@@ -41,7 +41,7 @@
 
             </div>
       
-            <div class="card">
+                        <div class="card">
                 <h2>Settings</h2>    
                 
                 <p>
@@ -51,41 +51,48 @@
                 <p>----------------</p>
                  
                 <p>
+					<form id="formHue">
 					    <p>
                             <label for="inputHue">Hue (0 to 255): </label>
                             <input type="number"  type="submit" id="inputHue" name="inputHue"  min="0" max="255" step="1"/>
                         </p>
                         <p class="gray-label">Current hue: <span id="valueHue"></span></p>
                         <p>----------------</p>
-                    </p>
+                    </form>
+				</p>
 
                 <p>
+					<form id="formColorOrder">
 					    <p>
                             <label for="inputColorOrder">Color order (0 to 5): </label>
                             <input type="number"  type="submit" id="inputColorOrder" name="inputColorOrder"  min="0" max="5" step="1"/>
                         </p>
                         <p class="gray-label">Current color order: <span id="valueColorOrder"></span></p>
                         <p>----------------</p>
-                    
+                    </form>
 				</p>
                 
                 <p>
+					<form id="formSpeed">
 					    <p>
                             <label for="inputSpeed">Speed (0 to 255): </label>
                             <input type="number"  type="submit" id="inputSpeed" name="inputSpeed"  min="0" max="255" step="1"/>
                         </p>
                         <p class="gray-label">Current speed: <span id="valueSpeed"></span></p>
                         <p>----------------</p>
-                    </p>
+                    </form>
+				</p>
                
                 <p>
+					<form id="formBrightness">
 					    <p>
                             <label for="inputBrightness">Brightness (0 to 255): </label>
                             <input type="number"  type="submit" id="inputBrightness" name="inputBrightness"  min="0" max="255" step="1"/>
                         </p>
                         <p class="gray-label">Current brightness: <span id="valueBrightness"></span></p>
                         <p>----------------</p>
-                    </p>
+                    </form>
+				</p>
 
 
             </div>
@@ -94,18 +101,23 @@
                 <h2>Pattern Control</h2>    
                 <p></p>
 				    <h3>Ratios</h3>
-					        <p>
+					    <form id="formRatiosBase">
+                            <p>
                                 <label for="inputRatiosBase">Base (-1.00 to 1.00): </label>
                                 <input type="number"  type="submit" id="inputRatiosBase" name="inputRatiosBase"  min="-1.00" max="1.00" step="0.01" value="0.00"/>
                             </p>
                             <p class="gray-label">Current base: <span id="valueRatiosBase"></span></p>
+                        </form>
+                        <form id="formRatiosDiff">
                             <p>
                                 <label for="inputRatiosDiff">Diff (0.1 to 10.0): </label>
                                 <input type="number"  type="submit" id="inputRatiosDiff" name="inputRatiosDiff"  min="0.1" max="10.0" step="0.1" value="1.0"/>
                             </p>
                             <p class="gray-label">Current differential: <span id="valueRatiosDiff"></span></p>
-                        <p></p>
+                        </form>
+                <p></p>
                     <h3>Offsets</h3>
+                        <form id="formOffsetsBase">
                             <label for="inputOffsetsBase">Base: </label>
                             <input type="range" id="inputOffsetsBase" name="inputOffsetsBase" min=".1" max="10" step=".1" value="1">
                             <span id="valueOffsetsBase">1.00</span>
@@ -114,7 +126,8 @@
                             <label for="inputOffsetsDiff">Diff: </label>
                             <input type="range" id="inputOffsetsDiff" name="inputOffsetsDiff" min=".1" max="10" step=".1" value="1">
                             <span id="valueOffsetsBase">1.00</span>
-                        </div>
+                        </form>
+            </div>
 	    </div>
 		
 		<p class="gray-label" ><i>Last value sent: <span id="valueSent"></span></i></p>
