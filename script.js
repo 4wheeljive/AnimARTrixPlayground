@@ -15,29 +15,31 @@ const offButton = document.getElementById('offButton');
 
 const rotateAnimationCheckbox = document.getElementById('rotateAnimationCheckbox');
 
-const formColorOrder = document.getElementById('formColorOrder');
+//const formColorOrder = document.getElementById('formColorOrder');
 const inputColorOrder = document.getElementById('inputColorOrder');
 const valueColorOrder = document.getElementById('valueColorOrder');
 
-const formSpeed = document.getElementById('formSpeed');
+//.const formSpeed = document.getElementById('formSpeed');
 const inputSpeed = document.getElementById('inputSpeed');
 const valueSpeed = document.getElementById('valueSpeed');
 
-const formBrightness = document.getElementById('formBrightness');
+//const formBrightness = document.getElementById('formBrightness');
 const inputBrightness = document.getElementById('inputBrightness');
 const valueBrightness = document.getElementById('valueBrightness');
 
-const formRatiosBase = document.getElementById('formRatiosBase');
+//const formRatiosBase = document.getElementById('formRatiosBase');
 const inputRatiosBase = document.getElementById('inputRatiosBase');
 const valueRatiosBase = document.getElementById('valueRatiosBase');
-const formRatiosDiff = document.getElementById('formRatiosDiff');
+
+//const formRatiosDiff = document.getElementById('formRatiosDiff');
 const inputRatiosDiff = document.getElementById('inputRatiosDiff');
 const valueRatiosDiff = document.getElementById('valueRatiosDiff');
 
-const formOffsetsBase = document.getElementById('formOffsetsBase');
+//const formOffsetsBase = document.getElementById('formOffsetsBase');
 const inputOffsetsBase = document.getElementById('inputOffsetsBase');
 const valueOffsetsBase = document.getElementById('valueOffsetsBase');
-const formOffsetsDiff = document.getElementById('formOffsetsDiff');
+
+//const formOffsetsDiff = document.getElementById('formOffsetsDiff');
 const inputOffsetsDiff = document.getElementById('inputOffsetsDiff');
 const valueOffsetsDiff = document.getElementById('valueOffsetsDiff');
 
@@ -144,15 +146,6 @@ function sendNumberCharacteristic(inputID, inputValue) {
 // Brightness Input (Number)
     inputBrightness.addEventListener('submit', function(event) {
         event.preventDefault();
-        /*
-	var sendDoc = {
-            "id" : inputBrightness.id,
-            "value" : inputBrightness.value
-        }
-        sendString = JSON.stringify(sendDoc);
-        sendBuffer = str2ab(sendString);        
-        writeNumberCharacteristic(sendBuffer);
-	*/
         sendNumberCharacteristic(this.id, this.value);
     });
 
