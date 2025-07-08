@@ -13,9 +13,11 @@ C:\Users\...\.platformio\packages\framework-arduinoespressif32\libraries\BLE\src
 #include <BLE2902.h>
 #include <string>
 
+using namespace fl;
+
 bool displayOn = true;
 bool debug = true;
-bool rotateAnimations = true;
+bool rotateAnimations = false;
 bool colorOrderChanged = false;
 
 double initialFxIndex = 4;   // this should really be changed to uint8_t, but UINumberField requires that it be a double
@@ -131,8 +133,8 @@ uint8_t dummy = 1;
 
 void animationAdjust(double newAnimation) {
    fxIndex = newAnimation;
- //  pAnimationCharacteristic->setValue(String(newAnimation).c_str());
- //  pAnimationCharacteristic->notify();
+   pButtonCharacteristic->setValue(String(newAnimation).c_str());
+   pButtonCharacteristic->notify();
    if (debug) {
       Serial.print("Animation: ");
       Serial.println(newAnimation);
@@ -269,7 +271,7 @@ class ButtonCharacteristicCallbacks : public BLECharacteristicCallbacks {
             }
             
             displayOn = true;
-            animationAdjust(fxIndex);
+            //animationAdjust(fxIndex);
        
        }
 

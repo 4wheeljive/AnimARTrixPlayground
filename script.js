@@ -219,24 +219,21 @@ function disconnectDevice() {
 
 
 function handleButtonCharacteristicChange(event){
-    //const newValueReceived = new TextDecoder().decode(event.target.value);
-    //console.log("Number received: ", newValueReceived);
+    const newValueReceived = new TextDecoder().decode(event.target.value);
+    console.log("Button pressed: ", newValueReceived);
     //valueSliderA.innerHTML = newValueReceived;
-    // parse and set different updates for different elements
 }
 
 function handleCheckboxCharacteristicChange(event){
     const newValueReceived = new TextDecoder().decode(event.target.value);
     console.log("Number received: ", newValueReceived);
     //valueSliderA.innerHTML = newValueReceived;
-    // parse and set different updates for different elements
 }
 
 function handleNumberCharacteristicChange(event){
     const newValueReceived = new TextDecoder().decode(event.target.value);
     console.log("Number received: ", newValueReceived);
     //valueSliderA.innerHTML = newValueReceived;
-    // parse and set different updates for different elements
 }
 
 
@@ -267,7 +264,8 @@ function writeCheckboxCharacteristic(value){
     if (bleServer && bleServer.connected) {
         bleServiceFound.getCharacteristic(CheckboxCharacteristic)
         .then(characteristic => {
-            return characteristic.writeValue(value);
+            const data = new Uint8Array([value]);
+            return characteristic.writeValue(data);
         })
         .then(() => {
             //const decodedBuffer = new TextDecoder().decode(sendBuffer);
