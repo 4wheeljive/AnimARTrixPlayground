@@ -89,7 +89,7 @@ function debounce(sendNumberCharacteristic, inputID, inputValue) {
             { sendNumberCharacteristic(inputID, inputValue); }, debounceDelay );
     };
 }
-
+*/
 // Create a send buffer for the NumberCharacteristic
 
 function sendNumberCharacteristic(inputID, inputValue) {
@@ -101,7 +101,7 @@ function sendNumberCharacteristic(inputID, inputValue) {
         sendBuffer = str2ab(sendString);        
         writeNumberCharacteristic(sendBuffer);
 }
-*/
+
 
 // ADD EVENT LISTENERS *************************************************************
 
@@ -144,14 +144,16 @@ function sendNumberCharacteristic(inputID, inputValue) {
 // Brightness Input (Number)
     inputBrightness.addEventListener('submit', function(event) {
         event.preventDefault();
-        var sendDoc = {
+        /*
+	var sendDoc = {
             "id" : inputBrightness.id,
             "value" : inputBrightness.value
         }
         sendString = JSON.stringify(sendDoc);
         sendBuffer = str2ab(sendString);        
         writeNumberCharacteristic(sendBuffer);
-        //sendNumberCharacteristic(inputBrightness.id, inputBrightness.value);
+	*/
+        sendNumberCharacteristic(inputBrightness.id, inputBrightness.value);
     });
 
 // Color Order Input (Number)
