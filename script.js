@@ -27,6 +27,13 @@ const formBrightness = document.getElementById('formBrightness');
 const inputBrightness = document.getElementById('inputBrightness');
 const valueBrightness = document.getElementById('valueBrightness');
 
+const formRatiosBase = document.getElementById('formRatiosBase');
+const inputRatiosBase = document.getElementById('inputRatiosBase');
+const valueRatiosBase = document.getElementById('valueRatiosBase');
+const formRatiosDiff = document.getElementById('formRatiosDiff');
+const inputRatiosDiff = document.getElementById('inputRatiosDiff');
+const valueRatiosDiff = document.getElementById('valueRatiosDiff');
+
 const latestValueSent = document.getElementById('valueSent');
 const bleStateContainer = document.getElementById('bleState');
 
@@ -133,6 +140,48 @@ function ab2str(buf) {
             writeCheckboxCharacteristic(101); 
         }
     });
+
+
+// Color Order Input (Number)
+    formColorOrder.addEventListener('submit', function(event) {
+        event.preventDefault();
+        var sendDoc = {
+            "id" : inputColorOrder.id,
+            "value" : inputColorOrder.value
+        }
+        sendString = JSON.stringify(sendDoc);
+        sendBuffer = str2ab(sendString);        
+        writeNumberCharacteristic(sendBuffer);
+    });
+
+
+// Ratios Base Input (Number)
+    formRatiosBase.addEventListener('submit', function(event) {
+        event.preventDefault();
+        var sendDoc = {
+            "id" : inputRatiosBase.id,
+            "value" : inputRatiosBase.value
+        }
+        sendString = JSON.stringify(sendDoc);
+        sendBuffer = str2ab(sendString);        
+        writeNumberCharacteristic(sendBuffer);
+    });
+
+
+// Ratios Diff Input (Number)
+    formRatiosDiff.addEventListener('submit', function(event) {
+        event.preventDefault();
+        var sendDoc = {
+            "id" : inputRatiosDiff.id,
+            "value" : inputRatiosDiff.value
+        }
+        sendString = JSON.stringify(sendDoc);
+        sendBuffer = str2ab(sendString);        
+        writeNumberCharacteristic(sendBuffer);
+    });
+
+
+
 
 
 // BLE CONNECTION *******************************************************************************

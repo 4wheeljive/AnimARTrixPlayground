@@ -23,12 +23,6 @@ bool colorOrderChanged = false;
 double initialFxIndex = 4;   // this should really be changed to uint8_t, but UINumberField requires that it be a double
 bool nextFxIndexRandom = false;
 
-enum Inputs { 
-   inputSpeed = 1, 
-   inputBrightness,
-   inputColorOrder
- };
-
 uint8_t switchNumber = 1;
 
 
@@ -172,32 +166,47 @@ void inputSwitcher(String receivedID) {
       if (receivedID == "inputSpeed") {switchNumber = 1;};
       if (receivedID == "inputBrightness") {switchNumber = 2;};
       if (receivedID == "inputColorOrder") {switchNumber = 3;};
+      if (receivedID == "inputRatiosBase") {switchNumber = 4;};
+      if (receivedID == "inputRatiosDiff") {switchNumber = 5;};
    }
 
-void processNumber(String receivedID, uint8_t receivedValue ) {
+void processNumber(String receivedID, float receivedValue ) {
 
    inputSwitcher(receivedID);
 
    switch (switchNumber) {
      
       case 1:
-         speed = receivedValue;
+         speed = (uint8_t) receivedValue;
          elementID = "inputSpeed";
          //sendReceiptNumber(elementID, receivedValue);
          break;
       
       case 2:
-         BRIGHTNESS = receivedValue;
+         BRIGHTNESS = (uint8_t) receivedValue;
          elementID = "inputBrightness";
          //sendReceiptNumber(elementID, receivedValue);
          break;
       
       case 3:
-         colorOrder = receivedValue;
+         colorOrder = (uint8_t) receivedValue;
          colorOrderChanged = true;   
          elementID = "inputColorOrder";
          //sendReceiptNumber(elementID, receivedValue);
          break;
+
+      case 4:
+         adjustRatiosBase = receivedValue;
+         elementID = "inputRatiosBase";
+         //sendReceiptNumber(elementID, receivedValue);
+         break;
+
+      case 5:
+         adjustRatiosDiff = receivedValue;
+         elementID = "inputRatiosDiff";
+         //sendReceiptNumber(elementID, receivedValue);
+         break;
+
 
       default:
          Serial.println("Unknown input");
@@ -315,7 +324,7 @@ class NumberCharacteristicCallbacks : public BLECharacteristicCallbacks {
          //}
          ArduinoJson::deserializeJson(receivedJSON, receivedBuffer);
          String receivedID = receivedJSON["id"] ;
-         uint8_t receivedValue = receivedJSON["value"];
+         float receivedValue = receivedJSON["value"];
          Serial.print(receivedID);
          Serial.print(": ");
          Serial.println(receivedValue);
