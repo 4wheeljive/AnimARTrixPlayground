@@ -83,13 +83,15 @@ function ab2str(buf) {
 
 // Debounce sliders
 
-function debounce(sendNumberCharacteristic, inputID, inputValue) {
+const debounce = (inputID, inputValue) => {
     let timer;
-    return function(inputID, inputValue) {
+    return (inputID, inputValue) =>{
         clearTimeout(timer);
-        timer = setTimeout(sendNumberCharacteristic. debounceDelay, inputID, inputValue);
+        timer = setTimeout(() => {
+            sendNumberCharacteristic(inputID, inputValue);
+        }, debounceDelay);
     };
-}
+};
 
 // Create a send buffer for the NumberCharacteristic
 
@@ -167,8 +169,10 @@ function sendNumberCharacteristic(inputID, inputValue) {
     });
 
 // Offsets Base Input (Number)
-    formOffsetsBase.addEventListener('input', (event) => {
-        const debouncedOffsetsBase =  debounce(sendNumberCharacteristic, inputOffsetsBase.id, inputOffsetsBase.value);
+
+    const debouncedOffsetsBase =  debounce(inputOffsetsBase.id, inputOffsetsBase.value);
+        
+    formOffsetsBase.addEventListener('input', () => {
         debouncedOffsetsBase(inputOffsetsBase.id, inputOffsetsBase.value);
     });
 
