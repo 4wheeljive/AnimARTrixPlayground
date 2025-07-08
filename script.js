@@ -82,7 +82,7 @@ function ab2str(buf) {
 }
 
 // Debounce sliders
-/*
+
 function debounce(sendNumberCharacteristic, inputID, inputValue) {
     let timer;
     return function(inputID, inputValue) {
@@ -91,7 +91,7 @@ function debounce(sendNumberCharacteristic, inputID, inputValue) {
             { sendNumberCharacteristic(inputID, inputValue); }, debounceDelay );
     };
 }
-*/
+
 // Create a send buffer for the NumberCharacteristic
 
 function sendNumberCharacteristic(inputID, inputValue) {
