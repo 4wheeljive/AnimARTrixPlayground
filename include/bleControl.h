@@ -285,19 +285,24 @@ class ButtonCharacteristicCallbacks : public BLECharacteristicCallbacks {
 
 class CheckboxCharacteristicCallbacks : public BLECharacteristicCallbacks {
    void onWrite(BLECharacteristic *characteristic) {
+  
       String value = characteristic->getValue();
+  
       if (value.length() > 0) {
          uint8_t receivedValue = value[0];
+  
          if (debug) {
             Serial.print("Checkbox: ");
             Serial.println(receivedValue);
          } 
+  
          if (receivedValue == 100) {
             rotateAnimations = true;
          }
          if (receivedValue == 101) {
             rotateAnimations = false;
          }
+  
       }
    }
 };

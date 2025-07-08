@@ -2,7 +2,6 @@
 const connectButton = document.getElementById('connectBleButton');
 const disconnectButton = document.getElementById('disconnectBleButton');
 
-
 const polarWavesButton = document.getElementById('polarWavesButton');
 const spiralusButton = document.getElementById('spiralusButton');
 const caleido1Button = document.getElementById('caleido1Button');
@@ -13,6 +12,8 @@ const complexKaleidoButton = document.getElementById('complexKaleidoButton');
 const experiment10Button = document.getElementById('experiment10Button');
 const experimentSM1Button = document.getElementById('experimentSM1Button');
 const offButton = document.getElementById('offButton');
+
+const rotateAnimationCheckbox = document.getElementById('rotateAnimationCheckbox');
 
 const formSpeed = document.getElementById('formSpeed');
 const inputSpeed = document.getElementById('inputSpeed');
@@ -169,16 +170,16 @@ function connectToDevice(){
             service.getCharacteristic(CheckboxCharacteristic)
             .then(characteristic => {
                 checkboxCharacteristicFound = characteristic;
-                characteristic.addEventListener('characteristicvaluechanged', handleCheckboxCharacteristicChange);
-                characteristic.startNotifications();				
+                //characteristic.addEventListener('characteristicvaluechanged', handleCheckboxCharacteristicChange);
+                //characteristic.startNotifications();				
                 //return characteristic.readValue();
                 })
 
             service.getCharacteristic(NumberCharacteristic)
             .then(characteristic => {
                 numberCharacteristicFound = characteristic;
-                characteristic.addEventListener('characteristicvaluechanged', handleNumberCharacteristicChange);
-                characteristic.startNotifications();				
+                //characteristic.addEventListener('characteristicvaluechanged', handleNumberCharacteristicChange);
+                //characteristic.startNotifications();				
                 //return characteristic.readValue();
                 })
             /*
@@ -226,7 +227,7 @@ function handleButtonCharacteristicChange(event){
 
 function handleCheckboxCharacteristicChange(event){
     const newValueReceived = new TextDecoder().decode(event.target.value);
-    console.log("Number received: ", newValueReceived);
+    console.log("Checkbox value: ", newValueReceived);
     //valueSliderA.innerHTML = newValueReceived;
 }
 
