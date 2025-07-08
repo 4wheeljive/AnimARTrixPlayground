@@ -138,9 +138,9 @@ function sendNumberCharacteristic(inputID, inputValue) {
     });
 
 // Speed Input (Number)
-    inputSpeed.addEventListener('submit', function(event) {
+    formSpeed.addEventListener('submit', function(event) {
         event.preventDefault();
-        sendNumberCharacteristic(this.id, this.value);
+        sendNumberCharacteristic(inputSpeed.id, inputSpeed.value);
     });
 
 // Brightness Input (Number)
@@ -150,27 +150,27 @@ function sendNumberCharacteristic(inputID, inputValue) {
     });
 
 // Color Order Input (Number)
-    inputColorOrder.addEventListener('submit', function(event) {
+    formColorOrder.addEventListener('submit', function(event) {
         event.preventDefault();
-        sendNumberCharacteristic(this.id, this.value);
+        sendNumberCharacteristic(inputColorOrder.id, inputColorOrder.value);
     });
 
 // Ratios Base Input (Number)
-    inputRatiosBase.addEventListener('submit', function(event) {
+    formRatiosBase.addEventListener('submit', function(event) {
         event.preventDefault();
-        sendNumberCharacteristic(this.id, this.value);
+        sendNumberCharacteristic(inputRatiosBase.id, inputRatiosBase.value);
     });
 
 // Ratios Diff Input (Number)
-    inputRatiosDiff.addEventListener('submit', function(event) {
+    formRatiosDiff.addEventListener('submit', function(event) {
         event.preventDefault();
-        sendNumberCharacteristic(this.id, this.value);
+        sendNumberCharacteristic(inputRatiosDiff.id, inputRatiosDiff.value);
     });
 
 // Offsets Base Input (Number)
-    inputOffsetsBase.addEventListener('input', (event) => {
-        const debouncedOffsetsBase =  debounce(sendNumberCharacteristic, this.id, this.value);
-        debouncedOffsetsBase(this.id, this.value);
+    formOffsetsBase.addEventListener('input', (event) => {
+        const debouncedOffsetsBase =  debounce(sendNumberCharacteristic, inputOffsetsBase.id, inputOffsetsBase.value);
+        debouncedOffsetsBase(inputOffsetsBase.id, inputOffsetsBase.value);
     });
 
 
