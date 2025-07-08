@@ -239,24 +239,24 @@ function connectToDevice(){
             service.getCharacteristic(ButtonCharacteristic)
             .then(characteristic => {
                 buttonCharacteristicFound = characteristic;
-                //characteristic.addEventListener('characteristicvaluechanged', handleButtonCharacteristicChange);
-                //characteristic.startNotifications();				
+                characteristic.addEventListener('characteristicvaluechanged', handleButtonCharacteristicChange);
+                characteristic.startNotifications();				
                 //return characteristic.readValue();
                 })
 
             service.getCharacteristic(CheckboxCharacteristic)
             .then(characteristic => {
                 checkboxCharacteristicFound = characteristic;
-                //characteristic.addEventListener('characteristicvaluechanged', handleCheckboxCharacteristicChange);
-                //characteristic.startNotifications();				
+                characteristic.addEventListener('characteristicvaluechanged', handleCheckboxCharacteristicChange);
+                characteristic.startNotifications();				
                 //return characteristic.readValue();
                 })
 
             service.getCharacteristic(NumberCharacteristic)
             .then(characteristic => {
                 numberCharacteristicFound = characteristic;
-                //characteristic.addEventListener('characteristicvaluechanged', handleNumberCharacteristicChange);
-                //characteristic.startNotifications();				
+                characteristic.addEventListener('characteristicvaluechanged', handleNumberCharacteristicChange);
+                characteristic.startNotifications();				
                 //return characteristic.readValue();
                 })
             /*

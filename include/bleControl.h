@@ -137,7 +137,7 @@ void animationAdjust(double newAnimation) {
    }
 }
 
-void sendReceiptNumber(String receivedID, uint8_t receivedValue) {
+void sendReceiptNumber(String receivedID, float receivedValue) {
    // Prepare the JSON document to send
    sendDoc.clear();
    sendDoc["id"] = receivedID;
@@ -159,6 +159,9 @@ void sendReceiptNumber(String receivedID, uint8_t receivedValue) {
       Serial.print(": ");
       Serial.println(receivedValue);
    }
+   //pNumberCharacteristic->setValue(String(receivedValue).c_str());
+   //pNumberCharacteristic->notify();
+
 }
 
 
@@ -181,52 +184,50 @@ void processNumber(String receivedID, float receivedValue ) {
       case 1:
          speed = (uint8_t) receivedValue;
          elementID = "inputSpeed";
-         //sendReceiptNumber(elementID, receivedValue);
+         sendReceiptNumber(elementID, receivedValue);
          break;
       
       case 2:
          BRIGHTNESS = (uint8_t) receivedValue;
          elementID = "inputBrightness";
-         //sendReceiptNumber(elementID, receivedValue);
+         sendReceiptNumber(elementID, receivedValue);
          break;
       
       case 3:
          colorOrder = (uint8_t) receivedValue;
          colorOrderChanged = true;   
          elementID = "inputColorOrder";
-         //sendReceiptNumber(elementID, receivedValue);
+         sendReceiptNumber(elementID, receivedValue);
          break;
 
       case 4:
          adjustRatiosBase = receivedValue;
          elementID = "inputRatiosBase";
-         //sendReceiptNumber(elementID, receivedValue);
+         sendReceiptNumber(elementID, receivedValue);
          break;
 
       case 5:
          adjustRatiosDiff = receivedValue;
          elementID = "inputRatiosDiff";
-         //sendReceiptNumber(elementID, receivedValue);
+         sendReceiptNumber(elementID, receivedValue);
          break;
 
       case 6:
          adjustOffsetsBase = receivedValue;
          elementID = "inputOffsetsBase";
-         //sendReceiptNumber(elementID, receivedValue);
+         sendReceiptNumber(elementID, receivedValue);
          break;
 
       case 7:
-         adjustOffsetsBase = receivedValue;
-         elementID = "inputOffsetsBase";
-         //sendReceiptNumber(elementID, receivedValue);
+         adjustOffsetsDiff = receivedValue;
+         elementID = "inputOffsetsDiff";
+         sendReceiptNumber(elementID, receivedValue);
          break;
 
       default:
          Serial.println("Unknown input");
          return;
    }
-   //pNumberCharacteristic->setValue(String(receivedValue).c_str());
-   //pNumberCharacteristic->notify();
 
 }
 
