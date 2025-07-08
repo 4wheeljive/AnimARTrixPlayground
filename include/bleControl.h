@@ -114,9 +114,11 @@ bool wasConnected = false;
 #define CHECKBOX_CHARACTERISTIC_UUID   "19b10002-e8f2-537e-4f6c-d104768a1214"
 #define NUMBER_CHARACTERISTIC_UUID     "19b10003-e8f2-537e-4f6c-d104768a1214"
 
+
 BLEDescriptor pButtonDescriptor(BLEUUID((uint16_t)0x2902));
 BLEDescriptor pCheckboxDescriptor(BLEUUID((uint16_t)0x2902));
 BLEDescriptor pNumberDescriptor(BLEUUID((uint16_t)0x2902));
+
 
 String elementID;
 uint8_t elementValue;
@@ -168,13 +170,13 @@ void processNumber(String receivedID, uint8_t receivedValue ) {
       case inputSpeed:
          speed = receivedValue;
          elementID = "inputSpeed";
-         sendReceiptNumber(elementID, receivedValue);
+         //sendReceiptNumber(elementID, receivedValue);
          break;
       
       case inputBrightness:
          BRIGHTNESS = receivedValue;
          elementID = "inputBrightness";
-         sendReceiptNumber(elementID, receivedValue);
+         //sendReceiptNumber(elementID, receivedValue);
          break;
       
 
@@ -182,7 +184,7 @@ void processNumber(String receivedID, uint8_t receivedValue ) {
          colorOrder = receivedValue;
          colorOrderChanged = true;   
          elementID = "inputColorOrder";
-         sendReceiptNumber(elementID, receivedValue);
+         //sendReceiptNumber(elementID, receivedValue);
          break;
 
       default:
@@ -201,8 +203,8 @@ void processNumber(String receivedID, uint8_t receivedValue ) {
    Serial.println(receivedValue);
    */
 
-   pNumberCharacteristic->setValue(String(receivedValue).c_str());
-   pNumberCharacteristic->notify();
+   //pNumberCharacteristic->setValue(String(receivedValue).c_str());
+   //pNumberCharacteristic->notify();
 
 }
 
@@ -329,38 +331,37 @@ void bleSetup() {
 
    BLEService *pService = pServer->createService(SERVICE_UUID);
 
-      pButtonCharacteristic = pService->createCharacteristic(
-                        BUTTON_CHARACTERISTIC_UUID,
-                        BLECharacteristic::PROPERTY_WRITE |
-                        BLECharacteristic::PROPERTY_READ |
-                        BLECharacteristic::PROPERTY_NOTIFY
-                     );
-      pButtonCharacteristic->setCallbacks(new ButtonCharacteristicCallbacks());
-      pButtonCharacteristic->setValue(String(fxIndex).c_str());
-      pButtonCharacteristic->addDescriptor(new BLE2902());
-      //pButtonDescriptor.setValue("fxIndex"); 
-  
-      pCheckboxCharacteristic = pService->createCharacteristic(
-                        CHECKBOX_CHARACTERISTIC_UUID,
-                        BLECharacteristic::PROPERTY_WRITE |
-                        BLECharacteristic::PROPERTY_READ |
-                        BLECharacteristic::PROPERTY_NOTIFY
-                     );
-      pCheckboxCharacteristic->setCallbacks(new CheckboxCharacteristicCallbacks());
-      pCheckboxCharacteristic->setValue(String(dummy).c_str());
-      pCheckboxCharacteristic->addDescriptor(new BLE2902());
-      
-      pNumberCharacteristic = pService->createCharacteristic(
-                        NUMBER_CHARACTERISTIC_UUID,
-                        BLECharacteristic::PROPERTY_WRITE |
-                        BLECharacteristic::PROPERTY_READ |
-                        BLECharacteristic::PROPERTY_NOTIFY
-                     );
-      pNumberCharacteristic->setCallbacks(new NumberCharacteristicCallbacks());
-      pNumberCharacteristic->setValue(String(dummy).c_str());
-      pNumberCharacteristic->addDescriptor(new BLE2902());
-      //pNumberDescriptor.setValue("Number"); 
-  
+   pButtonCharacteristic = pService->createCharacteristic(
+                     BUTTON_CHARACTERISTIC_UUID,
+                     BLECharacteristic::PROPERTY_WRITE |
+                     BLECharacteristic::PROPERTY_READ |
+                     BLECharacteristic::PROPERTY_NOTIFY
+                  );
+   pButtonCharacteristic->setCallbacks(new ButtonCharacteristicCallbacks());
+   pButtonCharacteristic->setValue(String(fxIndex).c_str());
+   pButtonCharacteristic->addDescriptor(new BLE2902());
+
+   pCheckboxCharacteristic = pService->createCharacteristic(
+                     CHECKBOX_CHARACTERISTIC_UUID,
+                     BLECharacteristic::PROPERTY_WRITE |
+                     BLECharacteristic::PROPERTY_READ |
+                     BLECharacteristic::PROPERTY_NOTIFY
+                  );
+   pCheckboxCharacteristic->setCallbacks(new CheckboxCharacteristicCallbacks());
+   pCheckboxCharacteristic->setValue(String(dummy).c_str());
+   pCheckboxCharacteristic->addDescriptor(new BLE2902());
+   
+   pNumberCharacteristic = pService->createCharacteristic(
+                     NUMBER_CHARACTERISTIC_UUID,
+                     BLECharacteristic::PROPERTY_WRITE |
+                     BLECharacteristic::PROPERTY_READ |
+                     BLECharacteristic::PROPERTY_NOTIFY
+                  );
+   pNumberCharacteristic->setCallbacks(new NumberCharacteristicCallbacks());
+   pNumberCharacteristic->setValue(String(dummy).c_str());
+   pNumberCharacteristic->addDescriptor(new BLE2902());
+   //pNumberDescriptor.setValue("Number"); 
+
    //**********************************************************
 
    pService->start();

@@ -25,18 +25,6 @@ const valueBrightness = document.getElementById('valueBrightness');
 const latestValueSent = document.getElementById('valueSent');
 const bleStateContainer = document.getElementById('bleState');
 
-/*
-var sendString = " ";
-
-var sendDoc = {
-    "id" : "placeholderID",
-    "value" : 1.0
-}
-
-var sentID = "placeholderID";
-var sentValue = 1.0;
-*/
-
 //Define BLE Device Specs
 var deviceName ='AnimARTrix Playground';
 var bleService =                '19b10000-e8f2-537e-4f6c-d104768a1214';
@@ -173,8 +161,8 @@ function connectToDevice(){
             service.getCharacteristic(ButtonCharacteristic)
             .then(characteristic => {
                 buttonCharacteristicFound = characteristic;
-                characteristic.addEventListener('characteristicvaluechanged', handleButtonCharacteristicChange);
-                characteristic.startNotifications();				
+                //characteristic.addEventListener('characteristicvaluechanged', handleButtonCharacteristicChange);
+                //characteristic.startNotifications();				
                 //return characteristic.readValue();
                 })
 
@@ -231,8 +219,8 @@ function disconnectDevice() {
 
 
 function handleButtonCharacteristicChange(event){
-    const newValueReceived = new TextDecoder().decode(event.target.value);
-    console.log("Number received: ", newValueReceived);
+    //const newValueReceived = new TextDecoder().decode(event.target.value);
+    //console.log("Number received: ", newValueReceived);
     //valueSliderA.innerHTML = newValueReceived;
     // parse and set different updates for different elements
 }
@@ -279,7 +267,7 @@ function writeCheckboxCharacteristic(value){
     if (bleServer && bleServer.connected) {
         bleServiceFound.getCharacteristic(CheckboxCharacteristic)
         .then(characteristic => {
-            return characteristic.writeValue(valueue);
+            return characteristic.writeValue(value);
         })
         .then(() => {
             //const decodedBuffer = new TextDecoder().decode(sendBuffer);
