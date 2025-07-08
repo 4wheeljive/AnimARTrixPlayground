@@ -80,7 +80,7 @@ function ab2str(buf) {
 }
 
 // Debounce sliders
-
+/*
 function debounce(sendNumberCharacteristic, inputID, inputValue) {
     let timer;
     return function(inputID, inputValue) {
@@ -101,7 +101,7 @@ function sendNumberCharacteristic(inputID, inputValue) {
         sendBuffer = str2ab(sendString);        
         writeNumberCharacteristic(sendBuffer);
 }
-
+*/
 
 // ADD EVENT LISTENERS *************************************************************
 
