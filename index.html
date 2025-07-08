@@ -102,20 +102,16 @@
                 <p></p>
 				    <h3>Ratios</h3>
 					    <form id="formRatiosBase">
-                            <p>
-                                <label for="inputRatiosBase">Base (-1.00 to 1.00): </label>
-                                <input type="number"  type="submit" id="inputRatiosBase" name="inputRatiosBase"  min="-1.00" max="1.00" step="0.01" value="0.00"/>
-                            </p>
-                            <p class="gray-label">Current base: <span id="valueRatiosBase"></span></p>
+                            <label for="inputRatiosBase">Base: </label>
+                            <input type="range"  type="submit" id="inputRatiosBase" name="inputRatiosBase"  min="-1.00" max="1.00" step="0.01" value="0.00"/>
+                            <span id="valueRatiosBase">0.00</span>
                         </form>
                         <form id="formRatiosDiff">
-                            <p>
-                                <label for="inputRatiosDiff">Diff (0.1 to 10.0): </label>
-                                <input type="number"  type="submit" id="inputRatiosDiff" name="inputRatiosDiff"  min="0.1" max="10.0" step="0.1" value="1.0"/>
-                            </p>
-                            <p class="gray-label">Current differential: <span id="valueRatiosDiff"></span></p>
+                            <label for="inputRatiosDiff">Diff (0.1 to 10.0): </label>
+                            <input type="range"  type="submit" id="inputRatiosDiff" name="inputRatiosDiff"  min="0.1" max="10.0" step="0.1" value="1.0"/>
+                            <span id="valueRatiosDiff">1.00</span>
                         </form>
-                <p></p>
+                <p></p> 
                     <h3>Offsets</h3>
                         <form id="formOffsetsBase">
                             <label for="inputOffsetsBase">Base: </label>

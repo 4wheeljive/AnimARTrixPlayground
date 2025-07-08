@@ -156,24 +156,41 @@ function sendNumberCharacteristic(inputID, inputValue) {
         sendNumberCharacteristic(inputColorOrder.id, inputColorOrder.value);
     });
 
-// Ratios Base Input (Number)
+/*// Ratios Base Input (Number)
     formRatiosBase.addEventListener('submit', function(event) {
         event.preventDefault();
         sendNumberCharacteristic(inputRatiosBase.id, inputRatiosBase.value);
     });
-
 // Ratios Diff Input (Number)
     formRatiosDiff.addEventListener('submit', function(event) {
         event.preventDefault();
         sendNumberCharacteristic(inputRatiosDiff.id, inputRatiosDiff.value);
     });
+*/
+
+// Ratios Base Input (Number)
+    const debouncedRatiosBase = debounce(inputRatiosBase.id, inputRatiosBase.value);
+    formRatiosBase.addEventListener('input', () => {
+        debouncedRatiosBase(inputRatiosBase.id, inputRatiosBase.value);
+    });
+
+// Ratios Diff Input (Number)
+    const debouncedRatiosDiff = debounce(inputRatiosDiff.id, inputRatiosDiff.value);
+    formRatiosDiff.addEventListener('input', () => {
+        debouncedRatiosDiff(inputRatiosDiff.id, inputRatiosDiff.value);
+    });
+
 
 // Offsets Base Input (Number)
-
-    const debouncedOffsetsBase =  debounce(inputOffsetsBase.id, inputOffsetsBase.value);
-        
+    const debouncedOffsetsBase = debounce(inputOffsetsBase.id, inputOffsetsBase.value);
     formOffsetsBase.addEventListener('input', () => {
         debouncedOffsetsBase(inputOffsetsBase.id, inputOffsetsBase.value);
+    });
+
+// Offsets Diff Input (Number)
+    const debouncedOffsetsDiff = debounce(inputOffsetsDiff.id, inputOffsetsDiff.value);
+    formOffsetsBase.addEventListener('input', () => {
+        debouncedOffsetsDiff(inputOffsetsDiff.id, inputOffsetsDiff.value);
     });
 
 
