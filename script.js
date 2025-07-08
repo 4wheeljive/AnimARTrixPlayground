@@ -146,7 +146,7 @@ function sendNumberCharacteristic(inputID, inputValue) {
 // Brightness Input (Number)
     formBrightness.addEventListener('submit', function(event) {
         event.preventDefault();
-        sendNumberCharacteristic(this.id, this.value);
+        sendNumberCharacteristic(inputBrightness.id, inputBrightness.value);
     });
 
 // Color Order Input (Number)
