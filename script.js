@@ -138,9 +138,9 @@ function sendNumberCharacteristic(inputID, inputValue) {
     });
 
 // Brightness Input (Number)
-    formBrightness.addEventListener('submit', function(event) {
+    inputBrightness.addEventListener('submit', function(event) {
         event.preventDefault();
-        sendNumberCharacteristic(inputBrightness.id, inputBrightness.value);
+        sendNumberCharacteristic(this.id, this.value);
         /*
         var sendDoc = {
             "id" : inputBrightness.id,
@@ -211,8 +211,8 @@ function sendNumberCharacteristic(inputID, inputValue) {
     });
 
 // Offsets Base Input (Number)
-    const debouncedOffsetsBase = debounce(sendNumberCharacteristic, inputOffsetsBase.id, inputOffsetsBase.value);
     inputOffsetsBase.addEventListener('input', (event) => {
+        const debouncedOffsetsBase = debounce(sendNumberCharacteristic, inputOffsetsBase.id, inputOffsetsBase.value);
         debouncedOffsetsBase(event.target.value);
     });
 

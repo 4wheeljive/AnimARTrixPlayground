@@ -90,10 +90,10 @@ When BIG_BOARD is undefined:
     #define NUM_SEGMENTS 3
     #define NUM_LEDS_PER_SEGMENT 512
 #else 
-    #define HEIGHT 22 
-    #define WIDTH 22
+    #define HEIGHT 16 
+    #define WIDTH 16
     #define NUM_SEGMENTS 1
-    #define NUM_LEDS_PER_SEGMENT 484
+    #define NUM_LEDS_PER_SEGMENT 256
 #endif
 
 //*********************************************
@@ -133,14 +133,14 @@ using namespace fl;
     // Custom XYMap mappings
 
         uint16_t ledNum = 0;
-
+  /*
         extern const uint16_t loc2indSerpByRow[HEIGHT][WIDTH] PROGMEM;
         extern const uint16_t loc2indProgByRow[HEIGHT][WIDTH] PROGMEM;
         extern const uint16_t loc2indSerp[NUM_LEDS] PROGMEM;
         extern const uint16_t loc2indProg[NUM_LEDS] PROGMEM;
         extern const uint16_t loc2indProgByColBottomUp[WIDTH][HEIGHT] PROGMEM;
 
-        /*
+      
         uint16_t XY(uint8_t x, uint8_t y) {
             ledNum = loc2indProgByColBottomUp[x][y];
             return ledNum;
@@ -157,8 +157,8 @@ using namespace fl;
 
         uint16_t myXYFunction(uint16_t x, uint16_t y, uint16_t width, uint16_t height);
 
-        XYMap myXYmap = XYMap::constructWithUserFunction(WIDTH, HEIGHT, myXYFunction);
-        //XYMap myXYmap(WIDTH, HEIGHT, true); // use this XYMap instead of one immediately above to bypass custom mapping 
+        //XYMap myXYmap = XYMap::constructWithUserFunction(WIDTH, HEIGHT, myXYFunction);
+        XYMap myXYmap(WIDTH, HEIGHT, true); // use this XYMap instead of one immediately above to bypass custom mapping 
 
 #else
 
