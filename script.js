@@ -125,45 +125,6 @@ function sendNumberCharacteristic(inputID, inputValue) {
     experimentSM1Button.addEventListener('click', () => writeButtonCharacteristic(9));
     offButton.addEventListener('click', () => writeButtonCharacteristic(99));
 
-// Speed Input (Number)
-    formSpeed.addEventListener('submit', function(event) {
-        event.preventDefault();
-        var sendDoc = {
-            "id" : inputSpeed.id,
-            "value" : inputSpeed.value
-        }
-        sendString = JSON.stringify(sendDoc);
-        sendBuffer = str2ab(sendString);        
-        writeNumberCharacteristic(sendBuffer);
-    });
-
-// Brightness Input (Number)
-    inputBrightness.addEventListener('submit', function(event) {
-        event.preventDefault();
-        sendNumberCharacteristic(this.id, this.value);
-        /*
-        var sendDoc = {
-            "id" : inputBrightness.id,
-            "value" : inputBrightness.value
-        }
-        sendString = JSON.stringify(sendDoc);
-        sendBuffer = str2ab(sendString);        
-        writeNumberCharacteristic(sendBuffer);
-        */
-    });
-
-// Color Order Input (Number)
-    formColorOrder.addEventListener('submit', function(event) {
-        event.preventDefault();
-        var sendDoc = {
-            "id" : inputColorOrder.id,
-            "value" : inputColorOrder.value
-        }
-        sendString = JSON.stringify(sendDoc);
-        sendBuffer = str2ab(sendString);        
-        writeNumberCharacteristic(sendBuffer);
-    });
-
 // Rotate Animation Toggle (Checkbox)
     rotateAnimationCheckbox.addEventListener('change', () => {
         if (rotateAnimationCheckbox.checked) {
@@ -174,52 +135,46 @@ function sendNumberCharacteristic(inputID, inputValue) {
         }
     });
 
-// Color Order Input (Number)
-    formColorOrder.addEventListener('submit', function(event) {
+    // Speed Input (Number)
+    inputSpeed.addEventListener('submit', function(event) {
         event.preventDefault();
-        var sendDoc = {
-            "id" : inputColorOrder.id,
-            "value" : inputColorOrder.value
-        }
-        sendString = JSON.stringify(sendDoc);
-        sendBuffer = str2ab(sendString);        
-        writeNumberCharacteristic(sendBuffer);
+        sendNumberCharacteristic(this.id, this.value);
+    });
+
+// Brightness Input (Number)
+    inputBrightness.addEventListener('submit', function(event) {
+        event.preventDefault();
+        sendNumberCharacteristic(this.id, this.value);
+    });
+
+// Color Order Input (Number)
+    inputColorOrder.addEventListener('submit', function(event) {
+        event.preventDefault();
+        sendNumberCharacteristic(this.id, this.value);
     });
 
 // Ratios Base Input (Number)
-    formRatiosBase.addEventListener('submit', function(event) {
+    inputRatiosBase.addEventListener('submit', function(event) {
         event.preventDefault();
-        var sendDoc = {
-            "id" : inputRatiosBase.id,
-            "value" : inputRatiosBase.value
-        }
-        sendString = JSON.stringify(sendDoc);
-        sendBuffer = str2ab(sendString);        
-        writeNumberCharacteristic(sendBuffer);
+        sendNumberCharacteristic(this.id, this.value);
     });
 
 // Ratios Diff Input (Number)
-    formRatiosDiff.addEventListener('submit', function(event) {
+    inputRatiosDiff.addEventListener('submit', function(event) {
         event.preventDefault();
-        var sendDoc = {
-            "id" : inputRatiosDiff.id,
-            "value" : inputRatiosDiff.value
-        }
-        sendString = JSON.stringify(sendDoc);
-        sendBuffer = str2ab(sendString);        
-        writeNumberCharacteristic(sendBuffer);
+        sendNumberCharacteristic(this.id, this.value);
     });
 
 // Offsets Base Input (Number)
     inputOffsetsBase.addEventListener('input', (event) => {
-        const debouncedOffsetsBase = debounce(sendNumberCharacteristic, inputOffsetsBase.id, inputOffsetsBase.value);
-        debouncedOffsetsBase(event.target.value);
+        const debouncedOffsetsBase =  debounce(sendNumberCharacteristic, this.id, this.value);
+        debouncedOffsetsBase(this.id, this.value);
     });
 
 
 // BLE CONNECTION *******************************************************************************
 
-// Check if BLE is available in your Browser
+// Check if BLE is available in your Browser    
 function isWebBluetoothEnabled() {
     if (!navigator.bluetooth) {
         console.log("Web Bluetooth API is not available in this browser!");
