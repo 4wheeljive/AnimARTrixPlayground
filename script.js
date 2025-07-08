@@ -153,7 +153,7 @@ function sendNumberCharacteristic(inputID, inputValue) {
         sendBuffer = str2ab(sendString);        
         writeNumberCharacteristic(sendBuffer);
 	*/
-        sendNumberCharacteristic(inputBrightness.id, inputBrightness.value);
+        sendNumberCharacteristic(this.id, this.value);
     });
 
 // Color Order Input (Number)
