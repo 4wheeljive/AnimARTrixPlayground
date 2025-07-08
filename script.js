@@ -87,8 +87,7 @@ function debounce(sendNumberCharacteristic, inputID, inputValue) {
     let timer;
     return function(inputID, inputValue) {
         clearTimeout(timer);
-        timer = setTimeout(() => 
-            { sendNumberCharacteristic(inputID, inputValue); }, debounceDelay );
+        timer = setTimeout(sendNumberCharacteristic. debounceDelay, inputID, inputValue);
     };
 }
 
