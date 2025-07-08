@@ -156,18 +156,6 @@ function sendNumberCharacteristic(inputID, inputValue) {
         sendNumberCharacteristic(inputColorOrder.id, inputColorOrder.value);
     });
 
-/*// Ratios Base Input (Number)
-    formRatiosBase.addEventListener('submit', function(event) {
-        event.preventDefault();
-        sendNumberCharacteristic(inputRatiosBase.id, inputRatiosBase.value);
-    });
-// Ratios Diff Input (Number)
-    formRatiosDiff.addEventListener('submit', function(event) {
-        event.preventDefault();
-        sendNumberCharacteristic(inputRatiosDiff.id, inputRatiosDiff.value);
-    });
-*/
-
 // Ratios Base Input (Number)
     const debouncedRatiosBase = debounce(inputRatiosBase.id, inputRatiosBase.value);
     formRatiosBase.addEventListener('input', () => {
@@ -309,8 +297,13 @@ function handleCheckboxCharacteristicChange(event){
 }
 
 function handleNumberCharacteristicChange(event){
-    const newValueReceived = new TextDecoder().decode(event.target.value);
-    console.log("Number received: ", newValueReceived);
+    const changeReceived = new TextDecoder().decode(event.target.value);
+    console.log("Number received: ", changeReceived);
+    const stringReceived = ab2str(changeReceived);
+	receivedDoc = JSON.parse(stringReceived);
+	receivedID = receivedDoc.id;
+	receivedValue = receivedDoc.value;
+    console.log("ID: ", receivedID, "- Value: ", receivedValue);
     //valueSliderA.innerHTML = newValueReceived;
 }
 
