@@ -135,7 +135,7 @@ function sendNumberCharacteristic(inputID, inputValue) {
         }
     });
 
-    // Speed Input (Number)
+// Speed Input (Number)
     inputSpeed.addEventListener('submit', function(event) {
         event.preventDefault();
         sendNumberCharacteristic(this.id, this.value);
@@ -144,7 +144,7 @@ function sendNumberCharacteristic(inputID, inputValue) {
 // Brightness Input (Number)
     inputBrightness.addEventListener('submit', function(event) {
         event.preventDefault();
-        sendNumberCharacteristic(this.id, this.value);
+        sendNumberCharacteristic(inputBrightness.id, inputBrightness.value);
     });
 
 // Color Order Input (Number)
