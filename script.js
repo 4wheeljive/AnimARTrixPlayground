@@ -144,7 +144,14 @@ function sendNumberCharacteristic(inputID, inputValue) {
 // Brightness Input (Number)
     inputBrightness.addEventListener('submit', function(event) {
         event.preventDefault();
-        sendNumberCharacteristic(inputBrightness.id, inputBrightness.value);
+        var sendDoc = {
+            "id" : inputBrightness.id,
+            "value" : inputBrightness.value
+        }
+        sendString = JSON.stringify(sendDoc);
+        sendBuffer = str2ab(sendString);        
+        writeNumberCharacteristic(sendBuffer);
+        //sendNumberCharacteristic(inputBrightness.id, inputBrightness.value);
     });
 
 // Color Order Input (Number)
