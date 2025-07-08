@@ -142,7 +142,7 @@ function sendNumberCharacteristic(inputID, inputValue) {
     });
 
 // Brightness Input (Number)
-    formBrightness.addEventListener('submit', function(event) {
+    inputBrightness.addEventListener('submit', function(event) {
         event.preventDefault();
         var sendDoc = {
             "id" : inputBrightness.id,
