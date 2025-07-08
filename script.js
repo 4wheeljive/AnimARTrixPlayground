@@ -15,6 +15,10 @@ const offButton = document.getElementById('offButton');
 
 const rotateAnimationCheckbox = document.getElementById('rotateAnimationCheckbox');
 
+const formColorOrder = document.getElementById('formColorOrder');
+const inputColorOrder = document.getElementById('inputColorOrder');
+const valueColorOrder = document.getElementById('valueColorOrder');
+
 const formSpeed = document.getElementById('formSpeed');
 const inputSpeed = document.getElementById('inputSpeed');
 const valueSpeed = document.getElementById('valueSpeed');
@@ -104,6 +108,20 @@ function ab2str(buf) {
         sendBuffer = str2ab(sendString);        
         writeNumberCharacteristic(sendBuffer);
     });
+
+
+// Color Order Input (Number)
+    formColorOrder.addEventListener('submit', function(event) {
+        event.preventDefault();
+        var sendDoc = {
+            "id" : inputColorOrder.id,
+            "value" : inputColorOrder.value
+        }
+        sendString = JSON.stringify(sendDoc);
+        sendBuffer = str2ab(sendString);        
+        writeNumberCharacteristic(sendBuffer);
+    });
+
 
 
 // Rotate Animation Toggle (Checkbox)

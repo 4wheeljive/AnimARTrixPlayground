@@ -29,6 +29,8 @@ enum Inputs {
    inputColorOrder
  };
 
+uint8_t switchNumber = 1;
+
 
 // UI Elements *************************************************************************************
 
@@ -165,24 +167,32 @@ void sendReceiptNumber(String receivedID, uint8_t receivedValue) {
    }
 }
 
+
+void inputSwitcher(String receivedID) {
+      if (receivedID == "inputSpeed") {switchNumber = 1;};
+      if (receivedID == "inputBrightness") {switchNumber = 2;};
+      if (receivedID == "inputColorOrder") {switchNumber = 3;};
+   }
+
 void processNumber(String receivedID, uint8_t receivedValue ) {
 
-   switch (receivedID.toInt()) {
+   inputSwitcher(receivedID);
+
+   switch (switchNumber) {
      
-      case inputSpeed:
+      case 1:
          speed = receivedValue;
          elementID = "inputSpeed";
          //sendReceiptNumber(elementID, receivedValue);
          break;
       
-      case inputBrightness:
+      case 2:
          BRIGHTNESS = receivedValue;
          elementID = "inputBrightness";
          //sendReceiptNumber(elementID, receivedValue);
          break;
       
-
-      case inputColorOrder:
+      case 3:
          colorOrder = receivedValue;
          colorOrderChanged = true;   
          elementID = "inputColorOrder";
@@ -193,18 +203,6 @@ void processNumber(String receivedID, uint8_t receivedValue ) {
          Serial.println("Unknown input");
          return;
    }
-   
-      Serial.print("New speed: ");
-      Serial.println(receivedValue); 
-
- 
-   /*
-   Serial.print("Processed ID: ");
-   Serial.println(receivedID);
-   Serial.print("Processed value: ");
-   Serial.println(receivedValue);
-   */
-
    //pNumberCharacteristic->setValue(String(receivedValue).c_str());
    //pNumberCharacteristic->notify();
 
