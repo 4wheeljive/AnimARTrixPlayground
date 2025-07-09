@@ -274,8 +274,7 @@ function inputSwitcher(receivedID) {
 
     resetScaleButton.addEventListener('click', (event) => {
         event.preventDefault();
-        inputScale.value = defaultValueScale;
-        valueScale.innerHTML = defaultValueScale;
+        sendNumberCharacteristic(inputScale, defaultValueScale);
     });
 
 
