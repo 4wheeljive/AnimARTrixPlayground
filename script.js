@@ -351,24 +351,20 @@ function disconnectDevice() {
 
 function handleButtonCharacteristicChange(event){
     const changeReceived = new TextDecoder().decode(event.target.value);
-    console.log("Button pressed: ", changeReceived);
-    const receivedDoc = JSON.parse(changeReceived);
-    console.log("ID: ", receivedDoc.id, "- Value: ", receivedDoc.value);
-    valueAnimation.innerHTML = receivedDoc.value;
+    console.log("Server receipt: Button pressed: ", changeReceived.toInt());
+    valueAnimation.innerHTML = changeReceived.toInt();
 }
 
 function handleCheckboxCharacteristicChange(event){
     const newValueReceived = new TextDecoder().decode(event.target.value);
-    console.log("Checkbox value: ", newValueReceived);
-    //valueSliderA.innerHTML = newValueReceived;
+    console.log("Server receipt: Checkbox value - ", newValueReceived);
 }
-
 
 function handleNumberCharacteristicChange(event){
     const changeReceived = new TextDecoder().decode(event.target.value);
-    console.log("Number received: ", changeReceived);
+    //console.log("Number received: ", changeReceived);
     const receivedDoc = JSON.parse(changeReceived);
-    console.log("ID: ", receivedDoc.id, "- Value: ", receivedDoc.value);
+    console.log("Server receipt: ", receivedDoc.id, " - ", receivedDoc.value);
     
     inputSwitcher(receivedDoc.id)
 
@@ -390,7 +386,6 @@ function handleNumberCharacteristicChange(event){
         default:   console.log("No valid switchNumber found. Received ID: ", receivedDoc.id);
     }
 }
-
 
 // WRITE TO CHARACTERISTIC FUNCTIONS *************************************************
 

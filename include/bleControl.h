@@ -154,9 +154,6 @@ void sendReceiptNumber(String receivedID, float receivedValue) {
       Serial.print(": ");
       Serial.println(receivedValue);
    }
-   //pNumberCharacteristic->setValue(String(receivedValue).c_str());
-   //pNumberCharacteristic->notify();
-
 }
 
 void inputSwitcher(String receivedID) {
@@ -293,6 +290,9 @@ class CheckboxCharacteristicCallbacks : public BLECharacteristicCallbacks {
             rotateAnimations = false;
          }
   
+      pCheckboxCharacteristic->setValue(String(receivedValue).c_str());
+      pCheckboxCharacteristic->notify();
+
       }
    }
 };
