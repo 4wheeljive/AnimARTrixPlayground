@@ -12,6 +12,7 @@ const complexKaleidoButton = document.getElementById('complexKaleidoButton');
 const experiment10Button = document.getElementById('experiment10Button');
 const experimentSM1Button = document.getElementById('experimentSM1Button');
 const offButton = document.getElementById('offButton');
+const valueAnimation = document.getElementById('valueAnimation');
 
 const rotateAnimationCheckbox = document.getElementById('rotateAnimationCheckbox');
 
@@ -291,7 +292,7 @@ function handleButtonCharacteristicChange(event){
     console.log("Button pressed: ", changeReceived);
     const receivedDoc = JSON.parse(changeReceived);
     console.log("ID: ", receivedDoc.id, "- Value: ", receivedDoc.value);
-    animationValue.innerHTML = receivedDoc.value;
+    valueAnimation.innerHTML = receivedDoc.value;
 }
 
 function handleCheckboxCharacteristicChange(event){

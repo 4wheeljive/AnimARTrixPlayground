@@ -533,9 +533,9 @@ class ANIMartRIX {
 
         timings.master_speed = 0.5;
 
-        timings.ratio[0] = 0.0025 + (double)adjustRatiosBase/10; 
-        timings.ratio[1] = 0.0027 + (double)adjustRatiosBase/10 * (double)adjustRatiosDiff;
-        timings.ratio[2] = 0.0031 + (double)adjustRatiosBase/10 * 2 * (double)adjustRatiosDiff;
+        timings.ratio[0] = 0.0025 + (double)adjustRatiosBase/100; 
+        timings.ratio[1] = 0.0027 + (double)adjustRatiosBase/100 * (double)adjustRatiosDiff;
+        timings.ratio[2] = 0.0031 + (double)adjustRatiosBase/100 * 2 * (double)adjustRatiosDiff;
 
         calculate_oscillators(timings);
 
