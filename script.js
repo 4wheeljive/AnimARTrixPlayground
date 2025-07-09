@@ -402,7 +402,7 @@ function writeButtonCharacteristic(value){
             return characteristic.writeValue(data);
         })
         .then(() => {
-            //const decodedBuffer = new TextDecoder().decode(sendBuffer);
+            latestValueSent.innerHTML = value;
             console.log("Value written to Button characteristic: ", value);
         })
         .catch(error => {
@@ -423,7 +423,7 @@ function writeCheckboxCharacteristic(value){
             return characteristic.writeValue(data);
         })
         .then(() => {
-            //const decodedBuffer = new TextDecoder().decode(sendBuffer);
+            latestValueSent.innerHTML = value;
             console.log("Value written to Checkbox characteristic: ", value);
         })
         .catch(error => {
@@ -444,6 +444,7 @@ function writeNumberCharacteristic(sendBuffer){
         })
         .then(() => {
             const decodedBuffer = new TextDecoder().decode(sendBuffer);
+            latestValueSent.innerHTML = decodedBuffer;
             console.log("Value written to Number characteristic: ", decodedBuffer);
         })
         .catch(error => {
