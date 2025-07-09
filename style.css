@@ -60,11 +60,15 @@ button {
 }
 
 .resetButton{
-    background-color: #a7a7a7;
-    border-radius: 50%;
+    background-color: #000000;
+    color: white;
+    padding: none;
+    margin: none;
+    border: none;
+    cursor: pointer;
+    border-radius: none;
+    border-radius: none;
 }
-
-
 
 .gray-label {
     color: #bebebe;
