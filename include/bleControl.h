@@ -123,7 +123,7 @@ uint8_t dummy = 1;
 // CONTROL FUNCTIONS ***************************************************************
 
 void animationAdjust(double newAnimation) {
-   fxIndex = newAnimation;
+   //fxIndex = newAnimation;
    pButtonCharacteristic->setValue(String(newAnimation).c_str());
    pButtonCharacteristic->notify();
    if (debug) {
@@ -261,7 +261,7 @@ class ButtonCharacteristicCallbacks : public BLECharacteristicCallbacks {
             }
             
             displayOn = true;
-            //animationAdjust(fxIndex);
+            animationAdjust(fxIndex);
        
        }
 
