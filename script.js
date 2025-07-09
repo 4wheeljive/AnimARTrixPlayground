@@ -272,7 +272,8 @@ function inputSwitcher(receivedID) {
 
 // Reset sliders to default values
 
-    resetScaleButton.addEventListener('click', () => {
+    resetScaleButton.addEventListener('click', (event) => {
+        event.preventDefault();
         inputScale.value = defaultValueScale;
         valueScale.innerHTML = defaultValueScale;
     });
