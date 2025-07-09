@@ -351,20 +351,20 @@ function disconnectDevice() {
 
 function handleButtonCharacteristicChange(event){
     const changeReceived = new TextDecoder().decode(event.target.value);
-    console.log("Server receipt: Button pressed: ", changeReceived.toInt());
-    valueAnimation.innerHTML = changeReceived.toInt();
+    console.log("Server receipt: Animation - ",changeReceived);
+    valueAnimation.innerHTML = changeReceived;
 }
 
 function handleCheckboxCharacteristicChange(event){
     const newValueReceived = new TextDecoder().decode(event.target.value);
-    console.log("Server receipt: Checkbox value - ", newValueReceived);
+    console.log("Server receipt: Checkbox value - ",newValueReceived);
 }
 
 function handleNumberCharacteristicChange(event){
     const changeReceived = new TextDecoder().decode(event.target.value);
     //console.log("Number received: ", changeReceived);
     const receivedDoc = JSON.parse(changeReceived);
-    console.log("Server receipt: ", receivedDoc.id, " - ", receivedDoc.value);
+    console.log("Server receipt: ",receivedDoc.id," - ",receivedDoc.value);
     
     inputSwitcher(receivedDoc.id)
 
