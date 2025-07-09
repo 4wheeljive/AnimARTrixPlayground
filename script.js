@@ -16,19 +16,46 @@ const valueAnimation = document.getElementById('valueAnimation');
 
 const rotateAnimationCheckbox = document.getElementById('rotateAnimationCheckbox');
 
-const formColorOrder = document.getElementById('formColorOrder');
-const inputColorOrder = document.getElementById('inputColorOrder');
-const valueColorOrder = document.getElementById('valueColorOrder');
+const formBrightness = document.getElementById('formBrightness');
+const inputBrightness = document.getElementById('inputBrightness');
+const valueBrightness = document.getElementById('valueBrightness');
 
 const formSpeed = document.getElementById('formSpeed');
 const inputSpeed = document.getElementById('inputSpeed');
 const valueSpeed = document.getElementById('valueSpeed');
-const defaultValSpeed = valueSpeed.defaultValue;
+//const defaultValSpeed = valueSpeed.defaultValue;
 
+const formColorOrder = document.getElementById('formColorOrder');
+const inputColorOrder = document.getElementById('inputColorOrder');
+const valueColorOrder = document.getElementById('valueColorOrder');
 
-const formBrightness = document.getElementById('formBrightness');
-const inputBrightness = document.getElementById('inputBrightness');
-const valueBrightness = document.getElementById('valueBrightness');
+const formRed = document.getElementById('formRed');
+const inputRed = document.getElementById('inputRed');
+const valueRed = document.getElementById('valueRed');
+
+const formGreen = document.getElementById('formGreen');
+const inputGreen = document.getElementById('inputGreen');
+const valueGreen = document.getElementById('valueGreen');
+
+const formBlue = document.getElementById('formBlue');
+const inputBlue = document.getElementById('inputBlue');
+const valueBlue = document.getElementById('valueBlue');
+
+const formScale = document.getElementById('formScale');
+const inputScale = document.getElementById('inputScale');
+const valueScale = document.getElementById('valueScale');
+
+const formAngle = document.getElementById('formAngle');
+const inputAngle = document.getElementById('inputAngle');
+const valueAngle = document.getElementById('valueAngle');
+
+const formRadiusA = document.getElementById('formRadiusA');
+const inputRadiusA = document.getElementById('inputRadiusA');
+const valueRadiusA = document.getElementById('valueRadiusA');
+
+const formZ = document.getElementById('formZ');
+const inputZ = document.getElementById('inputZ');
+const valueZ = document.getElementById('valueZ');
 
 const formRatiosBase = document.getElementById('formRatiosBase');
 const inputRatiosBase = document.getElementById('inputRatiosBase');
@@ -67,7 +94,6 @@ var buttonCharacteristicFound;
 var checkboxCharacteristicFound;
 var numberCharacteristicFound;
 
-
 // UTILITY FUNCTIONS *******************************************************************
 
 // Convert between String and ArrayBuffer
@@ -87,15 +113,30 @@ function ab2str(buf) {
 
 // Debounce sliders
 
-const debounce = (inputID, inputValue) => {
-    let timer;
-    return (inputID, inputValue) =>{
-        clearTimeout(timer);
-        timer = setTimeout(() => {
-            sendNumberCharacteristic(inputID, inputValue);
-        }, debounceDelay);
+    const debounce = (inputID, inputValue) => {
+        let timer;
+        return (inputID, inputValue) =>{
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                sendNumberCharacteristic(inputID, inputValue);
+            }, debounceDelay);
+        };
     };
-};
+
+    const debouncedSpeed = debounce(inputSpeed.id, inputSpeed.value);
+	const debouncedBrightness = debounce(inputBrightness.id, inputBrightness.value);
+	const debouncedColorOrder = debounce(inputColorOrder.id, inputColorOrder.value);
+    const debouncedRatiosBase = debounce(inputRatiosBase.id, inputRatiosBase.value);
+    const debouncedRatiosDiff = debounce(inputRatiosDiff.id, inputRatiosDiff.value);
+    const debouncedOffsetsBase = debounce(inputOffsetsBase.id, inputOffsetsBase.value);
+    const debouncedOffsetsDiff = debounce(inputOffsetsDiff.id, inputOffsetsDiff.value);
+    const debouncedScale = debounce(inputScale.id, inputScale.value);
+    const debouncedAngle = debounce(inputAngle.id, inputAngle.value);
+	const debouncedRadiusA = debounce(inputRadiusA.id, inputRadiusA.value);
+	const debouncedZ = debounce(inputZ.id, inputZ.value);
+	const debouncedRed = debounce(inputRed.id, inputRed.value);
+	const debouncedGreen = debounce(inputGreen.id, inputGreen.value);
+	const debouncedBlue = debounce(inputBlue.id, inputBlue.value);
 
 // Create a send buffer for the NumberCharacteristic
 
@@ -110,16 +151,21 @@ function sendNumberCharacteristic(inputID, inputValue) {
 }
 
 function inputSwitcher(receivedID) {
-      if (receivedID == "inputSpeed") {switchNumber = 1;};
-      if (receivedID == "inputBrightness") {switchNumber = 2;};
-      if (receivedID == "inputColorOrder") {switchNumber = 3;};
-      if (receivedID == "inputRatiosBase") {switchNumber = 4;};
-      if (receivedID == "inputRatiosDiff") {switchNumber = 5;};
-      if (receivedID == "inputOffsetsBase") {switchNumber = 6;};
-      if (receivedID == "inputOffsetsDiff") {switchNumber = 7;};
+    if (receivedID == "inputSpeed") {switchNumber = 1;};
+    if (receivedID == "inputBrightness") {switchNumber = 2;};
+    if (receivedID == "inputColorOrder") {switchNumber = 3;};
+    if (receivedID == "inputRatiosBase") {switchNumber = 4;};
+    if (receivedID == "inputRatiosDiff") {switchNumber = 5;};
+    if (receivedID == "inputOffsetsBase") {switchNumber = 6;};
+    if (receivedID == "inputOffsetsDiff") {switchNumber = 7;};
+    if (receivedID == "inputScale") {switchNumber = 8;};
+    if (receivedID == "inputAngle") {switchNumber = 9;};
+    if (receivedID == "inputRadiusA") {switchNumber = 10;};
+    if (receivedID == "inputZ") {switchNumber = 11;};
+    if (receivedID == "inputRed") {switchNumber = 12;};
+    if (receivedID == "inputGreen") {switchNumber = 13;};
+    if (receivedID == "inputBlue") {switchNumber = 14;};
 }
-
-
 
 // ADD EVENT LISTENERS *************************************************************
 
@@ -153,44 +199,60 @@ function inputSwitcher(receivedID) {
         }
     });
 
-// Speed Input (Number)
-    formSpeed.addEventListener('input', function(event) {
-        event.preventDefault();
-        sendNumberCharacteristic(inputSpeed.id, inputSpeed.value);
+// Sliders
+
+    formSpeed.addEventListener('input', () => {
+        debouncedSpeed(inputSpeed.id, inputSpeed.value);
     });
 
-// Brightness Input (Number)
-    formBrightness.addEventListener('input', function(event) {
-        event.preventDefault();
-        sendNumberCharacteristic(inputBrightness.id, inputBrightness.value);
+    formBrightness.addEventListener('input', () => {
+        debouncedBrightness(inputBrightness.id, inputBrightness.value);
     });
 
-// Color Order Input (Number)
-    formColorOrder.addEventListener('input', function(event) {
-        event.preventDefault();
-        sendNumberCharacteristic(inputColorOrder.id, inputColorOrder.value);
+    formColorOrder.addEventListener('input', () => {
+        debouncedColorOrder(inputColorOrder.id, inputColorOrder.value);
     });
 
-// Ratios Base Input (Number)
-    const debouncedRatiosBase = debounce(inputRatiosBase.id, inputRatiosBase.value);
+    formRed.addEventListener('input', () => {
+        debouncedRed(inputRed.id, inputRed.value);
+    });
+
+    formGreen.addEventListener('input', () => {
+        debouncedAngle(inputGreen.id, inputGreen.value);
+    });
+
+    formBlue.addEventListener('input', () => {
+        debouncedBlue(inputBlue.id, inputBlue.value);
+    });
+
+    formScale.addEventListener('input', () => {
+        debouncedScale(inputScale.id, inputScale.value);
+    });
+
+    formAngle.addEventListener('input', () => {
+        debouncedAngle(inputAngle.id, inputAngle.value);
+    });
+
+    formRadiusA.addEventListener('input', () => {
+        debouncedRadiusA(inputRadiusA.id, inputRadiusA.value);
+    });
+
+    formZ.addEventListener('input', () => {
+        debouncedZ(inputZ.id, inputZ.value);
+    });
+
     formRatiosBase.addEventListener('input', () => {
         debouncedRatiosBase(inputRatiosBase.id, inputRatiosBase.value);
     });
 
-// Ratios Diff Input (Number)
-    const debouncedRatiosDiff = debounce(inputRatiosDiff.id, inputRatiosDiff.value);
     formRatiosDiff.addEventListener('input', () => {
         debouncedRatiosDiff(inputRatiosDiff.id, inputRatiosDiff.value);
     });
 
-// Offsets Base Input (Number)
-    const debouncedOffsetsBase = debounce(inputOffsetsBase.id, inputOffsetsBase.value);
     formOffsetsBase.addEventListener('input', () => {
         debouncedOffsetsBase(inputOffsetsBase.id, inputOffsetsBase.value);
     });
 
-// Offsets Diff Input (Number)
-    const debouncedOffsetsDiff = debounce(inputOffsetsDiff.id, inputOffsetsDiff.value);
     formOffsetsDiff.addEventListener('input', () => {
         debouncedOffsetsDiff(inputOffsetsDiff.id, inputOffsetsDiff.value);
     });
@@ -318,6 +380,13 @@ function handleNumberCharacteristicChange(event){
         case 5:    valueRatiosDiff.innerHTML = receivedDoc.value; break;   
         case 6:    valueOffsetsBase.innerHTML = receivedDoc.value; break;
         case 7:    valueOffsetsDiff.innerHTML = receivedDoc.value; break;
+        case 8:    valueScale.innerHTML = receivedDoc.value; break;
+        case 9:    valueAngle.innerHTML = receivedDoc.value; break;
+        case 10:    valueRadiusA.innerHTML = receivedDoc.value; break;
+        case 11:    valueZ.innerHTML = receivedDoc.value; break;
+        case 12:    valueRed.innerHTML = receivedDoc.value; break;
+        case 13:    valueGreen.innerHTML = receivedDoc.value; break;
+        case 14:    valueBlue.innerHTML = receivedDoc.value; break;
         default:   console.log("No valid switchNumber found. Received ID: ", receivedDoc.id);
     }
 }

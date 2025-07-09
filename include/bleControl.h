@@ -65,8 +65,7 @@ uint8_t switchNumber = 1;
 
    uint8_t BRIGHTNESS = 25;
    uint8_t hue = 0;
-   uint8_t speed = 255;
-
+  
    double colorOrder = 0;                   // this should really be changed to uint8_t, but UINumberField requires that it be a double
    double fxIndex = initialFxIndex;        // this should really be changed to uint8_t, but UINumberField requires that it be a double
 
@@ -112,15 +111,11 @@ bool wasConnected = false;
 #define CHECKBOX_CHARACTERISTIC_UUID   "19b10002-e8f2-537e-4f6c-d104768a1214"
 #define NUMBER_CHARACTERISTIC_UUID     "19b10003-e8f2-537e-4f6c-d104768a1214"
 
-
 BLEDescriptor pButtonDescriptor(BLEUUID((uint16_t)0x2902));
 BLEDescriptor pCheckboxDescriptor(BLEUUID((uint16_t)0x2902));
 BLEDescriptor pNumberDescriptor(BLEUUID((uint16_t)0x2902));
 
-
 String elementID;
-uint8_t elementValue;
-String numberValue;
 String receivedString;
 
 uint8_t dummy = 1;
@@ -164,7 +159,6 @@ void sendReceiptNumber(String receivedID, float receivedValue) {
 
 }
 
-
 void inputSwitcher(String receivedID) {
       if (receivedID == "inputSpeed") {switchNumber = 1;};
       if (receivedID == "inputBrightness") {switchNumber = 2;};
@@ -173,6 +167,13 @@ void inputSwitcher(String receivedID) {
       if (receivedID == "inputRatiosDiff") {switchNumber = 5;};
       if (receivedID == "inputOffsetsBase") {switchNumber = 6;};
       if (receivedID == "inputOffsetsDiff") {switchNumber = 7;};
+      if (receivedID == "inputScale") {switchNumber = 8;};	
+      if (receivedID == "inputAngle") {switchNumber = 9;};	
+      if (receivedID == "inputRadiusA") {switchNumber = 10;};	
+      if (receivedID == "inputZ") {switchNumber = 11;};	
+      if (receivedID == "inputRed") {switchNumber = 12;};	
+      if (receivedID == "inputGreen") {switchNumber = 13;};	
+      if (receivedID == "inputBlue") {switchNumber = 14;};	
    }
 
 void processNumber(String receivedID, float receivedValue ) {
@@ -180,57 +181,26 @@ void processNumber(String receivedID, float receivedValue ) {
    inputSwitcher(receivedID);
 
    switch (switchNumber) {
-     
-      case 1:
-         timeSpeed = receivedValue;
-         elementID = "inputSpeed";
-         sendReceiptNumber(elementID, receivedValue);
-         break;
-      
-      case 2:
-         BRIGHTNESS = (uint8_t) receivedValue;
-         elementID = "inputBrightness";
-         sendReceiptNumber(elementID, receivedValue);
-         break;
-      
-      case 3:
-         colorOrder = (uint8_t) receivedValue;
-         colorOrderChanged = true;   
-         elementID = "inputColorOrder";
-         sendReceiptNumber(elementID, receivedValue);
-         break;
-
-      case 4:
-         adjustRatiosBase = receivedValue;
-         elementID = "inputRatiosBase";
-         sendReceiptNumber(elementID, receivedValue);
-         break;
-
-      case 5:
-         adjustRatiosDiff = receivedValue;
-         elementID = "inputRatiosDiff";
-         sendReceiptNumber(elementID, receivedValue);
-         break;
-
-      case 6:
-         adjustOffsetsBase = receivedValue;
-         elementID = "inputOffsetsBase";
-         sendReceiptNumber(elementID, receivedValue);
-         break;
-
-      case 7:
-         adjustOffsetsDiff = receivedValue;
-         elementID = "inputOffsetsDiff";
-         sendReceiptNumber(elementID, receivedValue);
-         break;
-
-      default:
-         Serial.println("Unknown input");
-         return;
+      case 1:  timeSpeed = receivedValue; break;
+      case 2:  BRIGHTNESS = (uint8_t) receivedValue; break;
+      case 3:  colorOrder = (uint8_t) receivedValue; colorOrderChanged = true; break;
+      case 4:  adjustRatiosBase = receivedValue; break;
+      case 5:  adjustRatiosDiff = receivedValue; break;
+      case 6:  adjustOffsetsBase = receivedValue; break;
+      case 7:  adjustOffsetsDiff = receivedValue; break;
+      case 8:  adjustScale = receivedValue; break;
+      case 9:  adjustAngle = receivedValue; break;
+      case 10:  adjustRadiusA = receivedValue; break;
+      case 11:  adjustZ = receivedValue; break;
+      case 12:  adjustRed = receivedValue; break;
+      case 13:  adjustGreen = receivedValue; break;
+      case 14:  adjustBlue = receivedValue; break;
+      default:  Serial.println("Unknown input"); return;
    }
 
-}
+   sendReceiptNumber(receivedID, receivedValue);
 
+}
 
 // CALLBACKS ****************************************************************************
 
@@ -246,7 +216,6 @@ class MyServerCallbacks: public BLEServerCallbacks {
     wasConnected = true;
   }
 };
-
 
 class ButtonCharacteristicCallbacks : public BLECharacteristicCallbacks {
    void onWrite(BLECharacteristic *characteristic) {
@@ -330,21 +299,28 @@ class CheckboxCharacteristicCallbacks : public BLECharacteristicCallbacks {
 
 class NumberCharacteristicCallbacks : public BLECharacteristicCallbacks {
    void onWrite(BLECharacteristic *characteristic) {
+      
       String receivedBuffer = characteristic->getValue();
-      //if (receivedBuffer.length() > 0) {
-         // if (debug) {
+      
+      if (receivedBuffer.length() > 0) {
+      
+         if (debug) {
             Serial.print("Received buffer: ");
             Serial.println(receivedBuffer);
-         //}
+         }
+      
          ArduinoJson::deserializeJson(receivedJSON, receivedBuffer);
          String receivedID = receivedJSON["id"] ;
          float receivedValue = receivedJSON["value"];
-         Serial.print(receivedID);
-         Serial.print(": ");
-         Serial.println(receivedValue);
-         
+      
+         if (debug) {
+            Serial.print(receivedID);
+            Serial.print(": ");
+            Serial.println(receivedValue);
+         }
+      
          processNumber(receivedID, receivedValue);
-      //}
+      }
    }
 };
 
@@ -388,8 +364,7 @@ void bleSetup() {
    pNumberCharacteristic->setCallbacks(new NumberCharacteristicCallbacks());
    pNumberCharacteristic->setValue(String(dummy).c_str());
    pNumberCharacteristic->addDescriptor(new BLE2902());
-   //pNumberDescriptor.setValue("Number"); 
-
+      
    //**********************************************************
 
    pService->start();

@@ -69,8 +69,8 @@ When BIG_BOARD is undefined:
 
 //*********************************************
 
-#define BIG_BOARD
-//#undef BIG_BOARD
+//#define BIG_BOARD
+#undef BIG_BOARD
 
 //#define SCREEN_TEST
 #undef SCREEN_TEST
@@ -157,8 +157,8 @@ using namespace fl;
 
         uint16_t myXYFunction(uint16_t x, uint16_t y, uint16_t width, uint16_t height);
 
-        XYMap myXYmap = XYMap::constructWithUserFunction(WIDTH, HEIGHT, myXYFunction);
-        //XYMap myXYmap(WIDTH, HEIGHT, true); // use this XYMap instead of one immediately above to bypass custom mapping 
+        //XYMap myXYmap = XYMap::constructWithUserFunction(WIDTH, HEIGHT, myXYFunction);
+        XYMap myXYmap(WIDTH, HEIGHT, true); // use this XYMap instead of one immediately above to bypass custom mapping 
 
 #else
 
