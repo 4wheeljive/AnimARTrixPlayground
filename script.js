@@ -25,15 +25,6 @@ const valueSpeed = document.getElementById('valueSpeed');
 const defaultValSpeed = valueSpeed.defaultValue;
 
 
-<button onclick="resetSlider()">Reset Slider</button>
-
-
-
-
-
-
-
-
 const formBrightness = document.getElementById('formBrightness');
 const inputBrightness = document.getElementById('inputBrightness');
 const valueBrightness = document.getElementById('valueBrightness');
