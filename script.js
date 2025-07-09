@@ -154,19 +154,19 @@ function inputSwitcher(receivedID) {
     });
 
 // Speed Input (Number)
-    formSpeed.addEventListener('submit', function(event) {
+    formSpeed.addEventListener('input', function(event) {
         event.preventDefault();
         sendNumberCharacteristic(inputSpeed.id, inputSpeed.value);
     });
 
 // Brightness Input (Number)
-    formBrightness.addEventListener('submit', function(event) {
+    formBrightness.addEventListener('input', function(event) {
         event.preventDefault();
         sendNumberCharacteristic(inputBrightness.id, inputBrightness.value);
     });
 
 // Color Order Input (Number)
-    formColorOrder.addEventListener('submit', function(event) {
+    formColorOrder.addEventListener('input', function(event) {
         event.preventDefault();
         sendNumberCharacteristic(inputColorOrder.id, inputColorOrder.value);
     });
