@@ -47,6 +47,7 @@ const latestValueSent = document.getElementById('valueSent');
 const bleStateContainer = document.getElementById('bleState');
 
 const debounceDelay = 300;
+var switchNumber = 0;
 
 //Define BLE Device Specs
 var deviceName ='AnimARTrix Playground';
@@ -104,6 +105,32 @@ function sendNumberCharacteristic(inputID, inputValue) {
         sendBuffer = str2ab(sendString);        
         writeNumberCharacteristic(sendBuffer);
 }
+
+
+
+
+
+function inputSwitcher(receivedID) {
+      if (receivedID == "inputSpeed") {switchNumber = 1;};
+      if (receivedID == "inputBrightness") {switchNumber = 2;};
+      if (receivedID == "inputColorOrder") {switchNumber = 3;};
+      if (receivedID == "inputRatiosBase") {switchNumber = 4;};
+      if (receivedID == "inputRatiosDiff") {switchNumber = 5;};
+      if (receivedID == "inputOffsetsBase") {switchNumber = 6;};
+      if (receivedID == "inputOffsetsDiff") {switchNumber = 7;};
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // ADD EVENT LISTENERS *************************************************************
@@ -295,18 +322,27 @@ function handleCheckboxCharacteristicChange(event){
     //valueSliderA.innerHTML = newValueReceived;
 }
 
+
+
+
 function handleNumberCharacteristicChange(event){
-    //.const receivedDoc = JSON.parse(event.target.value);
     const changeReceived = new TextDecoder().decode(event.target.value);
     console.log("Number received: ", changeReceived);
     const receivedDoc = JSON.parse(changeReceived);
-    //const stringReceived = ab2str(changeReceived);
-    //const jsonReceived = JSON.stringify(changeReceived);
-	//const receivedDoc = JSON.parse(jsonReceived);
-	//receivedID = receivedDoc.id;
-	//receivedValue = receivedDoc.value;
     console.log("ID: ", receivedDoc.id, "- Value: ", receivedDoc.value);
-    //valueSliderA.innerHTML = newValueReceived;
+    
+    inputSwitcher(receivedDoc.id)
+
+    switch (switchNumber) {
+        case 1:    valueSpeed.innerHTML = receivedDoc.value; break;
+        case 2:    valueBrightness.innerHTML = receivedDoc.value; break;
+        case 3:    valueColorOrder.innerHTML = receivedDoc.value; break;   
+        case 4:    valueRatiosBase.innerHTML = receivedDoc.value; break;
+        case 5:    valueRatiosDiff.innerHTML = receivedDoc.value; break;   
+        case 6:    valueOffsetsBase.innerHTML = receivedDoc.value; break;
+        case 7:    valueOffsetsDiff.innerHTML = receivedDoc.value; break;
+        default:   console.log("No valid switchNumber found. Received ID: ", receivedDoc.id);
+    }
 }
 
 
