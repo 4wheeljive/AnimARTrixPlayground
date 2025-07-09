@@ -182,7 +182,7 @@ void processNumber(String receivedID, float receivedValue ) {
    switch (switchNumber) {
      
       case 1:
-         speed = (uint8_t) receivedValue;
+         timeSpeed = receivedValue;
          elementID = "inputSpeed";
          sendReceiptNumber(elementID, receivedValue);
          break;

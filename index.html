@@ -36,8 +36,8 @@
                         <button id="experiment10Button" class="onButton">EXPERIMENT 10</button>
                         <button id="experimentSM1Button" class="onButton">EXPERIMENT SM1</button>
                         <button id="offButton" class="offButton">OFF</button>
-                    </p>
-                    <!--<p class="gray-label">Current animation: <span id="animationValue"></span></p>-->
+                    </p>    
+                    <p class="gray-label">Current animation: <span id="animationValue"></span></p>
 
             </div>
       
@@ -50,6 +50,7 @@
                 </p>
                 <p>----------------</p>
                  
+                <!--
                 <p>
 					<form id="formHue">
 					    <p>
@@ -60,6 +61,7 @@
                         <p>----------------</p>
                     </form>
 				</p>
+            -->
 
                 <p>
 					<form id="formColorOrder">
@@ -67,7 +69,7 @@
                             <label for="inputColorOrder">Color order (0 to 5): </label>
                             <input type="number"  type="submit" id="inputColorOrder" name="inputColorOrder"  min="0" max="5" step="1"/>
                         </p>
-                        <p class="gray-label">Current color order: <span id="valueColorOrder"></span></p>
+                        <p class="gray-label">Current: <span id="valueColorOrder"></span></p>
                         <p>----------------</p>
                     </form>
 				</p>
@@ -75,10 +77,10 @@
                 <p>
 					<form id="formSpeed">
 					    <p>
-                            <label for="inputSpeed">Speed (0 to 255): </label>
-                            <input type="number"  type="submit" id="inputSpeed" name="inputSpeed"  min="0" max="255" step="1"/>
+                            <label for="inputSpeed">Speed (0.1 to 1.0): </label>
+                            <input type="number"  type="submit" id="inputSpeed" name="inputSpeed"  min="0.1" max="10.0" step=".1"/>
                         </p>
-                        <p class="gray-label">Current speed: <span id="valueSpeed"></span></p>
+                        <p class="gray-label">Current: <span id="valueSpeed"></span></p>
                         <p>----------------</p>
                     </form>
 				</p>
@@ -89,7 +91,7 @@
                             <label for="inputBrightness">Brightness (0 to 255): </label>
                             <input type="number"  type="submit" id="inputBrightness" name="inputBrightness"  min="0" max="255" step="1"/>
                         </p>
-                        <p class="gray-label">Current brightness: <span id="valueBrightness"></span></p>
+                        <p class="gray-label">Current: <span id="valueBrightness"></span></p>
                         <p>----------------</p>
                     </form>
 				</p>

@@ -106,10 +106,6 @@ function sendNumberCharacteristic(inputID, inputValue) {
         writeNumberCharacteristic(sendBuffer);
 }
 
-
-
-
-
 function inputSwitcher(receivedID) {
       if (receivedID == "inputSpeed") {switchNumber = 1;};
       if (receivedID == "inputBrightness") {switchNumber = 2;};
@@ -119,17 +115,6 @@ function inputSwitcher(receivedID) {
       if (receivedID == "inputOffsetsBase") {switchNumber = 6;};
       if (receivedID == "inputOffsetsDiff") {switchNumber = 7;};
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -222,6 +207,7 @@ function isWebBluetoothEnabled() {
 }
 
 // Connect to BLE Device and Enable Notifications
+
 function connectToDevice(){
     console.log('Initializing Bluetooth...');
     navigator.bluetooth.requestDevice({
@@ -273,18 +259,6 @@ function connectToDevice(){
                 characteristic.startNotifications();				
                 //return characteristic.readValue();
                 })
-            /*
-            .then(value => {
-				receivedString = new TextDecoder().decode(value);; //ab2str(value);
-				receivedDoc = JSON.parse(receivedString);
-				//receivedID = receivedDoc.id;
-				//receivedValue = receivedDoc.value;
-				console.log("Number characteristic received: ", receivedDoc.id, ": ", receivedDoc.value);
-				valueHue.innerHTML = receivedDoc.value;
-                //const decodedValue = new TextDecoder().decode(value);
-                //console.log("Number: ", decodedValue);
-                })
-            */
     })
 }
 
@@ -311,9 +285,11 @@ function disconnectDevice() {
 
 
 function handleButtonCharacteristicChange(event){
-    const newValueReceived = new TextDecoder().decode(event.target.value);
-    console.log("Button pressed: ", newValueReceived);
-    //valueSliderA.innerHTML = newValueReceived;
+    const changeReceived = new TextDecoder().decode(event.target.value);
+    console.log("Button pressed: ", changeReceived);
+    const receivedDoc = JSON.parse(changeReceived);
+    console.log("ID: ", receivedDoc.id, "- Value: ", receivedDoc.value);
+    animationValue.innerHTML = receivedDoc.value;
 }
 
 function handleCheckboxCharacteristicChange(event){
@@ -321,8 +297,6 @@ function handleCheckboxCharacteristicChange(event){
     console.log("Checkbox value: ", newValueReceived);
     //valueSliderA.innerHTML = newValueReceived;
 }
-
-
 
 
 function handleNumberCharacteristicChange(event){

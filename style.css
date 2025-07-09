@@ -23,11 +23,11 @@ body {
     padding: 50px;
 }
 .card-grid {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
     margin-bottom: 30px;
     display: grid;
-    grid-gap: 2rem;
+    grid-gap: 1.5rem;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 .card {
@@ -36,8 +36,8 @@ body {
 }
 button {
     color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
+    padding: 10px 16px;
+    margin: 6px 0;
     border: none;
     cursor: pointer;
     border-radius: 4px;
