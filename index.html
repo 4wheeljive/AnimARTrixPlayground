@@ -68,8 +68,7 @@
 					    <p>
                             <label for="inputColorOrder">Color order (0 to 5): </label>
                             <input type="number"  type="submit" id="inputColorOrder" name="inputColorOrder"  min="0" max="5" step="1"/>
-                        </p>
-                        <p class="gray-label">Current: <span id="valueColorOrder"></span></p>
+                            <span id="valueColorOrder">0</span>
                         <p>----------------</p>
                     </form>
 				</p>
@@ -77,10 +76,17 @@
                 <p>
 					<form id="formSpeed">
 					    <p>
-                            <label for="inputSpeed">Speed (0.1 to 1.0): </label>
+                            <label for="inputSpeed">Speed (0.1 to 10.0): </label>
                             <input type="number"  type="submit" id="inputSpeed" name="inputSpeed"  min="0.1" max="10.0" step=".1"/>
                         </p>
                         <p class="gray-label">Current: <span id="valueSpeed"></span></p>
+                        <button onclick="resetSpeed()">Reset</button>
+                        <script>
+                            function resetSpeed() {
+                                const slider = document.getElementById('inputSpeed');
+                                slider.value = slider.defaultValue;
+                            }
+                        </script>
                         <p>----------------</p>
                     </form>
 				</p>
