@@ -47,7 +47,7 @@ const defaultValueBlue = valueBlue.defaultValue;
 const formScale = document.getElementById('formScale');
 const inputScale = document.getElementById('inputScale');
 const valueScale = document.getElementById('valueScale');
-const defaultValueScale = valueScale.defaultValue;
+const defaultValueScale = inputScale.defaultValue;
 const resetScaleButton = document.getElementById('resetScaleButton');
 
 const formAngle = document.getElementById('formAngle');
