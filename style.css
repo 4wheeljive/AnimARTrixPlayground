@@ -59,6 +59,13 @@ button {
     background-color: #d13a30;
 }
 
+.resetButton{
+    background-color: #a7a7a7;
+    border-radius: 50%;
+}
+
+
+
 .gray-label {
     color: #bebebe;
     font-size: 1rem;

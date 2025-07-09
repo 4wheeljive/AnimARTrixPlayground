@@ -25,6 +25,10 @@ bool nextFxIndexRandom = false;
 
 uint8_t switchNumber = 1;
 
+String elementID;
+String receivedString;
+
+uint8_t dummy = 1;
 
 // UI Elements *************************************************************************************
 
@@ -64,7 +68,6 @@ uint8_t switchNumber = 1;
    using namespace ArduinoJson;
 
    uint8_t BRIGHTNESS = 25;
-   uint8_t hue = 0;
   
    double colorOrder = 0;                   // this should really be changed to uint8_t, but UINumberField requires that it be a double
    double fxIndex = initialFxIndex;        // this should really be changed to uint8_t, but UINumberField requires that it be a double
@@ -115,15 +118,9 @@ BLEDescriptor pButtonDescriptor(BLEUUID((uint16_t)0x2902));
 BLEDescriptor pCheckboxDescriptor(BLEUUID((uint16_t)0x2902));
 BLEDescriptor pNumberDescriptor(BLEUUID((uint16_t)0x2902));
 
-String elementID;
-String receivedString;
-
-uint8_t dummy = 1;
-
 // CONTROL FUNCTIONS ***************************************************************
 
 void animationAdjust(double newAnimation) {
-   //fxIndex = newAnimation;
    pButtonCharacteristic->setValue(String(newAnimation).c_str());
    pButtonCharacteristic->notify();
    if (debug) {

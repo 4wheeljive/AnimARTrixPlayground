@@ -23,7 +23,7 @@ const valueBrightness = document.getElementById('valueBrightness');
 const formSpeed = document.getElementById('formSpeed');
 const inputSpeed = document.getElementById('inputSpeed');
 const valueSpeed = document.getElementById('valueSpeed');
-//const defaultValSpeed = valueSpeed.defaultValue;
+const defaultValueSpeed = valueSpeed.defaultValue;
 
 const formColorOrder = document.getElementById('formColorOrder');
 const inputColorOrder = document.getElementById('inputColorOrder');
@@ -32,46 +32,58 @@ const valueColorOrder = document.getElementById('valueColorOrder');
 const formRed = document.getElementById('formRed');
 const inputRed = document.getElementById('inputRed');
 const valueRed = document.getElementById('valueRed');
+const defaultValueRed = valueRed.defaultValue;
 
 const formGreen = document.getElementById('formGreen');
 const inputGreen = document.getElementById('inputGreen');
 const valueGreen = document.getElementById('valueGreen');
+const defaultValueGreen = valueGreen.defaultValue;
 
 const formBlue = document.getElementById('formBlue');
 const inputBlue = document.getElementById('inputBlue');
 const valueBlue = document.getElementById('valueBlue');
+const defaultValueBlue = valueBlue.defaultValue;
 
 const formScale = document.getElementById('formScale');
 const inputScale = document.getElementById('inputScale');
 const valueScale = document.getElementById('valueScale');
+const defaultValueScale = valueScale.defaultValue;
+const resetScaleButton = document.getElementById('resetScaleButton');
 
 const formAngle = document.getElementById('formAngle');
 const inputAngle = document.getElementById('inputAngle');
 const valueAngle = document.getElementById('valueAngle');
+const defaultValueAngle = valueAngle.defaultValue;
 
 const formRadiusA = document.getElementById('formRadiusA');
 const inputRadiusA = document.getElementById('inputRadiusA');
 const valueRadiusA = document.getElementById('valueRadiusA');
+const defaultValueRadiusA = valueRadiusA.defaultValue;
 
 const formZ = document.getElementById('formZ');
 const inputZ = document.getElementById('inputZ');
 const valueZ = document.getElementById('valueZ');
+const defaultValueZ = valueZ.defaultValue;
 
 const formRatiosBase = document.getElementById('formRatiosBase');
 const inputRatiosBase = document.getElementById('inputRatiosBase');
 const valueRatiosBase = document.getElementById('valueRatiosBase');
+const defaultValueRatiosBase = valueRatiosBase.defaultValue;
 
 const formRatiosDiff = document.getElementById('formRatiosDiff');
 const inputRatiosDiff = document.getElementById('inputRatiosDiff');
 const valueRatiosDiff = document.getElementById('valueRatiosDiff');
+const defaultValueRatiosDiff = valueRatiosDiff.defaultValue;
 
 const formOffsetsBase = document.getElementById('formOffsetsBase');
 const inputOffsetsBase = document.getElementById('inputOffsetsBase');
 const valueOffsetsBase = document.getElementById('valueOffsetsBase');
+const defaultValueOffsetsBase = valueOffsetsBase.defaultValue;
 
 const formOffsetsDiff = document.getElementById('formOffsetsDiff');
 const inputOffsetsDiff = document.getElementById('inputOffsetsDiff');
 const valueOffsetsDiff = document.getElementById('valueOffsetsDiff');
+const defaultValueOffsetsDiff = valueOffsetsDiff.defaultValue;
 
 const latestValueSent = document.getElementById('valueSent');
 const bleStateContainer = document.getElementById('bleState');
@@ -258,6 +270,15 @@ function inputSwitcher(receivedID) {
     });
 
 
+// Reset sliders to default values
+
+    resetScaleButton.addEventListener('click', () => {
+        inputScale.value = defaultValueScale;
+        valueScale.innerHTML = defaultValueScale;
+    });
+
+
+
 // BLE CONNECTION *******************************************************************************
 
 // Check if BLE is available in your Browser    
@@ -383,7 +404,7 @@ function handleNumberCharacteristicChange(event){
         case 12:    valueRed.innerHTML = receivedDoc.value; break;
         case 13:    valueGreen.innerHTML = receivedDoc.value; break;
         case 14:    valueBlue.innerHTML = receivedDoc.value; break;
-        default:   console.log("No valid switchNumber found. Received ID: ", receivedDoc.id);
+        default:   console.log("No valid switchNumber found. Received ID: ",receivedDoc.id);
     }
 }
 

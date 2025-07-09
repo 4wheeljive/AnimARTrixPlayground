@@ -257,6 +257,7 @@ void loop() {
             EVERY_N_SECONDS (SECONDS_PER_ANIMATION) { 
                 if (nextFxIndexRandom) {fxIndex = random(0, NUM_ANIMATIONS - 1);}
                 else {fxIndex += 1 % (NUM_ANIMATIONS - 1);}
+                animationAdjust(fxIndex);
             }
         }
         
