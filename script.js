@@ -168,7 +168,6 @@ function sendNumberCharacteristic(inputID, inputValue) {
         debouncedRatiosDiff(inputRatiosDiff.id, inputRatiosDiff.value);
     });
 
-
 // Offsets Base Input (Number)
     const debouncedOffsetsBase = debounce(inputOffsetsBase.id, inputOffsetsBase.value);
     formOffsetsBase.addEventListener('input', () => {
@@ -177,7 +176,7 @@ function sendNumberCharacteristic(inputID, inputValue) {
 
 // Offsets Diff Input (Number)
     const debouncedOffsetsDiff = debounce(inputOffsetsDiff.id, inputOffsetsDiff.value);
-    formOffsetsBase.addEventListener('input', () => {
+    formOffsetsDiff.addEventListener('input', () => {
         debouncedOffsetsDiff(inputOffsetsDiff.id, inputOffsetsDiff.value);
     });
 

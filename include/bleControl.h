@@ -17,7 +17,7 @@ using namespace fl;
 
 bool displayOn = true;
 bool debug = true;
-bool rotateAnimations = false;
+bool rotateAnimations = true;
 bool colorOrderChanged = false;
 
 double initialFxIndex = 4;   // this should really be changed to uint8_t, but UINumberField requires that it be a double
