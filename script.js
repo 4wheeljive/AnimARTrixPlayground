@@ -297,7 +297,7 @@ function handleCheckboxCharacteristicChange(event){
 }
 
 function handleNumberCharacteristicChange(event){
-    const receivedDoc = new JSON.parse(event.target.value);
+    const receivedDoc = JSON.parse(event.target.value);
     const changeReceived = new TextDecoder().decode(event.target.value);
     console.log("Number received: ", changeReceived);
     //receivedDoc = JSON.parse('changeReceived');
