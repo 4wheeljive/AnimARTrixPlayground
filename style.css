@@ -3,6 +3,11 @@ html {
     display: inline-block;
     text-align: center;
 }
+body {
+    margin: 0 auto;
+    max-width: 1200px;
+    background-color: #000000;
+}
 h1 {
     font-size: 1.8rem;
     color: white;
@@ -11,89 +16,81 @@ h2 {
     font-size: 1.4rem;
     color: white;
 }
-.topnav {
-    overflow: hidden;
-    background-color: #000000;
+h3 {
+    font-size: 1.2rem;
+    color: white;
 }
-body {
-    margin: 0;
-    background-color: #000000;
-}
-.content {
-    padding: 50px;
-}
-
-.wrapper {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 100px;
-}
-
-.box1 {
-  grid-column-start: 1;
-  grid-column-end: 4;
-  grid-row-start: 1;
-  grid-row-end: 3;
-}
-
-.box2 {
-  grid-column-start: 1;
-  grid-column-end: 4;
-  grid-row-start: 3;
-  grid-row-end: 5;
-}
-
-.box3 {
-  grid-row-start: 5;
-  grid-row-end: 7;
-}
-
-.box4 {
-  grid-column-start: 2;
-  grid-column-end: 4;
-  grid-row-start: 5;
-  grid-row-end: 7;
-}
-
-
-
-.card-grid {
-    max-width: 1200px;
-    margin: 0 auto;
-    margin-bottom: 30px;
-    display: grid;
-    grid-gap: 1.5rem;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-}
-.card {
-    color: #bebebe;
-    background-color: rgb(72, 72, 72);
+p {
+    padding: 10px; 
 }
 button {
     color: white;
-    padding: 10px 16px;
-    margin: 6px 0;
+    padding: 5px 5px;
+    margin: 5px 5px;
     border: none;
     cursor: pointer;
     border-radius: 4px;
 }
+.topnav {
+    padding: 10px;
+    text-align: center;
+    overflow: hidden;
+    background-color: #000000;
+}
+.wrapper {
+    text-align: center;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+.box1 {
+    padding: 10px;  
+    grid-column: 1 / 4;
+}
+.box2 {
+    padding: 10px;
+    grid-column: 1 / 4;
+    grid-row-start: 2;
+}
+.box3 {
+    padding: 10px;
+    grid-row-start: 3;
+}
+.box4 {
+    padding: 10px;
+    grid-column: 2 / 4;
+    grid-row-start: 3;
+}
+.table {
+  table-layout: fixed;
+  width: 100%;
+}
+.tableColumn1 {
+    width: 20%
+}
+.tableColumn2 {
+    width: 70%
+}
+.tableColumn3 {
+    width: 10%
+}
 
+
+.card {
+    color: #bebebe;
+    background-color: rgb(36, 36, 36);
+}
 .onButton{
     background-color: #a7a7a7;
 }
-
 .offButton{
     background-color: #5c5c5c;
 }
-
 .connectButton{
     background-color: #24af37;
 }
-
 .disconnectButton{
     background-color: #d13a30;
 }
-
 .resetButton{
     background-color: #000000;
     color: white;
@@ -104,12 +101,10 @@ button {
     border-radius: none;
     border-radius: none;
 }
-
 .gray-label {
     color: #bebebe;
     font-size: 1rem;
 }
-
 .reading {
     font-size: 1.8rem;
 }
