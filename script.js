@@ -336,21 +336,12 @@ function inputSwitcher(receivedID) {
     resetGreenButton.addEventListener('click', (event) => {
         event.preventDefault();
         sendNumberCharacteristic(inputGreen, defaultValueGreen);
-    }
+    });
 	
 	resetBlueButton.addEventListener('click', (event) => {
         event.preventDefault();
         sendNumberCharacteristic(inputBlue, defaultValueBlue);
     });
-
-
-
-
-
-
-
-
-
 
 // BLE CONNECTION *******************************************************************************
 
