@@ -23,7 +23,7 @@ const valueBrightness = document.getElementById('valueBrightness');
 const formSpeed = document.getElementById('formSpeed');
 const inputSpeed = document.getElementById('inputSpeed');
 const valueSpeed = document.getElementById('valueSpeed');
-const defaultValueSpeed = valueSpeed.defaultValue;
+const defaultValueSpeed = inputSpeed.defaultValue;
 const resetSpeedButton = document.getElementById('resetSpeedButton');
 
 const formColorOrder = document.getElementById('formColorOrder');
@@ -33,19 +33,19 @@ const valueColorOrder = document.getElementById('valueColorOrder');
 const formRed = document.getElementById('formRed');
 const inputRed = document.getElementById('inputRed');
 const valueRed = document.getElementById('valueRed');
-const defaultValueRed = valueRed.defaultValue;
+const defaultValueRed = inputRed.defaultValue;
 const resetRedButton = document.getElementById('resetRedButton');
 
 const formGreen = document.getElementById('formGreen');
 const inputGreen = document.getElementById('inputGreen');
 const valueGreen = document.getElementById('valueGreen');
-const defaultValueGreen = valueGreen.defaultValue;
+const defaultValueGreen = inputGreen.defaultValue;
 const resetGreenButton = document.getElementById('resetGreenButton');
 
 const formBlue = document.getElementById('formBlue');
 const inputBlue = document.getElementById('inputBlue');
 const valueBlue = document.getElementById('valueBlue');
-const defaultValueBlue = valueBlue.defaultValue;
+const defaultValueBlue = inputBlue.defaultValue;
 const resetBlueButton = document.getElementById('resetBlueButton');
 
 const formScale = document.getElementById('formScale');
@@ -57,13 +57,13 @@ const resetScaleButton = document.getElementById('resetScaleButton');
 const formAngle = document.getElementById('formAngle');
 const inputAngle = document.getElementById('inputAngle');
 const valueAngle = document.getElementById('valueAngle');
-const defaultValueAngle = valueAngle.defaultValue;
+const defaultValueAngle = inputAngle.defaultValue;
 const resetAngleButton = document.getElementById('resetAngleButton');
 
 const formRadiusA = document.getElementById('formRadiusA');
 const inputRadiusA = document.getElementById('inputRadiusA');
 const valueRadiusA = document.getElementById('valueRadiusA');
-const defaultValueRadiusA = valueRadiusA.defaultValue;
+const defaultValueRadiusA = inputRadiusA.defaultValue;
 const resetRadiusAButton = document.getElementById('resetRadiusAButton');
 
 const formZ = document.getElementById('formZ');
@@ -75,25 +75,25 @@ const resetZButton = document.getElementById('resetZButton');
 const formRatiosBase = document.getElementById('formRatiosBase');
 const inputRatiosBase = document.getElementById('inputRatiosBase');
 const valueRatiosBase = document.getElementById('valueRatiosBase');
-const defaultValueRatiosBase = valueRatiosBase.defaultValue;
+const defaultValueRatiosBase = inputRatiosBase.defaultValue;
 const resetRatiosBaseButton = document.getElementById('resetRatiosBaseButton');
 
 const formRatiosDiff = document.getElementById('formRatiosDiff');
 const inputRatiosDiff = document.getElementById('inputRatiosDiff');
 const valueRatiosDiff = document.getElementById('valueRatiosDiff');
-const defaultValueRatiosDiff = valueRatiosDiff.defaultValue;
+const defaultValueRatiosDiff = vinputRatiosDiff.defaultValue;
 const resetRatiosDiffButton = document.getElementById('resetRatiosDiffButton');
 
 const formOffsetsBase = document.getElementById('formOffsetsBase');
 const inputOffsetsBase = document.getElementById('inputOffsetsBase');
 const valueOffsetsBase = document.getElementById('valueOffsetsBase');
-const defaultValueOffsetsBase = valueOffsetsBase.defaultValue;
+const defaultValueOffsetsBase = inputOffsetsBase.defaultValue;
 const resetOffsetsBaseButton = document.getElementById('resetOffsetsBaseButton');
 
 const formOffsetsDiff = document.getElementById('formOffsetsDiff');
 const inputOffsetsDiff = document.getElementById('inputOffsetsDiff');
 const valueOffsetsDiff = document.getElementById('valueOffsetsDiff');
-const defaultValueOffsetsDiff = valueOffsetsDiff.defaultValue;
+const defaultValueOffsetsDiff = inputOffsetsDiff.defaultValue;
 const resetOffsetsDiffButton = document.getElementById('resetOffsetsDiffButton');
 
 const latestValueSent = document.getElementById('valueSent');
