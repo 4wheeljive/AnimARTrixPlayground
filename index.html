@@ -47,7 +47,6 @@
             <div class="card">
                 <h2>Display</h2>    
                 
-            
                     <form id="formBrightness">
                         <label for="inputBrightness">Brightness: </label>
                         <input type="range" id="inputBrightness" name="inputBrightness"  min="0" max="255" step="5"/>
@@ -63,150 +62,101 @@
                         <span id="valueColorOrder">0</span>
                     </form>
                     
-                    <table class="table">
-                    <thead>
-                        <tr>
-                            <th class="tableColumn1">Color</th>
-                            <th class="tableColumn2">Multiplier</th>
-                            <th class="tableColumn3">Reset</th>
-                        </tr>
-                    </thead>
+                    <form id="formRed">
+                        <label for="inputRed">Red: </label>
+                        <input type="range" id="inputRed" name="inputRed" min=".1" max="10" step=".1" value="1">
+                        <span id="valueRed">1.0</span>
+                        <button id="resetRedButton" class="resetButton"><i class="fa-solid fa-rotate-left fa-xs"></i></button>
+                    </form>
+                    
+                    <form id="formGreen">
+                        <label for="inputGreen">Green: </label>
+                        <input type="range" id="inputGreen" name="inputGreen" min=".1" max="10" step=".1" value="1">
+                        <span id="valueGreen">1.0</span>
+                        <button id="resetGreenButton" class="resetButton"><i class="fa-solid fa-rotate-left fa-xs"></i></button>
+                    </form>
+                    
+                    <form id="formBlue">
+                        <label for="inputBlue">Blue: </label>
+                        <input type="range" id="inputBlue" name="inputBlue" min=".1" max="10" step=".1" value="1">
+                        <span id="valueBlue">1.0</span>
+                        <button id="resetBlueButton" class="resetButton"><i class="fa-solid fa-rotate-left fa-xs"></i></button>
+                    </form>    
 
-                    <tbody>
-
-                        <tr><form id="formRed">
-                            <td>Red: </td>
-                            <td>
-                                <input type="range" id="inputRed" name="inputRed" min=".3" max="3" step=".1" value="1">
-                                <span id="valueRed">1.0</span>
-                            </td>
-                            <td><button id="resetRedButton" class="resetButton"><i class="fa-solid fa-rotate-left fa-xs"></i></button></td>
-                        </form></tr>
-                        
-                        <tr><form id="formGreen">
-                            <td>Green: </td>
-                            <td>
-                                <input type="range" id="inputGreen" name="inputGreen" min=".3" max="3" step=".1" value="1">
-                                <span id="valueGreen">1.0</span>
-                            </td>
-                            <td><button id="resetGreenButton" class="resetButton"><i class="fa-solid fa-rotate-left fa-xs"></i></button></td>
-                        </form></tr>
-                        
-                        <tr><form id="formBlue">
-                            <td>Blue: </td>
-                            <td>
-                                <input type="range" id="inputBlue" name="inputBlue" min=".3" max="3" step=".1" value="1">
-                                <span id="valueBlue">1.0</span>
-                            </td>
-                            <td><button id="resetBlueButton" class="resetButton"><i class="fa-solid fa-rotate-left fa-xs"></i></button></td>
-                        </form></tr>
-
-                   </tbody>
-                </table>
-        
             </div>
         </div>
 
         <div class="box4">
             <div class="card">
                 <h2>Pattern Control</h2>    
-            
-                <h3>General</h3>
-                
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th class="tableColumn1">Parameter</th>
-                                <th class="tableColumn2">Value</th>
-                                <th class="tableColumn3">Reset</th>
-                            </tr>
-                        </thead>
-                        
-                        <tbody>    
-                            <tr><form id="formSpeed">
-                                <td>Speed: </td>
-                                <td>
-                                    <input type="range" id="inputSpeed" name="inputSpeed" min=".3" max="3" step=".1" value="1">
-                                    <span id="valueSpeed">1.0</span>
-                                </td>
-                                <td><button id="resetSpeedButton" class="resetButton"><i class="fa-solid fa-rotate-left fa-xs"></i></button></td>
-                            </form></tr>
-                                
-                            <tr><form id="formScale">
-                                <td>Scale: </td>
-                                <td>
-                                    <input type="range" id="inputScale" name="inputScale" min=".3" max="3" step=".1" value="1">
-                                    <span id="valueScale">1.0</span>
-                                </td>
-                                <td><button id="resetScaleButton" class="resetButton"><i class="fa-solid fa-rotate-left fa-xs"></i></button></td>
-                            </form></tr> 
-                            
-                            <tr><form id="formAngle">
-                                <td>Angle: </td>
-                                <td>
-                                    <input type="range" id="inputAngle" name="inputAngle" min=".3" max="3" step=".1" value="1">
-                                    <span id="valueAngle">1.0</span>
-                                </td>
-                                <td><button id="resetAngleButton" class="resetButton"><i class="fa-solid fa-rotate-left fa-xs"></i></button></td>
-                            </form></tr>
-                                
-                            <tr><form id="formRadiusA">
-                                <td>RadiusA: </td>
-                                <td>
-                                    <input type="range" id="inputRadiusA" name="inputRadiusA" min=".3" max="3" step=".1" value="1">
-                                    <span id="valueRadiusA">1.0</span>
-                                </td>
-                                <td><button id="resetRadiusAButton" class="resetButton"><i class="fa-solid fa-rotate-left fa-xs"></i></button></td>
-                            </form></tr>
-                            
-                            <tr><form id="formZ">
-                                <td>Z: </td>
-                                <td>
-                                    <input type="range" id="inputZ" name="inputZ" min=".3" max="3" step=".1" value="1">
-                                    <span id="valueZ">1.0</span>
-                                </td>
-                                <td><button id="resetZButton" class="resetButton"><i class="fa-solid fa-rotate-left fa-xs"></i></button></td>
-                            </form></tr>
-                            
-                            <tr><form id="formRatiosBase">
-                                <td>RatiosBase: </td>
-                                <td>
-                                    <input type="range" id="inputRatiosBase" name="inputRatiosBase" min=".3" max="3" step=".1" value="1">
-                                    <span id="valueRatiosBase">1.0</span>
-                                </td>
-                                <td><button id="resetRatiosBaseButton" class="resetButton"><i class="fa-solid fa-rotate-left fa-xs"></i></button></td>
-                            </form></tr>	 
 
-                            <tr><form id="formRatiosDiff">
-                                <td>RatiosDiff: </td>
-                                <td>
-                                    <input type="range" id="inputRatiosDiff" name="inputRatiosDiff" min=".3" max="3" step=".1" value="1">
-                                    <span id="valueRatiosDiff">1.0</span>
-                                </td>
-                                <td><button id="resetRatiosDiffButton" class="resetButton"><i class="fa-solid fa-rotate-left fa-xs"></i></button></td>
-                            </form></tr>
-                            
-                            <tr><form id="formOffsetsBase">
-                                <td>OffsetsBase: </td>
-                                <td>
-                                    <input type="range" id="inputOffsetsBase" name="inputOffsetsBase" min=".3" max="3" step=".1" value="1">
-                                    <span id="valueOffsetsBase">1.0</span>
-                                </td>
-                                <td><button id="resetOffsetsBaseButton" class="resetButton"><i class="fa-solid fa-rotate-left fa-xs"></i></button></td>
-                            </form></tr>
-                            
-                            <tr><form id="formOffsetsDiff">
-                                <td>OffsetsDiff: </td>
-                                <td>
-                                    <input type="range" id="inputOffsetsDiff" name="inputOffsetsDiff" min=".3" max="3" step=".1" value="1">
-                                    <span id="valueOffsetsDiff">1.0</span>
-                                </td>
-                                <td><button id="resetOffsetsDiffButton" class="resetButton"><i class="fa-solid fa-rotate-left fa-xs"></i></button></td>
-                            </form></tr>
-                        </tbody>
-                    </table>
-                  
+
+					<form id="formSpeed">
+                        <label for="inputSpeed">Speed: </label>
+                        <input type="range" id="inputSpeed" name="inputSpeed"  min="0.1" max="10.0" step=".1" value="1"/>
+                        <span id="valueSpeed">1.0</span>
+                        <button id="resetSpeedButton" class="resetButton"><i class="fa-solid fa-rotate-left fa-xs"></i></button>
+                    </form>      
+
+                    <form id="formScale">
+                        <label for="inputScale">Scale: </label>
+                        <input type="range" id="inputScale" name="inputScale"  min="0.1" max="10.0" step=".1" value="1"/>
+                        <span id="valueScale">1.0</span>
+                        <button id="resetScaleButton" class="resetButton"><i class="fa-solid fa-rotate-left fa-xs"></i></button>
+                    </form>    
+
+                    <form id="formAngle">
+                        <label for="inputAngle">Angle: </label>
+                        <input type="range" id="inputAngle" name="inputAngle" min=".1" max="10" step=".1" value="1">
+                        <span id="valueAngle">1.0</span>
+                        <button id="resetAngleButton" class="resetButton"><i class="fa-solid fa-rotate-left fa-xs"></i></button>
+                    </form>
+
+                    <form id="formRadiusA">
+                        <label for="inputRadiusA">Radius: </label>
+                        <input type="range" id="inputRadiusA" name="inputRadiusA" min="-10" max="30" step="1" value="0">
+                        <span id="valueRadiusA">0</span>
+                        <button id="resetRadiusAButton" class="resetButton"><i class="fa-solid fa-rotate-left fa-xs"></i></button>
+                    </form>
+
+                    <form id="formZ">
+                        <label for="inputZ">Magic Z: </label>
+                        <input type="range" id="inputZ" name="inputZ" min=".1" max="2" step=".1" value="1">
+                        <span id="valueZ">1.0</span>
+                        <button id="resetZButton" class="resetButton"><i class="fa-solid fa-rotate-left fa-xs"></i></button>
+                    </form>
         
+                <h3>Ratios</h3>
+                    
+                <form id="formRatiosBase">
+                        <label for="inputRatiosBase">Base: </label>
+                        <input type="range"  id="inputRatiosBase" name="inputRatiosBase"  min="-1.00" max="1.00" step="0.01" value="0.00"/>
+                        <span id="valueRatiosBase">0.00</span>
+                        <button id="resetRatiosBaseButton" class="resetButton"><i class="fa-solid fa-rotate-left fa-xs"></i></button>
+                    </form>
+                    
+                    <form id="formRatiosDiff">
+                        <label for="inputRatiosDiff">Diff: </label>
+                        <input type="range" id="inputRatiosDiff" name="inputRatiosDiff"  min="0.1" max="10.0" step="0.1" value="1.0"/>
+                        <span id="valueRatiosDiff">1.00</span>
+                        <button id="resetRatiosDiffButton" class="resetButton"><i class="fa-solid fa-rotate-left fa-xs"></i></button>
+                    </form>
+                
+                <h3>Offsets</h3>
+                    
+                    <form id="formOffsetsBase">
+                        <label for="inputOffsetsBase">Base: </label>
+                        <input type="range" id="inputOffsetsBase" name="inputOffsetsBase" min=".1" max="10" step=".1" value="1">
+                        <span id="valueOffsetsBase">1.00</span>
+                        <button id="resetOffsetsBaseButton" class="resetButton"><i class="fa-solid fa-rotate-left fa-xs"></i></button>
+                    </form>
+                    
+                    <form id="formOffsetsDiff">
+                        <label for="inputOffsetsDiff">Diff: </label>
+                        <input type="range" id="inputOffsetsDiff" name="inputOffsetsDiff" min=".1" max="10" step=".1" value="1">
+                        <span id="valueOffsetsDiff">1.00</span>
+                        <button id="resetOffsetsDiffButton" class="resetButton"><i class="fa-solid fa-rotate-left fa-xs"></i></button>
+                    </form>
             </div> 
         </div>
     

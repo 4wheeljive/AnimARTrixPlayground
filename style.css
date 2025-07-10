@@ -60,10 +60,18 @@ button {
     grid-column: 2 / 4;
     grid-row-start: 3;
 }
-.table {
-  table-layout: fixed;
-  width: 100%;
+DIV.table {
+    display:table;
 }
+FORM.tr, DIV.tr
+{
+    display:table-row;
+}
+SPAN.td
+{
+    display:table-cell;
+}
+
 .tableColumn1 {
     width: 20%
 }
@@ -73,6 +81,9 @@ button {
 .tableColumn3 {
     width: 10%
 }
+
+
+
 
 
 .card {
