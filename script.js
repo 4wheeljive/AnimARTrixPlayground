@@ -81,7 +81,7 @@ const resetRatiosBaseButton = document.getElementById('resetRatiosBaseButton');
 const formRatiosDiff = document.getElementById('formRatiosDiff');
 const inputRatiosDiff = document.getElementById('inputRatiosDiff');
 const valueRatiosDiff = document.getElementById('valueRatiosDiff');
-const defaultValueRatiosDiff = vinputRatiosDiff.defaultValue;
+const defaultValueRatiosDiff = inputRatiosDiff.defaultValue;
 const resetRatiosDiffButton = document.getElementById('resetRatiosDiffButton');
 
 const formOffsetsBase = document.getElementById('formOffsetsBase');
