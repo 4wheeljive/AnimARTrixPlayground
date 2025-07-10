@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="topnav">
-        <h1>AnimARTrix Playground</h1>
+        <p><h1>AnimARTrix Playground</h1></p>
     </div>
      
     <div class="wrapper">
@@ -24,36 +24,43 @@
 
 		<div class="box2">
             <div class="card">
-                 <h2>Animation</h2>
-                        <button id="polarWavesButton" class="onButton">POLAR WAVES</button> 
-                        <button id="spiralusButton" class="onButton">SPIRALUS</button>
-                        <button id="caleido1Button" class="onButton">CALEIDO1</button>
-                        <button id="wavesButton" class="onButton">WAVES</button>
-                        <button id="chasingSpiralsButton" class="onButton">CHASING SPIRALS</button>
-                        <button id="ringsButton" class="onButton">RINGS</button>
-                        <button id="complexKaleidoButton" class="onButton">COMPLEX KALEIDO 6</button>
-                        <button id="experiment10Button" class="onButton">EXPERIMENT 10</button>
-                        <button id="experimentSM1Button" class="onButton">EXPERIMENT SM1</button>
-                        <button id="offButton" class="offButton">OFF</button>
-                    <p>
-                        <label for="rotateAnimationCheckbox">Rotate animation:</label>
-                        <input type="checkbox" id="rotateAnimationCheckbox" checked>
-                    </p>    
-                    <p class="gray-label">Current: <span id="valueAnimation">0</span></p>
+               
+                <p>
+                <h2>Animation</h2>
+                </p>
+                
+                <button id="polarWavesButton" class="onButton">POLAR WAVES</button> 
+                <button id="spiralusButton" class="onButton">SPIRALUS</button>
+                <button id="caleido1Button" class="onButton">CALEIDO1</button>
+                <button id="wavesButton" class="onButton">WAVES</button>
+                <button id="chasingSpiralsButton" class="onButton">CHASING SPIRALS</button>
+                <button id="ringsButton" class="onButton">RINGS</button>
+                <button id="complexKaleidoButton" class="onButton">COMPLEX KALEIDO 6</button>
+                <button id="experiment10Button" class="onButton">EXPERIMENT 10</button>
+                <button id="experimentSM1Button" class="onButton">EXPERIMENT SM1</button>
+                <button id="offButton" class="offButton">OFF</button>
+                
+                <p>
+                    <label for="rotateAnimationCheckbox">Rotate animation:</label>
+                    <input type="checkbox" id="rotateAnimationCheckbox" checked>
+                </p>    
+                
+                <p class="gray-label">Current: <span id="valueAnimation">0</span></p>
+            
             </div>
         </div>
         
         <div class="box3">
             <div class="card">
-                <h2>Display</h2>    
-                
+                <p>
+                <h2>Display</h2>
+                </p>    
                     <form id="formBrightness">
                         <label for="inputBrightness">Brightness: </label>
                         <input type="range" id="inputBrightness" name="inputBrightness"  min="0" max="255" step="5"/>
                         <span id="valueBrightness"></span>
                     </form>
-            
-            
+                        
                 <h3>Color</h3>
         
                     <form id="formColorOrder">
@@ -61,27 +68,44 @@
                         <input type="range" id="inputColorOrder" name="inputColorOrder"  min="0" max="5" step="1" value="0"/>
                         <span id="valueColorOrder">0</span>
                     </form>
+
                     
-                    <form id="formRed">
-                        <label for="inputRed">Red: </label>
-                        <input type="range" id="inputRed" name="inputRed" min=".1" max="10" step=".1" value="1">
-                        <span id="valueRed">1.0</span>
-                        <button id="resetRedButton" class="resetButton">X</i></button>
-                    </form>
+                    <div class="table">
                     
-                    <form id="formGreen">
-                        <label for="inputGreen">Green: </label>
-                        <input type="range" id="inputGreen" name="inputGreen" min=".1" max="10" step=".1" value="1">
-                        <span id="valueGreen">1.0</span>
-                        <button id="resetGreenButton" class="resetButton">X</i></button>
-                    </form>
+                        <div class="tr">
+                            <span class="td">Color</span>
+                            <span class="td">Multiplier</span>
+                            <span class="td">Reset</span>
+                        </div>
+
+                        <form id="formRed" class="tr">
+                            <span class="td">Red: </span>
+                            <span class="td">
+                                <input type="range" id="inputRed" name="inputRed" min=".1" max="10" step=".1" value="1">
+                                <span id="valueRed">1.0</span>
+                            </span>
+                            <span class="td"><button id="resetRedButton" class="resetButton">&#8634</button></span>
+                        </form>
+                        
+                        <form id="formGreen" class="tr">
+                            <span class="td">Green: </span>
+                            <span class="td">
+                                <input type="range" id="inputGreen" name="inputGreen" min=".1" max="10" step=".1" value="1">
+                                <span id="valueGreen">1.0</span>
+                            </span>
+                            <span class="td"><button id="resetGreenButton" class="resetButton">&#8634</button></span>
+                        </form>
+                        
+                        <form id="formBlue" class="tr">
+                            <span class="td">Blue: </span>
+                            <span class="td">
+                                <input type="range" id="inputBlue" name="inputBlue" min=".1" max="10" step=".1" value="1">
+                                <span id="valueBlue">1.0</span>
+                            </span>
+                            <span class="td"><button id="resetBlueButton" class="resetButton">&#8634</button></span>
+                        </form> 
                     
-                    <form id="formBlue">
-                        <label for="inputBlue">Blue: </label>
-                        <input type="range" id="inputBlue" name="inputBlue" min=".1" max="10" step=".1" value="1">
-                        <span id="valueBlue">1.0</span>
-                        <button id="resetBlueButton" class="resetButton">X</i></button>
-                    </form>    
+                    </div>
 
             </div>
         </div>
@@ -94,67 +118,67 @@
                         <label for="inputSpeed">Speed: </label>
                         <input type="range" id="inputSpeed" name="inputSpeed"  min="0.1" max="2.0" step=".1" value="1"/>
                         <span id="valueSpeed">1.0</span>
-                        <button id="resetSpeedButton" class="resetButton">X</i></button>
+                        <button id="resetSpeedButton" class="resetButton">&#8634</button>
                     </form>      
 
                     <form id="formScale">
                         <label for="inputScale">Scale: </label>
-                        <input type="range" id="inputScale" name="inputScale"  min="0.1" max="1.5" step=".1" value="1"/>
+                        <input type="range" id="inputScale" name="inputScale"  min="0.25" max="1.5" step=".05" value="1"/>
                         <span id="valueScale">1.0</span>
-                        <button id="resetScaleButton" class="resetButton">X</i></button>
+                        <button id="resetScaleButton" class="resetButton">&#8634</button>
                     </form>    
 
                     <form id="formAngle">
                         <label for="inputAngle">Angle: </label>
-                        <input type="range" id="inputAngle" name="inputAngle" min=".1" max="10" step=".1" value="1">
+                        <input type="range" id="inputAngle" name="inputAngle" min=".1" max="3" step=".05" value="1">
                         <span id="valueAngle">1.0</span>
-                        <button id="resetAngleButton" class="resetButton">X</i></button>
+                        <button id="resetAngleButton" class="resetButton">&#8634</button>
                     </form>
 
                     <form id="formRadiusA">
                         <label for="inputRadiusA">Radius: </label>
                         <input type="range" id="inputRadiusA" name="inputRadiusA" min="-10" max="30" step="1" value="0">
                         <span id="valueRadiusA">0</span>
-                        <button id="resetRadiusAButton" class="resetButton">X</i></button>
+                        <button id="resetRadiusAButton" class="resetButton">&#8634</button>
                     </form>
 
                     <form id="formZ">
                         <label for="inputZ">Magic Z: </label>
                         <input type="range" id="inputZ" name="inputZ" min=".1" max="2" step=".1" value="1">
                         <span id="valueZ">1.0</span>
-                        <button id="resetZButton" class="resetButton">X</i></button>
+                        <button id="resetZButton" class="resetButton">&#8634</button>
                     </form>
         
                 <h3>Ratios</h3>
                     
                     <form id="formRatiosBase">
                         <label for="inputRatiosBase">Base: </label>
-                        <input type="range"  id="inputRatiosBase" name="inputRatiosBase"  min="-.50" max="0.50" step="0.01" value="0.00"/>
+                        <input type="range"  id="inputRatiosBase" name="inputRatiosBase"  min="-.25" max="0.50" step="0.05" value="0.00"/>
                         <span id="valueRatiosBase">0.00</span>
-                        <button id="resetRatiosBaseButton" class="resetButton">X</i></button>
+                        <button id="resetRatiosBaseButton" class="resetButton">&#8634</button>
                     </form>
                     
                     <form id="formRatiosDiff">
                         <label for="inputRatiosDiff">Diff: </label>
-                        <input type="range" id="inputRatiosDiff" name="inputRatiosDiff"  min="0.1" max="10.0" step="0.1" value="1.0"/>
+                        <input type="range" id="inputRatiosDiff" name="inputRatiosDiff"  min=".1" max="5.0" step="0.1" value="1.0"/>
                         <span id="valueRatiosDiff">1.00</span>
-                        <button id="resetRatiosDiffButton" class="resetButton">X</i></button>
+                        <button id="resetRatiosDiffButton" class="resetButton">&#8634</button>
                     </form>
                 
                 <h3>Offsets</h3>
                     
                     <form id="formOffsetsBase">
                         <label for="inputOffsetsBase">Base: </label>
-                        <input type="range" id="inputOffsetsBase" name="inputOffsetsBase" min=".1" max="10" step=".1" value="1">
+                        <input type="range" id="inputOffsetsBase" name="inputOffsetsBase" min=".1" max="5" step=".1" value="1">
                         <span id="valueOffsetsBase">1.00</span>
-                        <button id="resetOffsetsBaseButton" class="resetButton">X</i></button>
+                        <button id="resetOffsetsBaseButton" class="resetButton">&#8634</button>
                     </form>
                     
                     <form id="formOffsetsDiff">
                         <label for="inputOffsetsDiff">Diff: </label>
-                        <input type="range" id="inputOffsetsDiff" name="inputOffsetsDiff" min=".1" max="10" step=".1" value="1">
+                        <input type="range" id="inputOffsetsDiff" name="inputOffsetsDiff" min=".1" max="5" step=".1" value="1">
                         <span id="valueOffsetsDiff">1.00</span>
-                        <button id="resetOffsetsDiffButton" class="resetButton">X</i></button>
+                        <button id="resetOffsetsDiffButton" class="resetButton">&#8634</button>
                     </form>
             </div> 
         </div>

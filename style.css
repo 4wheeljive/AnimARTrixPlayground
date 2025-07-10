@@ -1,6 +1,6 @@
 html {
     font-family: sans-serif;
-    display: inline-block;
+    display: block;
     text-align: center;
 }
 body {
@@ -21,7 +21,7 @@ h3 {
     color: white;
 }
 p {
-    padding: 10px; 
+    padding: 2px; 
 }
 button {
     color: white;
@@ -32,7 +32,6 @@ button {
     border-radius: 4px;
 }
 .topnav {
-    padding: 10px;
     text-align: center;
     overflow: hidden;
     background-color: #000000;
@@ -43,20 +42,20 @@ button {
     grid-template-columns: repeat(3, 1fr);
 }
 .box1 {
-    padding: 10px;  
+    padding: 5px;  
     grid-column: 1 / 4;
 }
 .box2 {
-    padding: 10px;
+    padding: 5px;
     grid-column: 1 / 4;
     grid-row-start: 2;
 }
 .box3 {
-    padding: 10px;
+    padding: 5px;
     grid-row-start: 3;
 }
 .box4 {
-    padding: 10px;
+    padding: 5px;
     grid-column: 2 / 4;
     grid-row-start: 3;
 }
@@ -81,9 +80,6 @@ SPAN.td
 .tableColumn3 {
     width: 10%
 }
-
-
-
 
 
 .card {
