@@ -247,11 +247,14 @@ class ButtonCharacteristicCallbacks : public BLECharacteristicCallbacks {
             if (receivedValue == 7) { // complex kaleido 6 
                fxIndex = 6;
             }
-            if (receivedValue == 8) { // experiment 10
+            if (receivedValue == 8) { // water
                fxIndex = 7;
             }
-            if (receivedValue == 9) { // experiment sm1
+            if (receivedValue == 9) { // experiment 10
                fxIndex = 8;
+            }
+            if (receivedValue == 10) { // experiment sm1
+               fxIndex = 9;
             }
             
             displayOn = true;

@@ -9,6 +9,7 @@ const wavesButton = document.getElementById('wavesButton');
 const chasingSpiralsButton = document.getElementById('chasingSpiralsButton');
 const ringsButton = document.getElementById('ringsButton');
 const complexKaleidoButton = document.getElementById('complexKaleidoButton');
+const waterButton = document.getElementById('waterButton');
 const experiment10Button = document.getElementById('experiment10Button');
 const experimentSM1Button = document.getElementById('experimentSM1Button');
 const offButton = document.getElementById('offButton');
@@ -208,8 +209,9 @@ function inputSwitcher(receivedID) {
     chasingSpiralsButton.addEventListener('click', () => writeButtonCharacteristic(5));
     ringsButton.addEventListener('click', () => writeButtonCharacteristic(6));
     complexKaleidoButton.addEventListener('click', () => writeButtonCharacteristic(7));
-    experiment10Button.addEventListener('click', () => writeButtonCharacteristic(8));
-    experimentSM1Button.addEventListener('click', () => writeButtonCharacteristic(9));
+    waterButton.addEventListener('click', () => writeButtonCharacteristic(8));
+    experiment10Button.addEventListener('click', () => writeButtonCharacteristic(9));
+    experimentSM1Button.addEventListener('click', () => writeButtonCharacteristic(10));
     offButton.addEventListener('click', () => writeButtonCharacteristic(99));
 
 // Rotate Animation Toggle (Checkbox)
@@ -285,62 +287,62 @@ function inputSwitcher(receivedID) {
 
     resetSpeedButton.addEventListener('click', (event) => {
         event.preventDefault();
-        sendNumberCharacteristic(inputSpeed, defaultValueSpeed);
+        sendNumberCharacteristic(inputSpeed.id, inputSpeed.defaultValue);
     });
 
     resetScaleButton.addEventListener('click', (event) => {
         event.preventDefault();
-        sendNumberCharacteristic(inputScale, defaultValueScale);
+        sendNumberCharacteristic(inputScale.id, inputScale.defaultValue);
     });
 	
     resetRadiusAButton.addEventListener('click', (event) => {
         event.preventDefault();
-        sendNumberCharacteristic(inputRadiusA, defaultValueRadiusA);
+        sendNumberCharacteristic(inputRadiusA.id, inputRadiusA.defaultValue);
     });
 	
     resetAngleButton.addEventListener('click', (event) => {
         event.preventDefault();
-        sendNumberCharacteristic(inputAngle, defaultValueAngle);
+        sendNumberCharacteristic(inputAngle.id, inputAngle.defaultValue);
     });
 	
     resetZButton.addEventListener('click', (event) => {
         event.preventDefault();
-        sendNumberCharacteristic(inputZ, defaultValueZ);
+        sendNumberCharacteristic(inputZ.id, inputZ.defaultValue);
     });
 	
     resetRatiosBaseButton.addEventListener('click', (event) => {
         event.preventDefault();
-        sendNumberCharacteristic(inputRatiosBase, defaultValueRatiosBase);
+        sendNumberCharacteristic(inputRatiosBase.id, inputRatiosBase.defaultValue);
     });
 	
     resetRatiosDiffButton.addEventListener('click', (event) => {
         event.preventDefault();
-        sendNumberCharacteristic(inputRatiosDiff, defaultValueRatiosDiff);
+        sendNumberCharacteristic(inputRatiosDiff.id, inputRatiosDiff.defaultValue);
     });
 	
     resetOffsetsBaseButton.addEventListener('click', (event) => {
         event.preventDefault();
-        sendNumberCharacteristic(inputOffsetsBase, defaultValueOffsetsBase);
+        sendNumberCharacteristic(inputOffsetsBase.id, inputOffsetsBase.defaultValue);
     });
 	
     resetOffsetsDiffButton.addEventListener('click', (event) => {
         event.preventDefault();
-        sendNumberCharacteristic(inputOffsetsDiff, defaultValueOffsetsDiff);
+        sendNumberCharacteristic(inputOffsetsDiff.id, inputOffsetsDiff.defaultValue);
     });
 	
     resetRedButton.addEventListener('click', (event) => {
         event.preventDefault();
-        sendNumberCharacteristic(inputRed, defaultValueRed);
+        sendNumberCharacteristic(inputRed.id, inputRed.defaultValue);
     });
 	
     resetGreenButton.addEventListener('click', (event) => {
         event.preventDefault();
-        sendNumberCharacteristic(inputGreen, defaultValueGreen);
+        sendNumberCharacteristic(inputGreen.id, inputGreen.defaultValue);
     });
 	
 	resetBlueButton.addEventListener('click', (event) => {
         event.preventDefault();
-        sendNumberCharacteristic(inputBlue, defaultValueBlue);
+        sendNumberCharacteristic(inputBlue.id, inputBlue.defaultValue);
     });
 
 // BLE CONNECTION *******************************************************************************

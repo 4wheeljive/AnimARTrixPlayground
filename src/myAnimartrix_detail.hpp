@@ -565,7 +565,7 @@ class ANIMartRIX {
                     polar_theta[x][y] * (double)adjustAngle
                     - animation.dist * 0.1 
                     + move.radial[2];
-                animation.z = (animation.dist * 1.5) - 10 * move.linear[2];
+                animation.z = ((animation.dist * 1.5) - 10 * move.linear[2]) * (double)adjustZ;
                 animation.offset_x = move.linear[2];
 
                 float show3 = render_value(animation);
@@ -595,12 +595,12 @@ class ANIMartRIX {
         timings.ratio[0] = 1.5 + (double)adjustRatiosBase * 2 * (double)adjustRatiosDiff;       
         timings.ratio[1] = 2.3 + (double)adjustRatiosBase * 2 * (double)adjustRatiosDiff;
         timings.ratio[2] = 3 + (double)adjustRatiosBase * 2 * (double)adjustRatiosDiff;
-        timings.ratio[3] = 0.05 + (double)adjustRatiosBase ;
-        timings.ratio[4] = 0.2 + (double)adjustRatiosBase ;
-        timings.ratio[5] = 0.03 + (double)adjustRatiosBase ;
-        timings.ratio[6] = 0.025 + (double)adjustRatiosBase ;
-        timings.ratio[7] = 0.021 + (double)adjustRatiosBase ;
-        timings.ratio[8] = 0.027 + (double)adjustRatiosBase ;
+        timings.ratio[3] = 0.05 + (double)adjustRatiosBase/10 ;
+        timings.ratio[4] = 0.2 + (double)adjustRatiosBase/10 ;
+        timings.ratio[5] = 0.03 + (double)adjustRatiosBase/10 ;
+        timings.ratio[6] = 0.025 + (double)adjustRatiosBase/10 ;
+        timings.ratio[7] = 0.021 + (double)adjustRatiosBase/10 ;
+        timings.ratio[8] = 0.027 + (double)adjustRatiosBase/10 ;
         
         timings.offset[0] = 0 ;
         timings.offset[1] = 100 * (double)adjustOffsetsBase;
@@ -663,11 +663,11 @@ class ANIMartRIX {
 
         timings.master_speed = 0.003;
         
-        timings.ratio[0] = 0.02;
-        timings.ratio[1] = 0.03;
-        timings.ratio[2] = 0.04;
-        timings.ratio[3] = 0.05;
-        timings.ratio[4] = 0.6;
+        timings.ratio[0] = 0.02 + (double)adjustRatiosBase/10  ;
+        timings.ratio[1] = 0.03 + (double)adjustRatiosBase/10 * (double)adjustOffsetsDiff;
+        timings.ratio[2] = 0.04 + (double)adjustRatiosBase/10 * 1.5 * (double)adjustOffsetsDiff;
+        timings.ratio[3] = 0.05 + (double)adjustRatiosBase/10 * 2 * (double)adjustOffsetsDiff;
+        timings.ratio[4] = 0.6 + (double)adjustRatiosBase/5 ;
         
         timings.offset[0] = 0;
         timings.offset[1] = 100;
@@ -681,11 +681,13 @@ class ANIMartRIX {
             for (int y = 0; y < num_y; y++) {
 
                 animation.dist = distance[x][y] * (2 + move.directional[0]) / 3;
-                animation.angle = 3 * polar_theta[x][y] +
-                                  3 * move.noise_angle[0] + move.radial[4];
-                animation.scale_x = 0.1;
-                animation.scale_y = 0.1;
-                animation.scale_z = 0.1;
+                animation.angle = 
+                    3 * polar_theta[x][y] * (double)adjustAngle
+                    + 3 * move.noise_angle[0] 
+                    + move.radial[4];
+                animation.scale_x = 0.1 * (double)adjustScale;
+                animation.scale_y = 0.1 * (double)adjustScale;
+                animation.scale_z = 0.1 * (double)adjustScale;
                 animation.offset_y = 2 * move.linear[0];
                 animation.offset_x = 0;
                 animation.offset_z = 0;
@@ -693,29 +695,35 @@ class ANIMartRIX {
                 float show1 = render_value(animation);
 
                 animation.dist = distance[x][y] * (2 + move.directional[1]) / 3;
-                animation.angle = 4 * polar_theta[x][y] +
-                                  3 * move.noise_angle[1] + move.radial[4];
+                animation.angle = 
+                    4 * polar_theta[x][y] * (double)adjustAngle
+                    + 3 * move.noise_angle[1] 
+                    + move.radial[4];
                 animation.offset_x = 2 * move.linear[1];
                 animation.z = move.linear[1];
                 float show2 = render_value(animation);
 
                 animation.dist = distance[x][y] * (2 + move.directional[2]) / 3;
-                animation.angle = 5 * polar_theta[x][y] +
-                                  3 * move.noise_angle[2] + move.radial[4];
+                animation.angle = 
+                    5 * polar_theta[x][y] * (double)adjustAngle
+                    + 3 * move.noise_angle[2]
+                    + move.radial[4];
                 animation.offset_y = 2 * move.linear[2];
                 animation.z = move.linear[2];
                 float show3 = render_value(animation);
 
                 animation.dist = distance[x][y] * (2 + move.directional[3]) / 3;
-                animation.angle = 4 * polar_theta[x][y] +
-                                  3 * move.noise_angle[3] + move.radial[4];
+                animation.angle = 
+                    4 * polar_theta[x][y] * (double)adjustAngle
+                    + 3 * move.noise_angle[3]
+                    + move.radial[4];
                 animation.offset_x = 2 * move.linear[3];
                 animation.z = move.linear[3];
                 float show4 = render_value(animation);
 
-                pixel.red = show1;
-                pixel.green = show3 * distance[x][y] / 10;
-                pixel.blue = (show2 + show4) / 2;
+                pixel.red = show1 * (double)adjustRed;
+                pixel.green = (show3 * distance[x][y] / 10) * (double)adjustGreen;
+                pixel.blue = ((show2 + show4) / 2) * (double)adjustBlue;
 
                 pixel = rgb_sanity_check(pixel);
 
@@ -745,10 +753,10 @@ class ANIMartRIX {
         for (int x = 0; x < num_x; x++) {
             for (int y = 0; y < num_y; y++) {
 
-                animation.angle = polar_theta[x][y];
-                animation.scale_x = 0.1;
-                animation.scale_y = 0.1;
-                animation.scale_z = 0.1;
+                animation.angle = polar_theta[x][y] *(double)adjustAngle;
+                animation.scale_x = 0.1 * (double)adjustScale;
+                animation.scale_y = 0.1 * (double)adjustScale;
+                animation.scale_z = 0.1 * (double)adjustScale;
                 animation.dist = distance[x][y];
                 animation.offset_y = 0;
                 animation.offset_x = 0;
@@ -802,7 +810,7 @@ class ANIMartRIX {
                     - distance[x][y] / 3;
                 animation.dist = distance[x][y];
                 animation.scale_z = .1 * (double)adjustScale;
-                animation.scale_y = .1 *(double)adjustScale;
+                animation.scale_y = .1 * (double)adjustScale;
                 animation.scale_x = .1 * (double)adjustScale;
                 animation.offset_x = move.linear[0];
                 animation.offset_y = 0;
@@ -905,7 +913,7 @@ class ANIMartRIX {
         timings.ratio[2] = 0.031;
         timings.ratio[3] = 0.033;
         timings.ratio[4] = 0.037;
-        timings.ratio[5] = 0.0038;
+        timings.ratio[5] = 0.038;
         timings.ratio[6] = 0.041;
 
         calculate_oscillators(timings);
@@ -916,8 +924,8 @@ class ANIMartRIX {
                 animation.dist = distance[x][y];
                 animation.angle = 16 * polar_theta[x][y] + 16 * move.radial[0];
                 animation.z = 5;
-                animation.scale_x = 0.06;
-                animation.scale_y = 0.06;
+                animation.scale_x = 0.06 * (double)adjustScale;
+                animation.scale_y = 0.06 * (double)adjustScale;
                 animation.offset_z = -10 * move.linear[0];
                 animation.offset_y = 10 * move.noise_angle[0];
                 animation.offset_x = 10 * move.noise_angle[4];
@@ -958,13 +966,13 @@ class ANIMartRIX {
 
         timings.master_speed = 0.037;
 
-        timings.ratio[0] = 0.025; 
-        timings.ratio[1] = 0.027;
-        timings.ratio[2] = 0.031;
-        timings.ratio[3] = 0.033; 
-        timings.ratio[4] = 0.037;
-        timings.ratio[5] = 0.1;
-        timings.ratio[6] = 0.41;
+        timings.ratio[0] = 0.025 + (double)adjustRatiosBase/10; 
+        timings.ratio[1] = 0.027 + (double)adjustRatiosBase/10 * (double)adjustRatiosDiff;
+        timings.ratio[2] = 0.031 + (double)adjustRatiosBase/10 * 1.25* (double)adjustRatiosDiff;
+        timings.ratio[3] = 0.033 + (double)adjustRatiosBase/10 * 1.5 * (double)adjustRatiosDiff; 
+        timings.ratio[4] = 0.037 + (double)adjustRatiosBase/10 * 1.75 * (double)adjustRatiosDiff;
+        timings.ratio[5] = 0.1 + (double)adjustRatiosBase/5;
+        timings.ratio[6] = 0.41 + (double)adjustRatiosBase/5;
 
         calculate_oscillators(timings);
 
@@ -975,10 +983,10 @@ class ANIMartRIX {
                     distance[x][y] +
                     4 * FL_SIN_F(move.directional[5] * PI + (float)x / 2) +
                     4 * FL_COS_F(move.directional[6] * PI + float(y) / 2);
-                animation.angle = 1 * polar_theta[x][y];
-                animation.z = 5;
-                animation.scale_x = 0.06;
-                animation.scale_y = 0.06;
+                animation.angle = 1 * polar_theta[x][y] * double(adjustAngle) ;
+                animation.z = 5 * (double)adjustZ;
+                animation.scale_x = 0.06 * (double)adjustScale;
+                animation.scale_y = 0.06 * (double)adjustScale;
                 animation.offset_z = -10 * move.linear[0];
                 animation.offset_y = 10;
                 animation.offset_x = 10;
@@ -988,10 +996,10 @@ class ANIMartRIX {
                 animation.dist = 
                     (10 + move.directional[0]) * FL_SIN_F(-move.radial[5] + 
                     move.radial[0] + (distance[x][y] / (3)));
-                animation.angle = 1 * polar_theta[x][y];
-                animation.z = 5;
-                animation.scale_x = 0.1;
-                animation.scale_y = 0.1;
+                animation.angle = 1 * polar_theta[x][y] * double(adjustAngle) ;
+                animation.z = 5 * (double)adjustZ;
+                animation.scale_x = 0.1 * (double)adjustScale;
+                animation.scale_y = 0.1 * (double)adjustScale;
                 animation.offset_z = -10;
                 animation.offset_y = 20 * move.linear[0];
                 animation.offset_x = 10;
@@ -1001,10 +1009,10 @@ class ANIMartRIX {
                 animation.dist = 
                     (10 + move.directional[1]) * FL_SIN_F(-move.radial[5] + 
                     move.radial[1] + (distance[x][y] / (3)));
-                animation.angle = 1 * polar_theta[x][y];
-                animation.z = 500;
-                animation.scale_x = 0.1;
-                animation.scale_y = 0.1;
+                animation.angle = 1 * polar_theta[x][y] * double(adjustAngle) ;
+                animation.z = 500 * (double)adjustZ;
+                animation.scale_x = 0.1 * (double)adjustScale;
+                animation.scale_y = 0.1 * (double)adjustScale;
                 animation.offset_z = -10;
                 animation.offset_y = 20 * move.linear[1];
                 animation.offset_x = 10;
@@ -1014,10 +1022,10 @@ class ANIMartRIX {
                 animation.dist = 
                     (10 + move.directional[2]) * FL_SIN_F(-move.radial[5] + 
                     move.radial[2] + (distance[x][y] / (3)));
-                animation.angle = 1 * polar_theta[x][y];
-                animation.z = 500;
-                animation.scale_x = 0.1;
-                animation.scale_y = 0.1;
+                animation.angle = 1 * polar_theta[x][y] * double(adjustAngle) ;
+                animation.z = 500 * (double)adjustZ;
+                animation.scale_x = 0.1 * (double)adjustScale;
+                animation.scale_y = 0.1 * (double)adjustScale;
                 animation.offset_z = -10;
                 animation.offset_y = 20 * move.linear[2];
                 animation.offset_x = 10;
@@ -1063,7 +1071,9 @@ class ANIMartRIX {
             for (int y = 0; y < num_y / 2; y++) {
 
                 animation.dist = distance[x][y];
-                animation.angle = polar_theta[x][y] + 5 * move.noise_angle[0];
+                animation.angle = 
+                    polar_theta[x][y] * double(adjustAngle) 
+                    + 5 * move.noise_angle[0];
                 animation.z = 5 * (double)adjustZ;
                 animation.scale_x = 0.1 * (double)adjustScale;
                 animation.scale_y = 0.1 * (double)adjustScale;
@@ -1073,7 +1083,9 @@ class ANIMartRIX {
                 float show1 = render_value(animation);
 
                 animation.dist = distance[x][y];
-                animation.angle = polar_theta[x][y] + 4 * move.noise_angle[1];
+                animation.angle = 
+                    polar_theta[x][y] * double(adjustAngle) 
+                    + 4 * move.noise_angle[1];
                 animation.z = 15 * (double)adjustZ;
                 animation.scale_x = 0.15 * (double)adjustScale;
                 animation.scale_y = 0.15 * (double)adjustScale;
@@ -1083,7 +1095,9 @@ class ANIMartRIX {
                 float show2 = render_value(animation);
 
                 animation.dist = distance[x][y];
-                animation.angle = polar_theta[x][y] + 5 * move.noise_angle[2];
+                animation.angle = 
+                    polar_theta[x][y] * double(adjustAngle) 
+                    + 5 * move.noise_angle[2];
                 animation.z = 25 * (double)adjustZ;
                 animation.scale_x = 0.1 * (double)adjustScale;
                 animation.scale_y = 0.1 * (double)adjustScale;
@@ -1093,7 +1107,9 @@ class ANIMartRIX {
                 float show3 = render_value(animation);
 
                 animation.dist = distance[x][y];
-                animation.angle = polar_theta[x][y] + 5 * move.noise_angle[3];
+                animation.angle = 
+                    polar_theta[x][y] * double(adjustAngle) 
+                    + 5 * move.noise_angle[3];
                 animation.z = 35 * (double)adjustZ;
                 animation.scale_x = 0.15 * (double)adjustScale;
                 animation.scale_y = 0.15 * (double)adjustScale;
@@ -1103,7 +1119,9 @@ class ANIMartRIX {
                 float show4 = render_value(animation);
 
                 animation.dist = distance[x][y];
-                animation.angle = polar_theta[x][y] + 5 * move.noise_angle[4];
+                animation.angle = 
+                    polar_theta[x][y] * double(adjustAngle) 
+                    + 5 * move.noise_angle[4];
                 animation.z = 45 * (double)adjustZ;
                 animation.scale_x = 0.2 * (double)adjustScale;
                 animation.scale_y = 0.2 * (double)adjustScale;
@@ -1138,9 +1156,9 @@ class ANIMartRIX {
 
         timings.master_speed = 0.01; 
 
-        timings.ratio[0] = 0.01 + (double)adjustRatiosBase;
-        timings.ratio[1] = 0.011 + (double)adjustRatiosBase;
-        timings.ratio[2] = 0.013 + (double)adjustRatiosBase;
+        timings.ratio[0] = 0.01 + (double)adjustRatiosBase/10;
+        timings.ratio[1] = 0.011 + (double)adjustRatiosBase/10;
+        timings.ratio[2] = 0.013 + (double)adjustRatiosBase/10;
         timings.ratio[3] = 0.33 + (double)adjustRatiosBase * (double)adjustRatiosDiff;
         timings.ratio[4] = 0.36 + (double)adjustRatiosBase * (double)adjustRatiosDiff; 
         timings.ratio[5] = 0.38 + (double)adjustRatiosBase * (double)adjustRatiosDiff;
@@ -1246,10 +1264,10 @@ class ANIMartRIX {
 
         timings.master_speed = 0.03;
 
-        timings.ratio[0] = 0.0025 + (double)adjustRatiosBase; 
-        timings.ratio[1] = 0.0027 + (double)adjustRatiosBase * (double)adjustRatiosDiff;
-        timings.ratio[2] = 0.029 + (double)adjustRatiosBase * 1.5 * (double)adjustRatiosDiff;
-        timings.ratio[3] = 0.033 + (double)adjustRatiosBase * 2 * (double)adjustRatiosDiff; 
+        timings.ratio[0] = 0.0025 + (double)adjustRatiosBase/100; 
+        timings.ratio[1] = 0.0027 + (double)adjustRatiosBase/100 * (double)adjustRatiosDiff;
+        timings.ratio[2] = 0.029 + (double)adjustRatiosBase/10 * 1.5 * (double)adjustRatiosDiff;
+        timings.ratio[3] = 0.033 + (double)adjustRatiosBase/10 * 2 * (double)adjustRatiosDiff; 
 
         calculate_oscillators(timings);
 

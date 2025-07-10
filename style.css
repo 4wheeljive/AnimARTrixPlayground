@@ -61,6 +61,7 @@ button {
 }
 DIV.table {
     display:table;
+    width: 100%;
 }
 FORM.tr, DIV.tr
 {

@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="topnav">
-        <p><h1>AnimARTrix Playground</h1></p>
+        <h1>AnimARTrix Playground</h1>
     </div>
      
     <div class="wrapper">
@@ -36,6 +36,7 @@
                 <button id="chasingSpiralsButton" class="onButton">CHASING SPIRALS</button>
                 <button id="ringsButton" class="onButton">RINGS</button>
                 <button id="complexKaleidoButton" class="onButton">COMPLEX KALEIDO 6</button>
+                <button id="waterButton" class="onButton">WATER</button>
                 <button id="experiment10Button" class="onButton">EXPERIMENT 10</button>
                 <button id="experimentSM1Button" class="onButton">EXPERIMENT SM1</button>
                 <button id="offButton" class="offButton">OFF</button>
@@ -112,74 +113,99 @@
 
         <div class="box4">
             <div class="card">
-                <h2>Pattern Control</h2>    
+                <p>
+                <h2>Pattern Control</h2>
+                </p>
 
-					<form id="formSpeed">
-                        <label for="inputSpeed">Speed: </label>
-                        <input type="range" id="inputSpeed" name="inputSpeed"  min="0.1" max="2.0" step=".1" value="1"/>
-                        <span id="valueSpeed">1.0</span>
-                        <button id="resetSpeedButton" class="resetButton">&#8634</button>
-                    </form>      
+                <div class="table">
 
-                    <form id="formScale">
-                        <label for="inputScale">Scale: </label>
-                        <input type="range" id="inputScale" name="inputScale"  min="0.25" max="1.5" step=".05" value="1"/>
-                        <span id="valueScale">1.0</span>
-                        <button id="resetScaleButton" class="resetButton">&#8634</button>
-                    </form>    
+                    <div class="tr">
+                        <span class="td">Parameter</span>
+                        <span class="td">Value</span>
+                        <span class="td">Reset</span>
+                    </div>
 
-                    <form id="formAngle">
-                        <label for="inputAngle">Angle: </label>
-                        <input type="range" id="inputAngle" name="inputAngle" min=".1" max="3" step=".05" value="1">
-                        <span id="valueAngle">1.0</span>
-                        <button id="resetAngleButton" class="resetButton">&#8634</button>
-                    </form>
-
-                    <form id="formRadiusA">
-                        <label for="inputRadiusA">Radius: </label>
-                        <input type="range" id="inputRadiusA" name="inputRadiusA" min="-10" max="30" step="1" value="0">
-                        <span id="valueRadiusA">0</span>
-                        <button id="resetRadiusAButton" class="resetButton">&#8634</button>
-                    </form>
-
-                    <form id="formZ">
-                        <label for="inputZ">Magic Z: </label>
-                        <input type="range" id="inputZ" name="inputZ" min=".1" max="2" step=".1" value="1">
-                        <span id="valueZ">1.0</span>
-                        <button id="resetZButton" class="resetButton">&#8634</button>
-                    </form>
-        
-                <h3>Ratios</h3>
-                    
-                    <form id="formRatiosBase">
-                        <label for="inputRatiosBase">Base: </label>
-                        <input type="range"  id="inputRatiosBase" name="inputRatiosBase"  min="-.25" max="0.50" step="0.05" value="0.00"/>
-                        <span id="valueRatiosBase">0.00</span>
-                        <button id="resetRatiosBaseButton" class="resetButton">&#8634</button>
-                    </form>
-                    
-                    <form id="formRatiosDiff">
-                        <label for="inputRatiosDiff">Diff: </label>
-                        <input type="range" id="inputRatiosDiff" name="inputRatiosDiff"  min=".1" max="5.0" step="0.1" value="1.0"/>
-                        <span id="valueRatiosDiff">1.00</span>
-                        <button id="resetRatiosDiffButton" class="resetButton">&#8634</button>
-                    </form>
-                
-                <h3>Offsets</h3>
-                    
-                    <form id="formOffsetsBase">
-                        <label for="inputOffsetsBase">Base: </label>
-                        <input type="range" id="inputOffsetsBase" name="inputOffsetsBase" min=".1" max="5" step=".1" value="1">
-                        <span id="valueOffsetsBase">1.00</span>
-                        <button id="resetOffsetsBaseButton" class="resetButton">&#8634</button>
-                    </form>
-                    
-                    <form id="formOffsetsDiff">
-                        <label for="inputOffsetsDiff">Diff: </label>
-                        <input type="range" id="inputOffsetsDiff" name="inputOffsetsDiff" min=".1" max="5" step=".1" value="1">
-                        <span id="valueOffsetsDiff">1.00</span>
-                        <button id="resetOffsetsDiffButton" class="resetButton">&#8634</button>
-                    </form>
+                        <form id="formSpeed" class="tr">
+                            <span class="td">Speed: </span>
+                            <span class="td">
+                                <input type="range" id="inputSpeed" name="inputSpeed" min=".1" max="10" step=".1" value="1">
+                                <span id="valueSpeed">1.0</span>
+                            </span>
+                            <span class="td"><button id="resetSpeedButton" class="resetButton">&#8634</button></span>
+                        </form> 
+												
+						<form id="formScale" class="tr">
+                            <span class="td">Scale: </span>
+                            <span class="td">
+                                <input type="range" id="inputScale" name="inputScale" min=".1" max="10" step=".1" value="1">
+                                <span id="valueScale">1.0</span>
+                            </span>
+                            <span class="td"><button id="resetScaleButton" class="resetButton">&#8634</button></span>
+                        </form>
+						
+						<form id="formAngle" class="tr">
+                            <span class="td">Angle: </span>
+                            <span class="td">
+                                <input type="range" id="inputAngle" name="inputAngle" min=".1" max="10" step=".1" value="1">
+                                <span id="valueAngle">1.0</span>
+                            </span>
+                            <span class="td"><button id="resetAngleButton" class="resetButton">&#8634</button></span>
+                        </form> 
+						
+						<form id="formRadiusA" class="tr">
+                            <span class="td">RadiusA: </span>
+                            <span class="td">
+                                <input type="range" id="inputRadiusA" name="inputRadiusA" min=".1" max="10" step=".1" value="1">
+                                <span id="valueRadiusA">1.0</span>
+                            </span>
+                            <span class="td"><button id="resetRadiusAButton" class="resetButton">&#8634</button></span>
+                        </form> 
+						
+						<form id="formZ" class="tr">
+                            <span class="td">Z: </span>
+                            <span class="td">
+                                <input type="range" id="inputZ" name="inputZ" min=".1" max="10" step=".1" value="1">
+                                <span id="valueZ">1.0</span>
+                            </span>
+                            <span class="td"><button id="resetZButton" class="resetButton">&#8634</button></span>
+                        </form> 
+						
+						<form id="formRatiosBase" class="tr">
+                            <span class="td">RatiosBase: </span>
+                            <span class="td">
+                                <input type="range" id="inputRatiosBase" name="inputRatiosBase" min="-.25" max=".5" step=".01" value="0">
+                                <span id="valueRatiosBase">1.0</span>
+                            </span>
+                            <span class="td"><button id="resetRatiosBaseButton" class="resetButton">&#8634</button></span>
+                        </form> 
+						
+						<form id="formRatiosDiff" class="tr">
+                            <span class="td">RatiosDiff: </span>
+                            <span class="td">
+                                <input type="range" id="inputRatiosDiff" name="inputRatiosDiff" min=".1" max="10" step=".1" value="1">
+                                <span id="valueRatiosDiff">1.0</span>
+                            </span>
+                            <span class="td"><button id="resetRatiosDiffButton" class="resetButton">&#8634</button></span>
+                        </form> 
+						
+						<form id="formOffsetsBase" class="tr">
+                            <span class="td">OffsetsBase: </span>
+                            <span class="td">
+                                <input type="range" id="inputOffsetsBase" name="inputOffsetsBase" min=".1" max="10" step=".1" value="1">
+                                <span id="valueOffsetsBase">1.0</span>
+                            </span>
+                            <span class="td"><button id="resetOffsetsBaseButton" class="resetButton">&#8634</button></span>
+                        </form> 
+						
+						<form id="formOffsetsDiff" class="tr">
+                            <span class="td">OffsetsDiff: </span>
+                            <span class="td">
+                                <input type="range" id="inputOffsetsDiff" name="inputOffsetsDiff" min=".1" max="10" step=".1" value="1">
+                                <span id="valueOffsetsDiff">1.0</span>
+                            </span>
+                            <span class="td"><button id="resetOffsetsDiffButton" class="resetButton">&#8634</button></span>
+                        </form>
+                </div> 
             </div> 
         </div>
     
