@@ -80,7 +80,7 @@ uint8_t dummy = 1;
    float adjustOffsetsBase = 1.f; //("Offsets: Base", 1, .1, 10, -1);  // multiplied
    float adjustOffsetsDiff = 1.f; //("Offsets: Diff" , 1, .1, 10, -1);  //multiplied
 
-   float adjustScale = 1.f; // ("Scale", 1, .3, 3, -1); //multiplied
+   float adjustScale = 1.f; // ("Scale", 1, .5, 1.5, -1); //multiplied
 
    float adjustRadiusA = 0.0f; // ("Radius", 0, -10, 30, 1);  // added/subtracted
    float adjustRadiusB = 0.0f; // ("Radius", 0, -10, 10, 1);  // added/subtracted
