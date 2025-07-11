@@ -547,7 +547,7 @@ class ANIMartRIX {
                     polar_theta[x][y] * (double)adjustAngle
                     - animation.dist * 0.1
                     + move.radial[0];
-                animation.z = (animation.dist * 1.5) - 10 * move.linear[0];
+                animation.z = ((animation.dist * 1.5) - 10 * move.linear[0]) * (double)adjustZ;
                 animation.scale_x = 0.15 * (double)adjustScale;
                 animation.scale_y = 0.15 * (double)adjustScale;
                 animation.offset_x = move.linear[0];
@@ -557,7 +557,7 @@ class ANIMartRIX {
                     polar_theta[x][y] * (double)adjustAngle
                     - animation.dist * 0.1
                     + move.radial[1];
-                animation.z = (animation.dist * 1.5) - 10 * move.linear[1];
+                animation.z = ((animation.dist * 1.5) - 10 * move.linear[1]) * (double)adjustZ;
                 animation.offset_x = move.linear[1];
 
                 float show2 = render_value(animation);
@@ -626,7 +626,7 @@ class ANIMartRIX {
                 animation.offset_y = -move.linear[0];
                 animation.offset_x = 0;
                 animation.offset_z = 0;
-                animation.z = move.linear[1];
+                animation.z = move.linear[1] * (double)adjustZ;
                 float show1 = render_value(animation);
 
                 animation.angle = 
@@ -634,7 +634,7 @@ class ANIMartRIX {
                     + move.noise_angle[7]
                     + move.directional[5] * move.noise_angle[8] * animation.dist / 10;
                 animation.offset_y = -move.linear[1];
-                animation.z = move.linear[2];
+                animation.z = move.linear[2] * (double)adjustZ;
                 float show2 = render_value(animation);
 
                 animation.angle = 
@@ -642,7 +642,7 @@ class ANIMartRIX {
                     + move.noise_angle[6] 
                     + move.directional[6] * move.noise_angle[7] * animation.dist / 10;
                 animation.offset_y = move.linear[2];
-                animation.z = move.linear[0];
+                animation.z = move.linear[0] * (double)adjustZ;
                 float show3 = render_value(animation);
 
                 pixel.red =     (show1 + show2) * (double)adjustRed;
@@ -691,7 +691,7 @@ class ANIMartRIX {
                 animation.offset_y = 2 * move.linear[0];
                 animation.offset_x = 0;
                 animation.offset_z = 0;
-                animation.z = move.linear[0];
+                animation.z = move.linear[0] * (double)adjustZ;
                 float show1 = render_value(animation);
 
                 animation.dist = distance[x][y] * (2 + move.directional[1]) / 3;
@@ -700,7 +700,7 @@ class ANIMartRIX {
                     + 3 * move.noise_angle[1] 
                     + move.radial[4];
                 animation.offset_x = 2 * move.linear[1];
-                animation.z = move.linear[1];
+                animation.z = move.linear[1] * (double)adjustZ;
                 float show2 = render_value(animation);
 
                 animation.dist = distance[x][y] * (2 + move.directional[2]) / 3;
@@ -709,7 +709,7 @@ class ANIMartRIX {
                     + 3 * move.noise_angle[2]
                     + move.radial[4];
                 animation.offset_y = 2 * move.linear[2];
-                animation.z = move.linear[2];
+                animation.z = move.linear[2] * (double)adjustZ;
                 float show3 = render_value(animation);
 
                 animation.dist = distance[x][y] * (2 + move.directional[3]) / 3;
@@ -718,7 +718,7 @@ class ANIMartRIX {
                     + 3 * move.noise_angle[3]
                     + move.radial[4];
                 animation.offset_x = 2 * move.linear[3];
-                animation.z = move.linear[3];
+                animation.z = move.linear[3] * (double)adjustZ;
                 float show4 = render_value(animation);
 
                 pixel.red = show1 * (double)adjustRed;
@@ -760,12 +760,12 @@ class ANIMartRIX {
                 animation.dist = distance[x][y];
                 animation.offset_y = 0;
                 animation.offset_x = 0;
-                animation.z = 2 * distance[x][y] - move.linear[0];
+                animation.z = (2 * distance[x][y] - move.linear[0]) * (double)adjustZ;
                 float show1 = render_value(animation);
 
                 animation.angle = polar_theta[x][y];
                 animation.dist = distance[x][y];
-                animation.z = 2 * distance[x][y] - move.linear[1];
+                animation.z = (2 * distance[x][y] - move.linear[1]) * (double)adjustZ;
                 float show2 = render_value(animation);
 
                 // colormapping
@@ -836,7 +836,7 @@ class ANIMartRIX {
 
                 // colormapping
                 float radius = radial_filter_radius + (double)adjustRadiusA;
-                float radial_filter = (radius + (double)adjustRadiusB - distance[x][y]) / ( radius - (double)adjustRadiusC);
+                float radial_filter = (radius + (double)adjustRadiusB - distance[x][y]) / ( radius - (double)adjustRadiusB);
 
                 pixel.red =     (3 * show1 * radial_filter * (double)adjustRed);
                 pixel.green =   (show2 * radial_filter * (double)adjustGreen) / 2;
@@ -923,7 +923,7 @@ class ANIMartRIX {
 
                 animation.dist = distance[x][y];
                 animation.angle = 16 * polar_theta[x][y] + 16 * move.radial[0];
-                animation.z = 5;
+                animation.z = 5 * (double)adjustZ;
                 animation.scale_x = 0.06 * (double)adjustScale;
                 animation.scale_y = 0.06 * (double)adjustScale;
                 animation.offset_z = -10 * move.linear[0];
@@ -934,7 +934,7 @@ class ANIMartRIX {
 
                 animation.dist = distance[x][y];
                 animation.angle = 16 * polar_theta[x][y] + 16 * move.radial[1];
-                animation.z = 500;
+                animation.z = 500 * (double)adjustZ;
                 animation.scale_x = 0.06;
                 animation.scale_y = 0.06;
                 animation.offset_z = -10 * move.linear[1];

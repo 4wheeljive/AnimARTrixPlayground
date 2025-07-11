@@ -103,7 +103,8 @@ When BIG_BOARD is undefined:
     #include "bleControl.h"
 
     #ifndef BIG_BOARD
-        #include <matrixMap_22x22.h>    
+        #include <matrixMap_22x22.h>
+        //#include <matrixMap_14x19.h>    
     #else
         #include <matrixMap_32x48_3pin.h>    
     #endif
@@ -253,14 +254,14 @@ void loop() {
         
         fxEngine.draw(millis(), leds);
         
+        /*
         if (rotateAnimations) {
             EVERY_N_SECONDS (SECONDS_PER_ANIMATION) { 
-                if (nextFxIndexRandom) {fxIndex = random(0, NUM_ANIMATIONS - 1);}
-                else {fxIndex += 1 % (NUM_ANIMATIONS - 1);}
+                fxIndex += 1 % (NUM_ANIMATIONS - 1);
                 animationAdjust(fxIndex);
             }
         }
-        
+        */
     }
     
     FastLED.show();

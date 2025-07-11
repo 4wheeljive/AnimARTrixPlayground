@@ -3,8 +3,9 @@
 #include "FastLED.h" 
 #include <ArduinoJson.h> 
 
-/* Be sure to set numHandles = 60 in this file:
+/* If you use more than around 4 characteristics, you need to increase numHandles in this file:
 C:\Users\...\.platformio\packages\framework-arduinoespressif32\libraries\BLE\src\BLEServer.h
+Setting numHandles = 60 has worked for 7 characteristics.  
 */
 
 #include <BLEDevice.h>
@@ -17,11 +18,9 @@ using namespace fl;
 
 bool displayOn = true;
 bool debug = true;
-bool rotateAnimations = true;
 bool colorOrderChanged = false;
 
-double initialFxIndex = 4;   // this should really be changed to uint8_t, but UINumberField requires that it be a double
-bool nextFxIndexRandom = false;
+uint8_t initialFxIndex = 0;
 
 uint8_t switchNumber = 1;
 
@@ -39,8 +38,8 @@ uint8_t dummy = 1;
    UITitle title("AnimARTrix Playground");
    UIDescription description("Test of user-controlled inputs for selected Animartrix effects. @author of fx is StefanPetrick");
    UISlider brightness("Brightness", BRIGHTNESS, 0, 255);
-   UINumberField fxIndex("Animartrix - index", initialFxIndex, 0, 9); // NUM_ANIMATIONS - 1
-   UINumberField colorOrder("Color Order", 0, 0, 5);
+   UINumberField fxIndex("Animartrix - index", initialFxIndex, 0, 9); // NUM_ANIMATIONS - 1 // currently creates a float; rest of program assumes uint8_t; not sure it will work
+   UINumberField colorOrder("Color Order", 0, 0, 5); // currently creates a float; rest of program assumes uint8_t; not sure it will work
    UISlider timeSpeed("Speed", 1, .1, 10, -1); //multiplied
 
    UISlider adjustRatiosBase("Ratios: Base", 0, -1, 1, -1);  // added/subtracted
@@ -53,7 +52,6 @@ uint8_t dummy = 1;
 
    UISlider adjustRadiusA("Radius", 0, -10, 30, 1);  // added/subtracted
    UISlider adjustRadiusB("Radius", 0, -10, 10, 1);  // added/subtracted
-   UISlider adjustRadiusC("Radius", 0, -10, 30, 1);  // added/subtracted
 
    UISlider adjustAngle("Angle", 1, .1, 10, -1); //multiplied
 
@@ -69,30 +67,30 @@ uint8_t dummy = 1;
 
    uint8_t BRIGHTNESS = 25;
   
-   double colorOrder = 0;                   // this should really be changed to uint8_t, but UINumberField requires that it be a double
-   double fxIndex = initialFxIndex;        // this should really be changed to uint8_t, but UINumberField requires that it be a double
+   bool rotateAnimations = false;
+   uint8_t colorOrder = 0;                  
+   uint8_t fxIndex = initialFxIndex;
 
-   float timeSpeed = 1.f; //("Speed", 1, .1, 10, -1) multiplied
+   float timeSpeed = 1.f; 
 
-   float adjustRatiosBase = 0.0f; //("Ratios: Base", 0, -1, 1, -1);  // added/subtracted
-   float adjustRatiosDiff= 1.f; // ("Ratios: Diff", 1, .1, 10, -1);  // multiplied
+   float adjustRatiosBase = 0.0f; 
+   float adjustRatiosDiff= 1.f; 
 
-   float adjustOffsetsBase = 1.f; //("Offsets: Base", 1, .1, 10, -1);  // multiplied
-   float adjustOffsetsDiff = 1.f; //("Offsets: Diff" , 1, .1, 10, -1);  //multiplied
+   float adjustOffsetsBase = 1.f; 
+   float adjustOffsetsDiff = 1.f; 
 
-   float adjustScale = 1.f; // ("Scale", 1, .5, 1.5, -1); //multiplied
+   float adjustScale = 1.f; 
 
-   float adjustRadiusA = 0.0f; // ("Radius", 0, -10, 30, 1);  // added/subtracted
-   float adjustRadiusB = 0.0f; // ("Radius", 0, -10, 10, 1);  // added/subtracted
-   float adjustRadiusC = 0.0f; // ("Radius", 0, -10, 30, 1);  // added/subtracted
+   float adjustRadiusA = 0.0f; 
+   float adjustRadiusB = 0.0f;
 
-   float adjustAngle = 1.f; // ("Angle", 1, .1, 10, -1); //multiplied
+   float adjustAngle = 1.f; 
 
-   float adjustZ = 1.f; // ("Magic Z", 1, .1, 2, -1); //multiplied
+   float adjustZ = 1.f; 
 
-   float adjustRed = 1.f; // ("Red", 1, .1, 10, -1);  //multiplied 
-   float adjustGreen = 1.f; // ("Green", 1, .1, 10, -1);   //multiplied
-   float adjustBlue = 1.f; // ("Blue", 1, .1, 10, -1);  //multiplied
+   float adjustRed = 1.f; 
+   float adjustGreen = 1.f; 
+   float adjustBlue = 1.f; 
 
    ArduinoJson::JsonDocument sendDoc;
    ArduinoJson::JsonDocument receivedJSON;
@@ -120,7 +118,7 @@ BLEDescriptor pNumberDescriptor(BLEUUID((uint16_t)0x2902));
 
 // CONTROL FUNCTIONS ***************************************************************
 
-void animationAdjust(double newAnimation) {
+void animationAdjust(uint8_t newAnimation) {
    pButtonCharacteristic->setValue(String(newAnimation).c_str());
    pButtonCharacteristic->notify();
    if (debug) {
@@ -163,12 +161,13 @@ void inputSwitcher(String receivedID) {
       if (receivedID == "inputOffsetsDiff") {switchNumber = 7;};
       if (receivedID == "inputScale") {switchNumber = 8;};	
       if (receivedID == "inputAngle") {switchNumber = 9;};	
-      if (receivedID == "inputRadiusA") {switchNumber = 10;};	
-      if (receivedID == "inputZ") {switchNumber = 11;};	
-      if (receivedID == "inputRed") {switchNumber = 12;};	
-      if (receivedID == "inputGreen") {switchNumber = 13;};	
-      if (receivedID == "inputBlue") {switchNumber = 14;};	
-   }
+      if (receivedID == "inputRadiusA") {switchNumber = 10;};
+      if (receivedID == "inputRadiusB") {switchNumber = 11;};	
+      if (receivedID == "inputZ") {switchNumber = 12;};	
+      if (receivedID == "inputRed") {switchNumber = 13;};	
+      if (receivedID == "inputGreen") {switchNumber = 14;};	
+      if (receivedID == "inputBlue") {switchNumber = 15;};	
+}
 
 void processNumber(String receivedID, float receivedValue ) {
 
@@ -185,10 +184,11 @@ void processNumber(String receivedID, float receivedValue ) {
       case 8:  adjustScale = receivedValue; break;
       case 9:  adjustAngle = receivedValue; break;
       case 10:  adjustRadiusA = receivedValue; break;
-      case 11:  adjustZ = receivedValue; break;
-      case 12:  adjustRed = receivedValue; break;
-      case 13:  adjustGreen = receivedValue; break;
-      case 14:  adjustBlue = receivedValue; break;
+      case 11:  adjustRadiusB = receivedValue; break;
+      case 12:  adjustZ = receivedValue; break;
+      case 13:  adjustRed = receivedValue; break;
+      case 14:  adjustGreen = receivedValue; break;
+      case 15:  adjustBlue = receivedValue; break;
       default:  Serial.println("Unknown input"); return;
    }
 

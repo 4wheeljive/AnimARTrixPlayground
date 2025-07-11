@@ -9,23 +9,23 @@ body {
     background-color: #000000;
 }
 h1 {
-    font-size: 1.8rem;
-    color: white;
-}
-h2 {
     font-size: 1.4rem;
     color: white;
 }
-h3 {
+h2 {
     font-size: 1.2rem;
     color: white;
 }
-p {
-    padding: 2px; 
-}
-button {
+h3 {
+    font-size: 1.0rem;
     color: white;
-    padding: 5px 5px;
+}
+p {
+    padding: 5px; 
+}
+button {    
+    color: white;
+    padding: 5px 5px;   
     margin: 5px 5px;
     border: none;
     cursor: pointer;
@@ -33,7 +33,6 @@ button {
 }
 .topnav {
     text-align: center;
-    overflow: hidden;
     background-color: #000000;
 }
 .wrapper {
@@ -41,35 +40,53 @@ button {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
 }
-.box1 {
+.section1 {
     padding: 5px;  
-    grid-column: 1 / 4;
 }
-.box2 {
-    padding: 5px;
-    grid-column: 1 / 4;
-    grid-row-start: 2;
-}
-.box3 {
-    padding: 5px;
-    grid-row-start: 3;
-}
-.box4 {
+.section2 {
     padding: 5px;
     grid-column: 2 / 4;
-    grid-row-start: 3;
+    grid-row-start: 1;
 }
+.section3 {
+    padding: 5px;
+    grid-row-start: 2;
+}
+.section4 {
+    padding: 5px;
+    grid-column: 2 / 4;
+    grid-row-start: 2;
+}
+
+.tablegrid {
+    text-align: center;
+    display: grid;
+    grid-template-columns: 2fr 7fr 1fr;
+}
+.column1 {
+   text-align: left;
+}
+.column2 {
+    text-align: center;
+}
+.column3 {
+    text-align: center;
+}
+
+
 DIV.table {
     display:table;
+    table-layout: fixed;
     width: 100%;
 }
 FORM.tr, DIV.tr
 {
     display:table-row;
+    padding: 5px;
 }
 SPAN.td
 {
-    display:table-cell;
+    display:table-cell; 
 }
 
 .tableColumn1 {
@@ -81,11 +98,15 @@ SPAN.td
 .tableColumn3 {
     width: 10%
 }
+input[type=range] {
+  width: 75%;
+}
 
 
 .card {
     color: #bebebe;
     background-color: rgb(36, 36, 36);
+    padding: 10px;
 }
 .onButton{
     background-color: #a7a7a7;
@@ -115,4 +136,9 @@ SPAN.td
 }
 .reading {
     font-size: 1.8rem;
+}
+
+.credits {
+    color: #bebebe;
+    font-size: 1rem;
 }

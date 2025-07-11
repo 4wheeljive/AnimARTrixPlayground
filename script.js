@@ -24,7 +24,6 @@ const valueBrightness = document.getElementById('valueBrightness');
 const formSpeed = document.getElementById('formSpeed');
 const inputSpeed = document.getElementById('inputSpeed');
 const valueSpeed = document.getElementById('valueSpeed');
-const defaultValueSpeed = inputSpeed.defaultValue;
 const resetSpeedButton = document.getElementById('resetSpeedButton');
 
 const formColorOrder = document.getElementById('formColorOrder');
@@ -34,67 +33,61 @@ const valueColorOrder = document.getElementById('valueColorOrder');
 const formRed = document.getElementById('formRed');
 const inputRed = document.getElementById('inputRed');
 const valueRed = document.getElementById('valueRed');
-const defaultValueRed = inputRed.defaultValue;
 const resetRedButton = document.getElementById('resetRedButton');
 
 const formGreen = document.getElementById('formGreen');
 const inputGreen = document.getElementById('inputGreen');
 const valueGreen = document.getElementById('valueGreen');
-const defaultValueGreen = inputGreen.defaultValue;
 const resetGreenButton = document.getElementById('resetGreenButton');
 
 const formBlue = document.getElementById('formBlue');
 const inputBlue = document.getElementById('inputBlue');
 const valueBlue = document.getElementById('valueBlue');
-const defaultValueBlue = inputBlue.defaultValue;
 const resetBlueButton = document.getElementById('resetBlueButton');
 
 const formScale = document.getElementById('formScale');
 const inputScale = document.getElementById('inputScale');
 const valueScale = document.getElementById('valueScale');
-const defaultValueScale = inputScale.defaultValue;
 const resetScaleButton = document.getElementById('resetScaleButton');
 
 const formAngle = document.getElementById('formAngle');
 const inputAngle = document.getElementById('inputAngle');
 const valueAngle = document.getElementById('valueAngle');
-const defaultValueAngle = inputAngle.defaultValue;
 const resetAngleButton = document.getElementById('resetAngleButton');
 
 const formRadiusA = document.getElementById('formRadiusA');
 const inputRadiusA = document.getElementById('inputRadiusA');
 const valueRadiusA = document.getElementById('valueRadiusA');
-const defaultValueRadiusA = inputRadiusA.defaultValue;
 const resetRadiusAButton = document.getElementById('resetRadiusAButton');
+
+const formRadiusB = document.getElementById('formRadiusB');
+const inputRadiusB = document.getElementById('inputRadiusB');
+const valueRadiusB = document.getElementById('valueRadiusB');
+const resetRadiusBButton = document.getElementById('resetRadiusBButton');
 
 const formZ = document.getElementById('formZ');
 const inputZ = document.getElementById('inputZ');
 const valueZ = document.getElementById('valueZ');
-const defaultValueZ = valueZ.defaultValue;
 const resetZButton = document.getElementById('resetZButton');
 
 const formRatiosBase = document.getElementById('formRatiosBase');
 const inputRatiosBase = document.getElementById('inputRatiosBase');
 const valueRatiosBase = document.getElementById('valueRatiosBase');
-const defaultValueRatiosBase = inputRatiosBase.defaultValue;
 const resetRatiosBaseButton = document.getElementById('resetRatiosBaseButton');
 
 const formRatiosDiff = document.getElementById('formRatiosDiff');
 const inputRatiosDiff = document.getElementById('inputRatiosDiff');
 const valueRatiosDiff = document.getElementById('valueRatiosDiff');
-const defaultValueRatiosDiff = inputRatiosDiff.defaultValue;
 const resetRatiosDiffButton = document.getElementById('resetRatiosDiffButton');
 
 const formOffsetsBase = document.getElementById('formOffsetsBase');
 const inputOffsetsBase = document.getElementById('inputOffsetsBase');
 const valueOffsetsBase = document.getElementById('valueOffsetsBase');
-const defaultValueOffsetsBase = inputOffsetsBase.defaultValue;
 const resetOffsetsBaseButton = document.getElementById('resetOffsetsBaseButton');
 
 const formOffsetsDiff = document.getElementById('formOffsetsDiff');
 const inputOffsetsDiff = document.getElementById('inputOffsetsDiff');
 const valueOffsetsDiff = document.getElementById('valueOffsetsDiff');
-const defaultValueOffsetsDiff = inputOffsetsDiff.defaultValue;
 const resetOffsetsDiffButton = document.getElementById('resetOffsetsDiffButton');
 
 const latestValueSent = document.getElementById('valueSent');
@@ -157,7 +150,8 @@ function ab2str(buf) {
     const debouncedScale = debounce(inputScale.id, inputScale.value);
     const debouncedAngle = debounce(inputAngle.id, inputAngle.value);
 	const debouncedRadiusA = debounce(inputRadiusA.id, inputRadiusA.value);
-	const debouncedZ = debounce(inputZ.id, inputZ.value);
+	const debouncedRadiusB = debounce(inputRadiusB.id, inputRadiusB.value);
+    const debouncedZ = debounce(inputZ.id, inputZ.value);
 	const debouncedRed = debounce(inputRed.id, inputRed.value);
 	const debouncedGreen = debounce(inputGreen.id, inputGreen.value);
 	const debouncedBlue = debounce(inputBlue.id, inputBlue.value);
@@ -185,10 +179,11 @@ function inputSwitcher(receivedID) {
     if (receivedID == "inputScale") {switchNumber = 8;};
     if (receivedID == "inputAngle") {switchNumber = 9;};
     if (receivedID == "inputRadiusA") {switchNumber = 10;};
-    if (receivedID == "inputZ") {switchNumber = 11;};
-    if (receivedID == "inputRed") {switchNumber = 12;};
-    if (receivedID == "inputGreen") {switchNumber = 13;};
-    if (receivedID == "inputBlue") {switchNumber = 14;};
+    if (receivedID == "inputRadiusB") {switchNumber = 11;};
+    if (receivedID == "inputZ") {switchNumber = 12;};
+    if (receivedID == "inputRed") {switchNumber = 13;};
+    if (receivedID == "inputGreen") {switchNumber = 14;};
+    if (receivedID == "inputBlue") {switchNumber = 15;};
 }
 
 // ADD EVENT LISTENERS *************************************************************
@@ -262,6 +257,10 @@ function inputSwitcher(receivedID) {
         debouncedRadiusA(inputRadiusA.id, inputRadiusA.value);
     });
 
+    formRadiusB.addEventListener('input', () => {
+        debouncedRadiusB(inputRadiusB.id, inputRadiusB.value);
+    });
+
     formZ.addEventListener('input', () => {
         debouncedZ(inputZ.id, inputZ.value);
     });
@@ -288,61 +287,84 @@ function inputSwitcher(receivedID) {
     resetSpeedButton.addEventListener('click', (event) => {
         event.preventDefault();
         sendNumberCharacteristic(inputSpeed.id, inputSpeed.defaultValue);
+        formSpeed.reset();
     });
 
     resetScaleButton.addEventListener('click', (event) => {
         event.preventDefault();
-        sendNumberCharacteristic(inputScale.id, inputScale.defaultValue);
+        sendNumberCharacteristic(inputScale.id, inputScale.defaultValue)
+        formScale.reset();
     });
 	
     resetRadiusAButton.addEventListener('click', (event) => {
         event.preventDefault();
         sendNumberCharacteristic(inputRadiusA.id, inputRadiusA.defaultValue);
+        formRadiusA.reset();
+
+    });
+
+    resetRadiusBButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        sendNumberCharacteristic(inputRadiusB.id, inputRadiusB.defaultValue);
+        formRadiusB.reset();
+
     });
 	
     resetAngleButton.addEventListener('click', (event) => {
         event.preventDefault();
         sendNumberCharacteristic(inputAngle.id, inputAngle.defaultValue);
+        formAngle.reset();
+
     });
 	
     resetZButton.addEventListener('click', (event) => {
         event.preventDefault();
         sendNumberCharacteristic(inputZ.id, inputZ.defaultValue);
+        formZ.reset();
+
     });
 	
     resetRatiosBaseButton.addEventListener('click', (event) => {
         event.preventDefault();
         sendNumberCharacteristic(inputRatiosBase.id, inputRatiosBase.defaultValue);
+        formRatiosBase.reset();
+
     });
 	
     resetRatiosDiffButton.addEventListener('click', (event) => {
         event.preventDefault();
         sendNumberCharacteristic(inputRatiosDiff.id, inputRatiosDiff.defaultValue);
+        formRatiosDiff.reset();
     });
 	
     resetOffsetsBaseButton.addEventListener('click', (event) => {
         event.preventDefault();
         sendNumberCharacteristic(inputOffsetsBase.id, inputOffsetsBase.defaultValue);
+        formOffsetsBase.reset();
     });
 	
     resetOffsetsDiffButton.addEventListener('click', (event) => {
         event.preventDefault();
         sendNumberCharacteristic(inputOffsetsDiff.id, inputOffsetsDiff.defaultValue);
+        formOffsetsDiff.reset();
     });
 	
     resetRedButton.addEventListener('click', (event) => {
         event.preventDefault();
         sendNumberCharacteristic(inputRed.id, inputRed.defaultValue);
+        formRed.reset();
     });
 	
     resetGreenButton.addEventListener('click', (event) => {
         event.preventDefault();
         sendNumberCharacteristic(inputGreen.id, inputGreen.defaultValue);
+        formGreen.reset();
     });
 	
 	resetBlueButton.addEventListener('click', (event) => {
         event.preventDefault();
         sendNumberCharacteristic(inputBlue.id, inputBlue.defaultValue);
+        formBlue.reset();
     });
 
 // BLE CONNECTION *******************************************************************************
@@ -466,10 +488,11 @@ function handleNumberCharacteristicChange(event){
         case 8:    valueScale.innerHTML = receivedDoc.value; break;
         case 9:    valueAngle.innerHTML = receivedDoc.value; break;
         case 10:    valueRadiusA.innerHTML = receivedDoc.value; break;
-        case 11:    valueZ.innerHTML = receivedDoc.value; break;
-        case 12:    valueRed.innerHTML = receivedDoc.value; break;
-        case 13:    valueGreen.innerHTML = receivedDoc.value; break;
-        case 14:    valueBlue.innerHTML = receivedDoc.value; break;
+        case 11:    valueRadiusB.innerHTML = receivedDoc.value; break;
+        case 12:    valueZ.innerHTML = receivedDoc.value; break;
+        case 13:    valueRed.innerHTML = receivedDoc.value; break;
+        case 14:    valueGreen.innerHTML = receivedDoc.value; break;
+        case 15:    valueBlue.innerHTML = receivedDoc.value; break;
         default:   console.log("No valid switchNumber found. Received ID: ",receivedDoc.id);
     }
 }
