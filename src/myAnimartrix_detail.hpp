@@ -531,7 +531,7 @@ class ANIMartRIX {
 
         get_ready();
 
-        timings.master_speed = 0.5;
+        timings.master_speed = 0.5 * (double)adjustSpeed;
 
         timings.ratio[0] = 0.0025 + (double)adjustRatiosBase/100; 
         timings.ratio[1] = 0.0027 + (double)adjustRatiosBase/100 * (double)adjustRatiosDiff;
@@ -590,7 +590,7 @@ class ANIMartRIX {
 
         get_ready();
 
-        timings.master_speed = 0.0011;
+        timings.master_speed = 0.0011 * (double)adjustSpeed;
         
         timings.ratio[0] = 1.5 + (double)adjustRatiosBase * 2 * (double)adjustRatiosDiff;       
         timings.ratio[1] = 2.3 + (double)adjustRatiosBase * 2 * (double)adjustRatiosDiff;
@@ -661,19 +661,19 @@ class ANIMartRIX {
 
         get_ready();
 
-        timings.master_speed = 0.003;
+        timings.master_speed = 0.003 * (double)adjustSpeed;
         
         timings.ratio[0] = 0.02 + (double)adjustRatiosBase/10  ;
-        timings.ratio[1] = 0.03 + (double)adjustRatiosBase/10 * (double)adjustOffsetsDiff;
-        timings.ratio[2] = 0.04 + (double)adjustRatiosBase/10 * 1.5 * (double)adjustOffsetsDiff;
-        timings.ratio[3] = 0.05 + (double)adjustRatiosBase/10 * 2 * (double)adjustOffsetsDiff;
+        timings.ratio[1] = 0.03 + (double)adjustRatiosBase/10 * (double)adjustRatiosDiff;
+        timings.ratio[2] = 0.04 + (double)adjustRatiosBase/10 * 1.5 * (double)adjustRatiosDiff;
+        timings.ratio[3] = 0.05 + (double)adjustRatiosBase/10 * 2 * (double)adjustRatiosDiff;
         timings.ratio[4] = 0.6 + (double)adjustRatiosBase/5 ;
         
         timings.offset[0] = 0;
-        timings.offset[1] = 100;
-        timings.offset[2] = 200;
-        timings.offset[3] = 300;
-        timings.offset[4] = 400;
+        timings.offset[1] = 100 * (double)adjustOffsetsBase;
+        timings.offset[2] = 200 * (double)adjustOffsetsBase * (double)adjustOffsetsDiff;
+        timings.offset[3] = 300 * (double)adjustOffsetsBase * 1.25 * (double)adjustOffsetsDiff;
+        timings.offset[4] = 400 * (double)adjustOffsetsBase * 1.5 * (double)adjustOffsetsDiff;
 
         calculate_oscillators(timings); 
 
@@ -738,15 +738,15 @@ class ANIMartRIX {
 
         get_ready();
 
-        timings.master_speed = 0.01; 
+        timings.master_speed = 0.01 * (double)adjustSpeed; 
         
-        timings.ratio[0] = 2; 
-        timings.ratio[1] = 2.1;
-        timings.ratio[2] = 1.2;
+        timings.ratio[0] = 2  + (double)adjustRatiosBase; 
+        timings.ratio[1] = 2.1 + (double)adjustRatiosBase * (double)adjustRatiosDiff;
+        timings.ratio[2] = 1.2 + (double)adjustRatiosBase * (double)adjustRatiosDiff;;
 
-        timings.offset[1] = 100;
-        timings.offset[2] = 200;
-        timings.offset[3] = 300;
+        timings.offset[1] = 100 * (double)adjustOffsetsBase;
+        timings.offset[2] = 200 * (double)adjustOffsetsBase * (double)adjustOffsetsDiff;
+        timings.offset[3] = 300 * (double)adjustOffsetsBase * 1.5 * (double)adjustOffsetsDiff;
 
         calculate_oscillators(timings);
 
@@ -786,12 +786,12 @@ class ANIMartRIX {
 
         get_ready();
 
-        timings.master_speed = 0.01; 
+        timings.master_speed = 0.01 * (double)adjustSpeed; 
 
         // speed ratios for the oscillators, higher values = faster transitions
-        timings.ratio[0] = 0.1 +  (double)adjustRatiosBase;
-        timings.ratio[1] = 0.13 + (double)adjustRatiosBase * (double)adjustRatiosDiff ;
-        timings.ratio[2] = 0.16 + (double)adjustRatiosBase * 2 * (double)adjustRatiosDiff;
+        timings.ratio[0] = 0.1 +  (double)adjustRatiosBase/10;
+        timings.ratio[1] = 0.13 + (double)adjustRatiosBase/10 * (double)adjustRatiosDiff ;
+        timings.ratio[2] = 0.16 + (double)adjustRatiosBase/10 * 2 * (double)adjustRatiosDiff;
 
         timings.offset[1] = 10 * (double)adjustOffsetsBase;
         timings.offset[2] = 20 * (double)adjustOffsetsBase * (double)adjustOffsetsDiff;
@@ -836,7 +836,7 @@ class ANIMartRIX {
 
                 // colormapping
                 float radius = radial_filter_radius + (double)adjustRadiusA;
-                float radial_filter = (radius + (double)adjustRadiusB - distance[x][y]) / ( radius - (double)adjustRadiusB);
+                float radial_filter = (radius + (double)adjustRadiusB - distance[x][y]) / ( radius + (double)adjustRadiusB);
 
                 pixel.red =     (3 * show1 * radial_filter * (double)adjustRed);
                 pixel.green =   (show2 * radial_filter * (double)adjustGreen) / 2;
@@ -855,7 +855,7 @@ class ANIMartRIX {
 
         get_ready();
 
-        timings.master_speed = 0.01;
+        timings.master_speed = 0.01 * (double)adjustSpeed;
 
         timings.ratio[0] = 1 + (double)adjustRatiosBase;   
         timings.ratio[1] = 1.1 + (double)adjustRatiosBase * (double)adjustRatiosDiff;
@@ -906,15 +906,15 @@ class ANIMartRIX {
 
         get_ready();
 
-        timings.master_speed = 0.01; 
+        timings.master_speed = 0.01 * (double)adjustSpeed; 
 
-        timings.ratio[0] = 0.025; 
-        timings.ratio[1] = 0.027;
-        timings.ratio[2] = 0.031;
-        timings.ratio[3] = 0.033;
-        timings.ratio[4] = 0.037;
-        timings.ratio[5] = 0.038;
-        timings.ratio[6] = 0.041;
+        timings.ratio[0] = 0.025 + (double)adjustRatiosBase/10; 
+        timings.ratio[1] = 0.027 + (double)adjustRatiosBase/10 * (double)adjustRatiosDiff;
+        timings.ratio[2] = 0.031 + (double)adjustRatiosBase/10 * 1.2 * (double)adjustRatiosDiff;
+        timings.ratio[3] = 0.033 + (double)adjustRatiosBase/10 * 1.4 * (double)adjustRatiosDiff;
+        timings.ratio[4] = 0.037 + (double)adjustRatiosBase/10 * 1.6 * (double)adjustRatiosDiff;
+        timings.ratio[5] = 0.038 + (double)adjustRatiosBase/10 * 1.8 * (double)adjustRatiosDiff;
+        timings.ratio[6] = 0.041 + (double)adjustRatiosBase/10 * 2 * (double)adjustRatiosDiff;
 
         calculate_oscillators(timings);
 
@@ -922,7 +922,9 @@ class ANIMartRIX {
             for (int y = 0; y < num_y; y++) {
 
                 animation.dist = distance[x][y];
-                animation.angle = 16 * polar_theta[x][y] + 16 * move.radial[0];
+                animation.angle = 
+                    16 * polar_theta[x][y] * (double)adjustAngle 
+                    + 16 * move.radial[0];
                 animation.z = 5 * (double)adjustZ;
                 animation.scale_x = 0.06 * (double)adjustScale;
                 animation.scale_y = 0.06 * (double)adjustScale;
@@ -933,7 +935,9 @@ class ANIMartRIX {
                 show1 = render_value(animation);
 
                 animation.dist = distance[x][y];
-                animation.angle = 16 * polar_theta[x][y] + 16 * move.radial[1];
+                animation.angle = 
+                    16 * polar_theta[x][y] * (double)adjustAngle
+                    + 16 * move.radial[1];
                 animation.z = 500 * (double)adjustZ;
                 animation.scale_x = 0.06;
                 animation.scale_y = 0.06;
@@ -964,7 +968,7 @@ class ANIMartRIX {
 
         get_ready();
 
-        timings.master_speed = 0.037;
+        timings.master_speed = 0.037 * (double)adjustSpeed;
 
         timings.ratio[0] = 0.025 + (double)adjustRatiosBase/10; 
         timings.ratio[1] = 0.027 + (double)adjustRatiosBase/10 * (double)adjustRatiosDiff;
@@ -1056,14 +1060,14 @@ class ANIMartRIX {
 
         get_ready();
 
-        timings.master_speed = 0.02;
+        timings.master_speed = 0.02 * (double)adjustSpeed;
 
-        timings.ratio[0] = 0.0025 + (double)adjustRatiosBase ; 
-        timings.ratio[1] = 0.0027 + (double)adjustRatiosBase * 1.2 * (double)adjustRatiosDiff;
-        timings.ratio[2] = 0.0031 + (double)adjustRatiosBase * 1.4 * (double)adjustRatiosDiff;
-        timings.ratio[3] = 0.0033 + (double)adjustRatiosBase * 1.6 * (double)adjustRatiosDiff; 
-        timings.ratio[4] = 0.0036 + (double)adjustRatiosBase * 1.8 * (double)adjustRatiosDiff;
-        timings.ratio[5] = 0.0039 + (double)adjustRatiosBase * 2 * (double)adjustRatiosDiff;
+        timings.ratio[0] = 0.0025 + (double)adjustRatiosBase/100 ; 
+        timings.ratio[1] = 0.0027 + (double)adjustRatiosBase/100 * 1.2 * (double)adjustRatiosDiff;
+        timings.ratio[2] = 0.0031 + (double)adjustRatiosBase/100 * 1.4 * (double)adjustRatiosDiff;
+        timings.ratio[3] = 0.0033 + (double)adjustRatiosBase/100 * 1.6 * (double)adjustRatiosDiff; 
+        timings.ratio[4] = 0.0036 + (double)adjustRatiosBase/100 * 1.8 * (double)adjustRatiosDiff;
+        timings.ratio[5] = 0.0039 + (double)adjustRatiosBase/100 * 2 * (double)adjustRatiosDiff;
 
         calculate_oscillators(timings);
 
@@ -1154,7 +1158,7 @@ class ANIMartRIX {
 
         get_ready();
 
-        timings.master_speed = 0.01; 
+        timings.master_speed = 0.01 * (double)adjustSpeed; 
 
         timings.ratio[0] = 0.01 + (double)adjustRatiosBase/10;
         timings.ratio[1] = 0.011 + (double)adjustRatiosBase/10;
@@ -1262,12 +1266,12 @@ class ANIMartRIX {
 
         get_ready();
 
-        timings.master_speed = 0.03;
+        timings.master_speed = 0.03 * (double)adjustSpeed       ;
 
         timings.ratio[0] = 0.0025 + (double)adjustRatiosBase/100; 
         timings.ratio[1] = 0.0027 + (double)adjustRatiosBase/100 * (double)adjustRatiosDiff;
-        timings.ratio[2] = 0.029 + (double)adjustRatiosBase/10 * 1.5 * (double)adjustRatiosDiff;
-        timings.ratio[3] = 0.033 + (double)adjustRatiosBase/10 * 2 * (double)adjustRatiosDiff; 
+        timings.ratio[2] = 0.029 + (double)adjustRatiosBase/10 * 1.25 * (double)adjustRatiosDiff;
+        timings.ratio[3] = 0.033 + (double)adjustRatiosBase/10 * 1.5 * (double)adjustRatiosDiff; 
 
         calculate_oscillators(timings);
 

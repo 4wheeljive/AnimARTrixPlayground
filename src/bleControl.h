@@ -65,13 +65,14 @@ uint8_t dummy = 1;
 
    using namespace ArduinoJson;
 
-   uint8_t BRIGHTNESS = 25;
+   uint8_t adjustBrightness = 25;
   
    bool rotateAnimations = false;
-   uint8_t colorOrder = 0;                  
+   uint8_t adjustColorOrder = 0;                  
    uint8_t fxIndex = initialFxIndex;
 
    float timeSpeed = 1.f; 
+   float adjustSpeed = 1.f;
 
    float adjustRatiosBase = 0.0f; 
    float adjustRatiosDiff= 1.f; 
@@ -151,47 +152,23 @@ void sendReceiptNumber(String receivedID, float receivedValue) {
    }
 }
 
-void inputSwitcher(String receivedID) {
-      if (receivedID == "inputSpeed") {switchNumber = 1;};
-      if (receivedID == "inputBrightness") {switchNumber = 2;};
-      if (receivedID == "inputColorOrder") {switchNumber = 3;};
-      if (receivedID == "inputRatiosBase") {switchNumber = 4;};
-      if (receivedID == "inputRatiosDiff") {switchNumber = 5;};
-      if (receivedID == "inputOffsetsBase") {switchNumber = 6;};
-      if (receivedID == "inputOffsetsDiff") {switchNumber = 7;};
-      if (receivedID == "inputScale") {switchNumber = 8;};	
-      if (receivedID == "inputAngle") {switchNumber = 9;};	
-      if (receivedID == "inputRadiusA") {switchNumber = 10;};
-      if (receivedID == "inputRadiusB") {switchNumber = 11;};	
-      if (receivedID == "inputZ") {switchNumber = 12;};	
-      if (receivedID == "inputRed") {switchNumber = 13;};	
-      if (receivedID == "inputGreen") {switchNumber = 14;};	
-      if (receivedID == "inputBlue") {switchNumber = 15;};	
-}
-
 void processNumber(String receivedID, float receivedValue ) {
 
-   inputSwitcher(receivedID);
-
-   switch (switchNumber) {
-      case 1:  timeSpeed = receivedValue; break;
-      case 2:  BRIGHTNESS = (uint8_t) receivedValue; break;
-      case 3:  colorOrder = (uint8_t) receivedValue; colorOrderChanged = true; break;
-      case 4:  adjustRatiosBase = receivedValue; break;
-      case 5:  adjustRatiosDiff = receivedValue; break;
-      case 6:  adjustOffsetsBase = receivedValue; break;
-      case 7:  adjustOffsetsDiff = receivedValue; break;
-      case 8:  adjustScale = receivedValue; break;
-      case 9:  adjustAngle = receivedValue; break;
-      case 10:  adjustRadiusA = receivedValue; break;
-      case 11:  adjustRadiusB = receivedValue; break;
-      case 12:  adjustZ = receivedValue; break;
-      case 13:  adjustRed = receivedValue; break;
-      case 14:  adjustGreen = receivedValue; break;
-      case 15:  adjustBlue = receivedValue; break;
-      default:  Serial.println("Unknown input"); return;
-   }
-
+   if (receivedID == "inputSpeed") {adjustSpeed = receivedValue;};
+   if (receivedID == "inputColorOrder") {adjustColorOrder = receivedValue;};
+   if (receivedID == "inputRatiosBase") {adjustRatiosBase = receivedValue;};
+   if (receivedID == "inputRatiosDiff") {adjustRatiosDiff = receivedValue;};
+   if (receivedID == "inputOffsetsBase") {adjustOffsetsBase = receivedValue;};
+   if (receivedID == "inputOffsetsDiff") {adjustOffsetsDiff = receivedValue;};
+   if (receivedID == "inputScale") {adjustScale = receivedValue;};	
+   if (receivedID == "inputAngle") {adjustAngle = receivedValue;};	
+   if (receivedID == "inputRadiusA") {adjustRadiusA = receivedValue;};
+   if (receivedID == "inputRadiusB") {adjustRadiusB = receivedValue;};	
+   if (receivedID == "inputZ") {adjustZ = receivedValue;};	
+   if (receivedID == "inputRed") {adjustRed = receivedValue;};	
+   if (receivedID == "inputGreen") {adjustGreen = receivedValue;};	
+   if (receivedID == "inputBlue") {adjustBlue = receivedValue;};	
+ 
    sendReceiptNumber(receivedID, receivedValue);
 
 }

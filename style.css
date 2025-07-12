@@ -58,6 +58,11 @@ button {
     grid-row-start: 2;
 }
 
+.section5 {
+    padding: 5px;
+    grid-column: 1 / 4;
+}
+
 .tablegrid {
     text-align: center;
     display: grid;
@@ -133,12 +138,13 @@ input[type=range] {
 .gray-label {
     color: #bebebe;
     font-size: 1rem;
+    text-align: center;
 }
 .reading {
     font-size: 1.8rem;
 }
 
 .credits {
-    color: #bebebe;
-    font-size: 1rem;
+    color: #aaaaaa;
+    font-size: .8rem;
 }

@@ -17,84 +17,55 @@ const valueAnimation = document.getElementById('valueAnimation');
 
 const rotateAnimationCheckbox = document.getElementById('rotateAnimationCheckbox');
 
-const formBrightness = document.getElementById('formBrightness');
-const inputBrightness = document.getElementById('inputBrightness');
-const valueBrightness = document.getElementById('valueBrightness');
+const parameters = [ 'Brightness', 'Speed', 'ColorOrder', 'Red', 'Green', 'Blue', 'Scale', 'Angle', 'RadiusA', 'RadiusB', 'Z', 'RatiosBase', 'RatiosDiff', 'OffsetsBase', 'OffsetsDiff' ];
 
-const formSpeed = document.getElementById('formSpeed');
-const inputSpeed = document.getElementById('inputSpeed');
-const valueSpeed = document.getElementById('valueSpeed');
-const resetSpeedButton = document.getElementById('resetSpeedButton');
+const controls = {};  
+const controlsById = {};
 
-const formColorOrder = document.getElementById('formColorOrder');
-const inputColorOrder = document.getElementById('inputColorOrder');
-const valueColorOrder = document.getElementById('valueColorOrder');
+const debounce = (inputID, inputValue) => {
+    let timer;
+    return (inputID, inputValue) =>{
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            sendNumberCharacteristic(inputID, inputValue);
+        }, debounceDelay);
+    };
+};
 
-const formRed = document.getElementById('formRed');
-const inputRed = document.getElementById('inputRed');
-const valueRed = document.getElementById('valueRed');
-const resetRedButton = document.getElementById('resetRedButton');
+parameters.forEach(name => {
 
-const formGreen = document.getElementById('formGreen');
-const inputGreen = document.getElementById('inputGreen');
-const valueGreen = document.getElementById('valueGreen');
-const resetGreenButton = document.getElementById('resetGreenButton');
+        const form  = document.getElementById(`form${name}`);
+        const input = document.getElementById(`input${name}`);
+        const value = document.getElementById(`value${name}`);
+        const reset = document.getElementById(`reset${name}`);
+        controlsById[input.id] = { input, value };
 
-const formBlue = document.getElementById('formBlue');
-const inputBlue = document.getElementById('inputBlue');
-const valueBlue = document.getElementById('valueBlue');
-const resetBlueButton = document.getElementById('resetBlueButton');
+	  	controls[name] = { form, input, value, reset };
 
-const formScale = document.getElementById('formScale');
-const inputScale = document.getElementById('inputScale');
-const valueScale = document.getElementById('valueScale');
-const resetScaleButton = document.getElementById('resetScaleButton');
+	  	const debounced = debounce(input.id, input.value);
+		controls[name].debounced = debounced;
 
-const formAngle = document.getElementById('formAngle');
-const inputAngle = document.getElementById('inputAngle');
-const valueAngle = document.getElementById('valueAngle');
-const resetAngleButton = document.getElementById('resetAngleButton');
+	  
+		form.addEventListener('input', () => {
+			value.innerHTML = input.value;
+			debounced(input.id, input.value);
+		});
 
-const formRadiusA = document.getElementById('formRadiusA');
-const inputRadiusA = document.getElementById('inputRadiusA');
-const valueRadiusA = document.getElementById('valueRadiusA');
-const resetRadiusAButton = document.getElementById('resetRadiusAButton');
-
-const formRadiusB = document.getElementById('formRadiusB');
-const inputRadiusB = document.getElementById('inputRadiusB');
-const valueRadiusB = document.getElementById('valueRadiusB');
-const resetRadiusBButton = document.getElementById('resetRadiusBButton');
-
-const formZ = document.getElementById('formZ');
-const inputZ = document.getElementById('inputZ');
-const valueZ = document.getElementById('valueZ');
-const resetZButton = document.getElementById('resetZButton');
-
-const formRatiosBase = document.getElementById('formRatiosBase');
-const inputRatiosBase = document.getElementById('inputRatiosBase');
-const valueRatiosBase = document.getElementById('valueRatiosBase');
-const resetRatiosBaseButton = document.getElementById('resetRatiosBaseButton');
-
-const formRatiosDiff = document.getElementById('formRatiosDiff');
-const inputRatiosDiff = document.getElementById('inputRatiosDiff');
-const valueRatiosDiff = document.getElementById('valueRatiosDiff');
-const resetRatiosDiffButton = document.getElementById('resetRatiosDiffButton');
-
-const formOffsetsBase = document.getElementById('formOffsetsBase');
-const inputOffsetsBase = document.getElementById('inputOffsetsBase');
-const valueOffsetsBase = document.getElementById('valueOffsetsBase');
-const resetOffsetsBaseButton = document.getElementById('resetOffsetsBaseButton');
-
-const formOffsetsDiff = document.getElementById('formOffsetsDiff');
-const inputOffsetsDiff = document.getElementById('inputOffsetsDiff');
-const valueOffsetsDiff = document.getElementById('valueOffsetsDiff');
-const resetOffsetsDiffButton = document.getElementById('resetOffsetsDiffButton');
+	    if (reset) {
+            reset.addEventListener('click', (event) => {
+                event.preventDefault();
+                sendNumberCharacteristic(input.id, input.defaultValue);
+                form.reset();
+                value.innerHTML = input.defaultValue;
+            });
+        }
+});
 
 const latestValueSent = document.getElementById('valueSent');
 const bleStateContainer = document.getElementById('bleState');
 
 const debounceDelay = 300;
-var switchNumber = 0;
+//var switchNumber = 0;
 
 //Define BLE Device Specs
 var deviceName ='AnimARTrix Playground';
@@ -128,34 +99,6 @@ function ab2str(buf) {
     return String.fromCharCode.apply(null, new Uint8Array(buf));
 }
 
-// Debounce sliders
-
-    const debounce = (inputID, inputValue) => {
-        let timer;
-        return (inputID, inputValue) =>{
-            clearTimeout(timer);
-            timer = setTimeout(() => {
-                sendNumberCharacteristic(inputID, inputValue);
-            }, debounceDelay);
-        };
-    };
-
-    const debouncedSpeed = debounce(inputSpeed.id, inputSpeed.value);
-	const debouncedBrightness = debounce(inputBrightness.id, inputBrightness.value);
-	const debouncedColorOrder = debounce(inputColorOrder.id, inputColorOrder.value);
-    const debouncedRatiosBase = debounce(inputRatiosBase.id, inputRatiosBase.value);
-    const debouncedRatiosDiff = debounce(inputRatiosDiff.id, inputRatiosDiff.value);
-    const debouncedOffsetsBase = debounce(inputOffsetsBase.id, inputOffsetsBase.value);
-    const debouncedOffsetsDiff = debounce(inputOffsetsDiff.id, inputOffsetsDiff.value);
-    const debouncedScale = debounce(inputScale.id, inputScale.value);
-    const debouncedAngle = debounce(inputAngle.id, inputAngle.value);
-	const debouncedRadiusA = debounce(inputRadiusA.id, inputRadiusA.value);
-	const debouncedRadiusB = debounce(inputRadiusB.id, inputRadiusB.value);
-    const debouncedZ = debounce(inputZ.id, inputZ.value);
-	const debouncedRed = debounce(inputRed.id, inputRed.value);
-	const debouncedGreen = debounce(inputGreen.id, inputGreen.value);
-	const debouncedBlue = debounce(inputBlue.id, inputBlue.value);
-
 // Create a send buffer for the NumberCharacteristic
 
 function sendNumberCharacteristic(inputID, inputValue) {
@@ -168,22 +111,18 @@ function sendNumberCharacteristic(inputID, inputValue) {
         writeNumberCharacteristic(sendBuffer);
 }
 
-function inputSwitcher(receivedID) {
-    if (receivedID == "inputSpeed") {switchNumber = 1;};
-    if (receivedID == "inputBrightness") {switchNumber = 2;};
-    if (receivedID == "inputColorOrder") {switchNumber = 3;};
-    if (receivedID == "inputRatiosBase") {switchNumber = 4;};
-    if (receivedID == "inputRatiosDiff") {switchNumber = 5;};
-    if (receivedID == "inputOffsetsBase") {switchNumber = 6;};
-    if (receivedID == "inputOffsetsDiff") {switchNumber = 7;};
-    if (receivedID == "inputScale") {switchNumber = 8;};
-    if (receivedID == "inputAngle") {switchNumber = 9;};
-    if (receivedID == "inputRadiusA") {switchNumber = 10;};
-    if (receivedID == "inputRadiusB") {switchNumber = 11;};
-    if (receivedID == "inputZ") {switchNumber = 12;};
-    if (receivedID == "inputRed") {switchNumber = 13;};
-    if (receivedID == "inputGreen") {switchNumber = 14;};
-    if (receivedID == "inputBlue") {switchNumber = 15;};
+
+// handler for any incoming BLE update:
+
+function applyReceivedById(receivedDoc) {
+  const ctrl = controlsById[receivedDoc.id];
+  if (!ctrl) {
+    console.warn('Unknown parameter id:', receivedDoc.id);
+    return;
+  }
+  ctrl.input.value     	 = receivedDoc.value;
+  ctrl.value.innerHTML   = receivedDoc.value;
+
 }
 
 // ADD EVENT LISTENERS *************************************************************
@@ -219,153 +158,6 @@ function inputSwitcher(receivedID) {
         }
     });
 
-// Sliders
-
-    formSpeed.addEventListener('input', () => {
-        debouncedSpeed(inputSpeed.id, inputSpeed.value);
-    });
-
-    formBrightness.addEventListener('input', () => {
-        debouncedBrightness(inputBrightness.id, inputBrightness.value);
-    });
-
-    formColorOrder.addEventListener('input', () => {
-        debouncedColorOrder(inputColorOrder.id, inputColorOrder.value);
-    });
-
-    formRed.addEventListener('input', () => {
-        debouncedRed(inputRed.id, inputRed.value);
-    });
-
-    formGreen.addEventListener('input', () => {
-        debouncedAngle(inputGreen.id, inputGreen.value);
-    });
-
-    formBlue.addEventListener('input', () => {
-        debouncedBlue(inputBlue.id, inputBlue.value);
-    });
-
-    formScale.addEventListener('input', () => {
-        debouncedScale(inputScale.id, inputScale.value);
-    });
-
-    formAngle.addEventListener('input', () => {
-        debouncedAngle(inputAngle.id, inputAngle.value);
-    });
-
-    formRadiusA.addEventListener('input', () => {
-        debouncedRadiusA(inputRadiusA.id, inputRadiusA.value);
-    });
-
-    formRadiusB.addEventListener('input', () => {
-        debouncedRadiusB(inputRadiusB.id, inputRadiusB.value);
-    });
-
-    formZ.addEventListener('input', () => {
-        debouncedZ(inputZ.id, inputZ.value);
-    });
-
-    formRatiosBase.addEventListener('input', () => {
-        debouncedRatiosBase(inputRatiosBase.id, inputRatiosBase.value);
-    });
-
-    formRatiosDiff.addEventListener('input', () => {
-        debouncedRatiosDiff(inputRatiosDiff.id, inputRatiosDiff.value);
-    });
-
-    formOffsetsBase.addEventListener('input', () => {
-        debouncedOffsetsBase(inputOffsetsBase.id, inputOffsetsBase.value);
-    });
-
-    formOffsetsDiff.addEventListener('input', () => {
-        debouncedOffsetsDiff(inputOffsetsDiff.id, inputOffsetsDiff.value);
-    });
-
-
-// Reset sliders to default values
-
-    resetSpeedButton.addEventListener('click', (event) => {
-        event.preventDefault();
-        sendNumberCharacteristic(inputSpeed.id, inputSpeed.defaultValue);
-        formSpeed.reset();
-    });
-
-    resetScaleButton.addEventListener('click', (event) => {
-        event.preventDefault();
-        sendNumberCharacteristic(inputScale.id, inputScale.defaultValue)
-        formScale.reset();
-    });
-	
-    resetRadiusAButton.addEventListener('click', (event) => {
-        event.preventDefault();
-        sendNumberCharacteristic(inputRadiusA.id, inputRadiusA.defaultValue);
-        formRadiusA.reset();
-
-    });
-
-    resetRadiusBButton.addEventListener('click', (event) => {
-        event.preventDefault();
-        sendNumberCharacteristic(inputRadiusB.id, inputRadiusB.defaultValue);
-        formRadiusB.reset();
-
-    });
-	
-    resetAngleButton.addEventListener('click', (event) => {
-        event.preventDefault();
-        sendNumberCharacteristic(inputAngle.id, inputAngle.defaultValue);
-        formAngle.reset();
-
-    });
-	
-    resetZButton.addEventListener('click', (event) => {
-        event.preventDefault();
-        sendNumberCharacteristic(inputZ.id, inputZ.defaultValue);
-        formZ.reset();
-
-    });
-	
-    resetRatiosBaseButton.addEventListener('click', (event) => {
-        event.preventDefault();
-        sendNumberCharacteristic(inputRatiosBase.id, inputRatiosBase.defaultValue);
-        formRatiosBase.reset();
-
-    });
-	
-    resetRatiosDiffButton.addEventListener('click', (event) => {
-        event.preventDefault();
-        sendNumberCharacteristic(inputRatiosDiff.id, inputRatiosDiff.defaultValue);
-        formRatiosDiff.reset();
-    });
-	
-    resetOffsetsBaseButton.addEventListener('click', (event) => {
-        event.preventDefault();
-        sendNumberCharacteristic(inputOffsetsBase.id, inputOffsetsBase.defaultValue);
-        formOffsetsBase.reset();
-    });
-	
-    resetOffsetsDiffButton.addEventListener('click', (event) => {
-        event.preventDefault();
-        sendNumberCharacteristic(inputOffsetsDiff.id, inputOffsetsDiff.defaultValue);
-        formOffsetsDiff.reset();
-    });
-	
-    resetRedButton.addEventListener('click', (event) => {
-        event.preventDefault();
-        sendNumberCharacteristic(inputRed.id, inputRed.defaultValue);
-        formRed.reset();
-    });
-	
-    resetGreenButton.addEventListener('click', (event) => {
-        event.preventDefault();
-        sendNumberCharacteristic(inputGreen.id, inputGreen.defaultValue);
-        formGreen.reset();
-    });
-	
-	resetBlueButton.addEventListener('click', (event) => {
-        event.preventDefault();
-        sendNumberCharacteristic(inputBlue.id, inputBlue.defaultValue);
-        formBlue.reset();
-    });
 
 // BLE CONNECTION *******************************************************************************
 
@@ -415,7 +207,6 @@ function connectToDevice(){
                 buttonCharacteristicFound = characteristic;
                 characteristic.addEventListener('characteristicvaluechanged', handleButtonCharacteristicChange);
                 characteristic.startNotifications();				
-                //return characteristic.readValue();
                 })
 
             service.getCharacteristic(CheckboxCharacteristic)
@@ -423,7 +214,6 @@ function connectToDevice(){
                 checkboxCharacteristicFound = characteristic;
                 characteristic.addEventListener('characteristicvaluechanged', handleCheckboxCharacteristicChange);
                 characteristic.startNotifications();				
-                //return characteristic.readValue();
                 })
 
             service.getCharacteristic(NumberCharacteristic)
@@ -431,9 +221,9 @@ function connectToDevice(){
                 numberCharacteristicFound = characteristic;
                 characteristic.addEventListener('characteristicvaluechanged', handleNumberCharacteristicChange);
                 characteristic.startNotifications();				
-                //return characteristic.readValue();
                 })
     })
+     
 }
 
 // DISCONNECT FUNCTIONS ************************************************************
@@ -474,27 +264,9 @@ function handleNumberCharacteristicChange(event){
     //console.log("Number received: ", changeReceived);
     const receivedDoc = JSON.parse(changeReceived);
     console.log("Server receipt: ",receivedDoc.id," - ",receivedDoc.value);
-    
-    inputSwitcher(receivedDoc.id)
 
-    switch (switchNumber) {
-        case 1:    valueSpeed.innerHTML = receivedDoc.value; break;
-        case 2:    valueBrightness.innerHTML = receivedDoc.value; break;
-        case 3:    valueColorOrder.innerHTML = receivedDoc.value; break;   
-        case 4:    valueRatiosBase.innerHTML = receivedDoc.value; break;
-        case 5:    valueRatiosDiff.innerHTML = receivedDoc.value; break;   
-        case 6:    valueOffsetsBase.innerHTML = receivedDoc.value; break;
-        case 7:    valueOffsetsDiff.innerHTML = receivedDoc.value; break;
-        case 8:    valueScale.innerHTML = receivedDoc.value; break;
-        case 9:    valueAngle.innerHTML = receivedDoc.value; break;
-        case 10:    valueRadiusA.innerHTML = receivedDoc.value; break;
-        case 11:    valueRadiusB.innerHTML = receivedDoc.value; break;
-        case 12:    valueZ.innerHTML = receivedDoc.value; break;
-        case 13:    valueRed.innerHTML = receivedDoc.value; break;
-        case 14:    valueGreen.innerHTML = receivedDoc.value; break;
-        case 15:    valueBlue.innerHTML = receivedDoc.value; break;
-        default:   console.log("No valid switchNumber found. Received ID: ",receivedDoc.id);
-    }
+	applyReceivedById(receivedDoc);
+
 }
 
 // WRITE TO CHARACTERISTIC FUNCTIONS *************************************************

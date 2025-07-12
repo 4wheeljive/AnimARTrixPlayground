@@ -220,8 +220,6 @@ void setup() {
 
     fxEngine.addFx(myAnimartrix);
 
-    //myAnimartrix.fxSet(5);
-
     #ifndef SCREEN_TEST
         bleSetup();
     #endif
@@ -237,14 +235,22 @@ void loop() {
     }
     else {
 
-        FastLED.setBrightness(BRIGHTNESS);
-        fxEngine.setSpeed(timeSpeed);
-        //myAnimartrix.fxSet(fxIndex);
+        FastLED.setBrightness(adjustBrightness);
+        fxEngine.setSpeed(1);
+        //fxEngine.setSpeed(timeSpeed);
  
+        /*
         if (colorOrderChanged){
             setColorOrder(colorOrder);
             colorOrderChanged = false;
         }
+        */
+
+        static auto lastColorOrder = -1;
+        if (adjustColorOrder != lastColorOrder) {
+            setColorOrder(adjustColorOrder);
+            lastColorOrder = adjustColorOrder;
+        } 
 
         static auto lastFxIndex = -1;
         if (fxIndex != lastFxIndex) {
