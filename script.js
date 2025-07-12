@@ -15,6 +15,9 @@ const experimentSM1Button = document.getElementById('experimentSM1Button');
 const offButton = document.getElementById('offButton');
 const valueAnimation = document.getElementById('valueAnimation');
 
+//const formResetAll = document.getElementById('formResetAll');
+//const buttonResetAll = document.getElementById('buttonResetAll');
+
 const rotateAnimationCheckbox = document.getElementById('rotateAnimationCheckbox');
 
 const parameters = [ 'Brightness', 'Speed', 'ColorOrder', 'Red', 'Green', 'Blue', 'Scale', 'Angle', 'RadiusA', 'RadiusB', 'Z', 'RatiosBase', 'RatiosDiff', 'OffsetsBase', 'OffsetsDiff' ];
@@ -65,7 +68,6 @@ const latestValueSent = document.getElementById('valueSent');
 const bleStateContainer = document.getElementById('bleState');
 
 const debounceDelay = 300;
-//var switchNumber = 0;
 
 //Define BLE Device Specs
 var deviceName ='AnimARTrix Playground';
@@ -124,6 +126,17 @@ function applyReceivedById(receivedDoc) {
   ctrl.value.innerHTML   = receivedDoc.value;
 
 }
+/*
+function resetAll() {
+    parameters.forEach((parameter) => {
+        if (parameter.input.value != parameter.input.defaultValue) {
+            sendNumberCharacteristic(parameter.input.id, parameter.input.defaultValue);
+            parameter.value.innerHTML = parameter.input.defaultValue;
+        }
+    });
+ }
+    */
+
 
 // ADD EVENT LISTENERS *************************************************************
 
@@ -157,6 +170,8 @@ function applyReceivedById(receivedDoc) {
             writeCheckboxCharacteristic(101); 
         }
     });
+
+//	buttonResetAll.addEventListener('click', (event) => resetAll());
 
 
 // BLE CONNECTION *******************************************************************************
