@@ -20,7 +20,7 @@ const valueAnimation = document.getElementById('valueAnimation');
 
 const rotateAnimationCheckbox = document.getElementById('rotateAnimationCheckbox');
 
-const parameters = [ 'Brightness', 'Speed', 'ColorOrder', 'Red', 'Green', 'Blue', 'Scale', 'Angle', 'RadiusA', 'RadiusB', 'Z', 'RatiosBase', 'RatiosDiff', 'OffsetsBase', 'OffsetsDiff' ];
+const parameters = [ 'Brightness', 'Speed', 'ColorOrder', 'Red', 'Green', 'Blue', 'Scale', 'Distance', 'Angle', 'RadiusA', 'RadiusB', 'Z', 'RatiosBase', 'RatiosDiff', 'OffsetsBase', 'OffsetsDiff' ];
 
 const controls = {};  
 const controlsById = {};
@@ -112,7 +112,6 @@ function sendNumberCharacteristic(inputID, inputValue) {
         sendBuffer = str2ab(sendString);        
         writeNumberCharacteristic(sendBuffer);
 }
-
 
 // handler for any incoming BLE update:
 

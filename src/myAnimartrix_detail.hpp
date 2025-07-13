@@ -319,7 +319,7 @@ class ANIMartRIX {
 
     void calculate_oscillators(oscillators &timings) {
 
-        // global anaimation speed
+        // global animation speed
         double runtime = getTime() * timings.master_speed * speed_factor; 
 
         for (int i = 0; i < num_oscillators; i++) {
@@ -524,12 +524,16 @@ class ANIMartRIX {
         ANIMARTRIX_PRINT(" °C\n");
     }
 
+
+
+
+
     //********************************************************************************************************************
     // EFFECTS ***********************************************************************************************************
 
     void Polar_Waves() { // nice one
 
-        get_ready();
+        //get_ready();
 
         timings.master_speed = 0.5 * (double)adjustSpeed;
 
@@ -542,7 +546,7 @@ class ANIMartRIX {
         for (int x = 0; x < num_x; x++) {
             for (int y = 0; y < num_y; y++) {
 
-                animation.dist = (distance[x][y]);
+                animation.dist = distance[x][y];
                 animation.angle =
                     polar_theta[x][y] * (double)adjustAngle
                     - animation.dist * 0.1
@@ -588,7 +592,7 @@ class ANIMartRIX {
 
     void Spiralus() {
 
-        get_ready();
+        //get_ready();
 
         timings.master_speed = 0.0011 * (double)adjustSpeed;
         
@@ -615,7 +619,7 @@ class ANIMartRIX {
         for (int x = 0; x < num_x; x++) {
             for (int y = 0; y < num_y; y++) {
 
-                animation.dist = distance[x][y];
+                animation.dist = distance[x][y] ;
                 animation.angle = 
                     2 * polar_theta[x][y] * (double)adjustAngle
                     + move.noise_angle[5] 
@@ -659,7 +663,7 @@ class ANIMartRIX {
 
     void Caleido1() {
 
-        get_ready();
+        //get_ready();
 
         timings.master_speed = 0.003 * (double)adjustSpeed;
         
@@ -736,7 +740,7 @@ class ANIMartRIX {
 
     void Waves() {
 
-        get_ready();
+        //get_ready();
 
         timings.master_speed = 0.01 * (double)adjustSpeed; 
         
@@ -757,7 +761,7 @@ class ANIMartRIX {
                 animation.scale_x = 0.1 * (double)adjustScale;
                 animation.scale_y = 0.1 * (double)adjustScale;
                 animation.scale_z = 0.1 * (double)adjustScale;
-                animation.dist = distance[x][y];
+                animation.dist = distance[x][y] ;
                 animation.offset_y = 0;
                 animation.offset_x = 0;
                 animation.z = (2 * distance[x][y] - move.linear[0]) * (double)adjustZ;
@@ -768,7 +772,6 @@ class ANIMartRIX {
                 animation.z = (2 * distance[x][y] - move.linear[1]) * (double)adjustZ;
                 float show2 = render_value(animation);
 
-                // colormapping
                 pixel.red = show1;
                 pixel.green = 0;
                 pixel.blue = show2;
@@ -784,11 +787,10 @@ class ANIMartRIX {
 
     void Chasing_Spirals() {
 
-        get_ready();
+        //get_ready();
 
         timings.master_speed = 0.01 * (double)adjustSpeed; 
 
-        // speed ratios for the oscillators, higher values = faster transitions
         timings.ratio[0] = 0.1 +  (double)adjustRatiosBase/10;
         timings.ratio[1] = 0.13 + (double)adjustRatiosBase/10 * (double)adjustRatiosDiff ;
         timings.ratio[2] = 0.16 + (double)adjustRatiosBase/10 * 2 * (double)adjustRatiosDiff;
@@ -797,18 +799,16 @@ class ANIMartRIX {
         timings.offset[2] = 20 * (double)adjustOffsetsBase * (double)adjustOffsetsDiff;
         timings.offset[3] = 30 * (double)adjustOffsetsBase * 2 * (double)adjustOffsetsDiff;
 
-        // get linear movers and oscillators going
         calculate_oscillators(timings); 
 
         for (int x = 0; x < num_x; x++) {
             for (int y = 0; y < num_y; y++) {
 
-                // describe and render animation layers
                 animation.angle =
                     3 * polar_theta[x][y] * (double)adjustAngle
                     + move.radial[0] 
                     - distance[x][y] / 3;
-                animation.dist = distance[x][y];
+                animation.dist = distance[x][y] ;
                 animation.scale_z = .1 * (double)adjustScale;
                 animation.scale_y = .1 * (double)adjustScale;
                 animation.scale_x = .1 * (double)adjustScale;
@@ -822,7 +822,6 @@ class ANIMartRIX {
                     3 * polar_theta[x][y] * (double)adjustAngle
                     + move.radial[1] 
                     - distance[x][y] / 3;
-                //animation.dist = distance[x][y];
                 animation.offset_x = move.linear[1];
                 float show2 = render_value(animation);
 
@@ -830,11 +829,9 @@ class ANIMartRIX {
                     3 * polar_theta[x][y] * (double)adjustAngle
                     + move.radial[2] 
                     - distance[x][y] / 3;
-                //animation.dist = distance[x][y];
                 animation.offset_x = move.linear[2];
                 float show3 = render_value(animation);
 
-                // colormapping
                 float radius = radial_filter_radius + (double)adjustRadiusA;
                 float radial_filter = (radius + (double)adjustRadiusB - distance[x][y]) / ( radius + (double)adjustRadiusB);
 
@@ -853,7 +850,7 @@ class ANIMartRIX {
 
     void Rings() {
 
-        get_ready();
+        //get_ready();
 
         timings.master_speed = 0.01 * (double)adjustSpeed;
 
@@ -874,18 +871,16 @@ class ANIMartRIX {
                 animation.scale_x = 0.2 * (double)adjustScale;
                 animation.scale_y = 0.2 * (double)adjustScale;
                 animation.scale_z = 1 * (double)adjustScale;
-                animation.dist = distance[x][y];
+                animation.dist = distance[x][y] ;
                 animation.offset_y = -move.linear[0];
                 animation.offset_x = 0;
                 float show1 = render_value(animation);
 
                 animation.angle = 10;
-                //animation.dist = distance[x][y];
                 animation.offset_y = -move.linear[1];
                 float show2 = render_value(animation);
 
                 animation.angle = 12;
-                //animation.dist = distance[x][y];
                 animation.offset_y = -move.linear[2];
                 float show3 = render_value(animation);
         
@@ -904,7 +899,7 @@ class ANIMartRIX {
 
      void Complex_Kaleido_6() {
 
-        get_ready();
+        //get_ready();
 
         timings.master_speed = 0.01 * (double)adjustSpeed; 
 
@@ -921,7 +916,7 @@ class ANIMartRIX {
         for (int x = 0; x < num_x; x++) {
             for (int y = 0; y < num_y; y++) {
 
-                animation.dist = distance[x][y];
+                animation.dist = distance[x][y] ;
                 animation.angle = 
                     16 * polar_theta[x][y] * (double)adjustAngle 
                     + 16 * move.radial[0];
@@ -934,7 +929,6 @@ class ANIMartRIX {
                 animation.low_limit = 0;
                 show1 = render_value(animation);
 
-                animation.dist = distance[x][y];
                 animation.angle = 
                     16 * polar_theta[x][y] * (double)adjustAngle
                     + 16 * move.radial[1];
@@ -966,7 +960,7 @@ class ANIMartRIX {
 
     void Water() {
 
-        get_ready();
+        //get_ready();
 
         timings.master_speed = 0.037 * (double)adjustSpeed;
 
@@ -985,8 +979,10 @@ class ANIMartRIX {
 
                 animation.dist =
                     distance[x][y] +
-                    4 * FL_SIN_F(move.directional[5] * PI + (float)x / 2) +
-                    4 * FL_COS_F(move.directional[6] * PI + float(y) / 2);
+                    //4 * FL_SIN_F(move.directional[5] * PI + (float)x / 2) +      ?????
+                    //4 * FL_COS_F(move.directional[6] * PI + float(y) / 2);       ?????
+                    4 * FL_SIN_F(move.directional[5] * PI ) +
+                    4 * FL_COS_F(move.directional[6] * PI );
                 animation.angle = 1 * polar_theta[x][y] * double(adjustAngle) ;
                 animation.z = 5 * (double)adjustZ;
                 animation.scale_x = 0.06 * (double)adjustScale;
@@ -1058,7 +1054,7 @@ class ANIMartRIX {
     
     void SM1() { // nice one
 
-        get_ready();
+        //get_ready();
 
         timings.master_speed = 0.02 * (double)adjustSpeed;
 
@@ -1086,7 +1082,6 @@ class ANIMartRIX {
                 animation.offset_y = 150 * move.directional[1];
                 float show1 = render_value(animation);
 
-                animation.dist = distance[x][y];
                 animation.angle = 
                     polar_theta[x][y] * double(adjustAngle) 
                     + 4 * move.noise_angle[1];
@@ -1098,7 +1093,6 @@ class ANIMartRIX {
                 animation.offset_y = 150 * move.directional[2];
                 float show2 = render_value(animation);
 
-                animation.dist = distance[x][y];
                 animation.angle = 
                     polar_theta[x][y] * double(adjustAngle) 
                     + 5 * move.noise_angle[2];
@@ -1110,7 +1104,6 @@ class ANIMartRIX {
                 animation.offset_y = 150 * move.directional[3];
                 float show3 = render_value(animation);
 
-                animation.dist = distance[x][y];
                 animation.angle = 
                     polar_theta[x][y] * double(adjustAngle) 
                     + 5 * move.noise_angle[3];
@@ -1122,7 +1115,6 @@ class ANIMartRIX {
                 animation.offset_y = 150 * move.directional[4];
                 float show4 = render_value(animation);
 
-                animation.dist = distance[x][y];
                 animation.angle = 
                     polar_theta[x][y] * double(adjustAngle) 
                     + 5 * move.noise_angle[4];
@@ -1139,14 +1131,13 @@ class ANIMartRIX {
                 pixel.blue = show5 * (double)adjustBlue;
 
                 pixel = rgb_sanity_check(pixel);
-                // leds[xyMap(x, y)] = CRGB(pixel.red, pixel.green, pixel.blue);
-                setPixelColorInternal(x, y, pixel);
-
-                setPixelColorInternal((num_x - 1) - x, y, pixel);
-                setPixelColorInternal((num_x - 1) - x, (num_y - 1) - y, pixel);
+                //leds[xyMap(x, y)] = CRGB(pixel.red, pixel.green, pixel.blue);
+                //setPixelColorInternal(x, y, pixel);
+                //setPixelColorInternal((num_x - 1) - x, y, pixel);
+                //setPixelColorInternal((num_x - 1) - x, (num_y - 1) - y, pixel);
                 setPixelColorInternal(x, (num_y - 1) - y, pixel);
 
-                // Does it end up only doing the last of these ^^^? 
+
             }
         }
         // show_frame();
@@ -1156,7 +1147,7 @@ class ANIMartRIX {
 
     void Module_Experiment10() {
 
-        get_ready();
+        //get_ready();
 
         timings.master_speed = 0.01 * (double)adjustSpeed; 
 
@@ -1218,8 +1209,8 @@ class ANIMartRIX {
                 show2 = render_value(animation);
 
                 animation.dist =
-                    5 + distance[x][y] +
-                    5 * FL_SIN_F(0.23 * distance[x][y] 
+                    5 + distance[x][y]
+                    + 5 * FL_SIN_F(0.23 * distance[x][y] 
                     - move.radial[5]);
                 animation.angle = 
                     polar_theta[x][y] * (double)adjustAngle 
@@ -1236,8 +1227,7 @@ class ANIMartRIX {
 
                 show4 = colordodge(show1, show2);
 
-                float rad = FL_SIN_F(PI / 2 +
-                                 distance[x][y] / 14); // better radial filter?!
+                float rad = FL_SIN_F(PI / 2 + distance[x][y] / 14); // better radial filter?!
 
                 /*
                 pixel.red    = show1;
@@ -1264,9 +1254,9 @@ class ANIMartRIX {
 
     void Module_Experiment1() {
 
-        get_ready();
+        //get_ready();
 
-        timings.master_speed = 0.03 * (double)adjustSpeed       ;
+        timings.master_speed = 0.03 * (double)adjustSpeed;
 
         timings.ratio[0] = 0.0025 + (double)adjustRatiosBase/100; 
         timings.ratio[1] = 0.0027 + (double)adjustRatiosBase/100 * (double)adjustRatiosDiff;

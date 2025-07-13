@@ -54,7 +54,7 @@ uint8_t dummy = 1;
    UISlider adjustRadiusB("Radius", 0, -10, 10, 1);  // added/subtracted
 
    UISlider adjustAngle("Angle", 1, .1, 10, -1); //multiplied
-
+   UISlider adjustDistance("Distance", 1, .1, 10, -1); //multiplied
    UISlider adjustZ("Magic Z", 1, .1, 2, -1); //multiplied
 
    UISlider adjustRed("Red", 1, .1, 10, -1);  //multiplied 
@@ -84,6 +84,8 @@ uint8_t dummy = 1;
 
    float adjustRadiusA = 0.0f; 
    float adjustRadiusB = 0.0f;
+
+   float adjustDistance = 1.f;
 
    float adjustAngle = 1.f; 
 
@@ -154,6 +156,7 @@ void sendReceiptNumber(String receivedID, float receivedValue) {
 
 void processNumber(String receivedID, float receivedValue ) {
 
+   if (receivedID == "inputBrightness") {adjustBrightness = receivedValue;};
    if (receivedID == "inputSpeed") {adjustSpeed = receivedValue;};
    if (receivedID == "inputColorOrder") {adjustColorOrder = receivedValue;};
    if (receivedID == "inputRatiosBase") {adjustRatiosBase = receivedValue;};
@@ -162,6 +165,7 @@ void processNumber(String receivedID, float receivedValue ) {
    if (receivedID == "inputOffsetsDiff") {adjustOffsetsDiff = receivedValue;};
    if (receivedID == "inputScale") {adjustScale = receivedValue;};	
    if (receivedID == "inputAngle") {adjustAngle = receivedValue;};	
+   if (receivedID == "inputDistance") {adjustDistance = receivedValue;};
    if (receivedID == "inputRadiusA") {adjustRadiusA = receivedValue;};
    if (receivedID == "inputRadiusB") {adjustRadiusB = receivedValue;};	
    if (receivedID == "inputZ") {adjustZ = receivedValue;};	
