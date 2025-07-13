@@ -1,9 +1,34 @@
 This is a test "playground" for adding user controls to selected animations included in FastLED's Animartrix library:
 https://github.com/FastLED/FastLED/tree/master/examples/Animartrix
 
-
-
 This is all very rough, experimental, etc.
+
+Background
+
+
+Basic Framework
+- The src folder here includes custom "myAnimartrix" versions of the standard /fx/2d/animartrix.hpp and /fx/2d/animartrix_detail.hpp files
+- There are currently about 10 animations set up in the custom .hpp files (selected from the standard ~55 or so)
+- There are currently about 15 variables set up for the user to control various parameters within each of the animations
+- The playground can be used in two different ways:
+  - To drive FastLED's WASM compiler/browser with built-in FastLED UI controls
+  - To drive a physical LED panel using web BLE and a custom UI        
+
+
+Uses
+- To allow users to explore/create custom animations for their own projects
+- To allow for "guest" access control of a display (e.g., at a party) through BLE with a mobile device
+
+TODO
+- Create framework for saving and retrieving animation presets
+- Fine-tune parameter:
+  - functions (how they affect an animation)
+  - values (ranges/steps/etc.)
+  - control (e.g., add oscilation?) 
+
+
+
+The Controls
 
 The sliders are a handful of parameter variables that are included in various combinations and configurations in each of the Animation functions in myAnimartrix_detail.hpp.
 
