@@ -13,20 +13,22 @@ BASIC FRAMEWORK:
 
 LED PANEL MODE:
     
-        1.  Ensure your MCU is BLE capable and enabled. 
+    1.  Ensure your MCU is BLE capable and enabled. 
 
-        2.  Comment/uncomment the SCREEN_TEST defs in main.cpp as follows:
+    2.  Comment/uncomment the SCREEN_TEST defs in main.cpp as follows:
 
-            //#define SCREEN_TEST
-            #undef SCREEN_TEST
+        //#define SCREEN_TEST
+        #undef SCREEN_TEST
 
-        3.  Load https://4wheeljive.github.io/AnimARTrixPlayground/ from a Web BLE-capable browser.
+    3.  
+    
+    4.  Load https://4wheeljive.github.io/AnimARTrixPlayground/ from a Web BLE-capable browser.
 
-            NOTE:   On iOS devices, standard browsers (e.g., Safari, Chrome) do not currently support Web BLE.
-                    I've had success using the Bluefy browser:
-                    https://apps.apple.com/us/app/bluefy-web-ble-browser/id1492822055
-                    If Bluefy doesn't connect to your device on its own, the nRF Connect app might help:
-                    https://apps.apple.com/us/app/nrf-connect-for-mobile/id1054362403
+        NOTE:   On iOS devices, standard browsers (e.g., Safari, Chrome) do not currently support Web BLE.
+                I've had success using the Bluefy browser:
+                https://apps.apple.com/us/app/bluefy-web-ble-browser/id1492822055
+                If Bluefy doesn't connect to your device on its own, the nRF Connect app might help:
+                https://apps.apple.com/us/app/nrf-connect-for-mobile/id1054362403
 
 When running in the actual LED panel mode, this sketch can accommodate two different setups, 
 selected by defining/undefining BIG_BOARD in main.cpp as follows:
@@ -40,12 +42,14 @@ When BIG_BOARD is undefined:
 - Custom LED mapping may be unnecessary
 
 FASTLED COMPILER MODE:
-NOTE:  I have not used the Screen Test/ WASM functionality since very early development of the playground. Certain variables/UI elements may be broken/missing/disconnected. Known current/potential issues for using the compiler:
+
+I have not used the Screen Test/ WASM functionality since very early development of the playground. Certain variables/UI elements may be broken/missing/disconnected. Known current/potential issues for using the compiler:
   - The UINumberField controls for fxIndex and colorOrder were producing floats. It seemed to work better for me for those paramaters to be uint8_t, so that's how everything else is currently set up.
   - I have not updated the min/max/step values for the UISliders to reflect the current settings I have in the index.html file for BLE control
 
 
 PARAMETER CONTROLS
+
 Please see the Wiki (https://github.com/4wheeljive/AnimARTrixPlayground/wiki) for a basic explanation of what the parameter sliders do. 
 
 Also, as an early-stage, poor-man's "preset" system, the Wiki includes a page with screenshots of some parameter combinations that produced cool results.     
@@ -67,5 +71,6 @@ TODO
 
 
 DISCUSSION
+
 Since there is some apparently-unsolvable problem with my Reddit account, I've enabled Discussions for this repo (https://github.com/4wheeljive/AnimARTrixPlayground/discussions) so that I can, you know, participate like a normal human.
 

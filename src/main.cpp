@@ -69,8 +69,8 @@ When BIG_BOARD is undefined:
 
 //*********************************************
 
-#define BIG_BOARD
-//#undef BIG_BOARD
+//#define BIG_BOARD
+#undef BIG_BOARD
 
 //#define SCREEN_TEST
 #undef SCREEN_TEST
@@ -104,7 +104,6 @@ When BIG_BOARD is undefined:
 
     #ifndef BIG_BOARD
         #include <matrixMap_22x22.h>
-        //#include <matrixMap_14x19.h>    
     #else
         #include <matrixMap_32x48_3pin.h>    
     #endif
@@ -131,35 +130,29 @@ using namespace fl;
 
 #ifndef SCREEN_TEST
     
-    // Custom XYMap mappings
+    // Set ther LED mapping by selecting (comment/uncomment) one of the following:
 
-        uint16_t ledNum = 0;
-  /*
-        extern const uint16_t loc2indSerpByRow[HEIGHT][WIDTH] PROGMEM;
-        extern const uint16_t loc2indProgByRow[HEIGHT][WIDTH] PROGMEM;
-        extern const uint16_t loc2indSerp[NUM_LEDS] PROGMEM;
-        extern const uint16_t loc2indProg[NUM_LEDS] PROGMEM;
-        extern const uint16_t loc2indProgByColBottomUp[WIDTH][HEIGHT] PROGMEM;
+        // For a generic mapping
+        XYMap myXYmap(WIDTH, HEIGHT, true);  
 
-      
-        uint16_t XY(uint8_t x, uint8_t y) {
-            ledNum = loc2indProgByColBottomUp[x][y];
-            return ledNum;
-        }
-        */
+        // For a custom mapping
+        //XYMap myXYmap = XYMap::constructWithUserFunction(WIDTH, HEIGHT, myXYFunction);
 
-        uint16_t myXYFunction(uint16_t x, uint16_t y, uint16_t width, uint16_t height) {
-            width = WIDTH;
-            height = HEIGHT;
-            if (x >= width || y >= height) return 0;
-            ledNum = loc2indProgByRow[y][x];
-            return ledNum;
-        }
+        // Custom XYMap mapping
 
-        uint16_t myXYFunction(uint16_t x, uint16_t y, uint16_t width, uint16_t height);
+            uint16_t ledNum = 0;
+    
+            extern const uint16_t loc2indProgByRow[HEIGHT][WIDTH] PROGMEM;
+    
+            uint16_t myXYFunction(uint16_t x, uint16_t y, uint16_t width, uint16_t height) {
+                width = WIDTH;
+                height = HEIGHT;
+                if (x >= width || y >= height) return 0;
+                ledNum = loc2indProgByRow[y][x];
+                return ledNum;
+            }
 
-        XYMap myXYmap = XYMap::constructWithUserFunction(WIDTH, HEIGHT, myXYFunction);
-        //XYMap myXYmap(WIDTH, HEIGHT, true); // use this XYMap instead of one immediately above to bypass custom mapping 
+            uint16_t myXYFunction(uint16_t x, uint16_t y, uint16_t width, uint16_t height);
 
 #else
 
