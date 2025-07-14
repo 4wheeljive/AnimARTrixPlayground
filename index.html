@@ -11,9 +11,9 @@
         <h1>AnimARTrix Playground</h1>
 
     <p class="credits">My personal learning playground for working with FastLED Adapter for the AnimARTrix fx library.
-    Copyright Stefen Petrick 2023. <br>
+    Copyright Stefan Petrick 2023. <br>
     Adapted to C++ by Netmindz 2023. Adapted to FastLED by Zach Vorhies 2024. 
-    For details on the animartrix library and licensing information, see <a href="url">https://github.com/FastLED/FastLED/blob/master/src/fx/2d/animartrix_detail.hpp</a>
+    For details on the AnimARTrix library and licensing information, see <a href="url">https://github.com/FastLED/FastLED/blob/master/src/fx/2d/animartrix_detail.hpp</a>
     </p>
 
 
@@ -226,8 +226,14 @@
                             </span>
                             <span class="td"><button id="resetOffsetsDiff" class="resetButton">&#8634</button></span>
                         </form>
-                
-                        <!--
+                <!--
+                        <form id="formPreset" class="tr">
+                            <span class="td">Preset: </span>    
+                            <span class="td"><input type="text" type="submit" id="inputPreset" name="inputPreset"> </span>
+                            <span id="valuePreset">presetName</span>
+                        </form>
+
+                        
                         <form id="formResetAll" class="tr">
                             <span class="td">Reset All: </span>
                             <span class="td"><button id="buttonResetAll" class="resetButton">&#8634</button></span>
@@ -241,7 +247,8 @@
         <div class="section5">
             <p class="gray-label" ><i>Last value sent: <span id="valueSent"></span></i></p>
         </div>
-    
+
+
     </div>
 
 

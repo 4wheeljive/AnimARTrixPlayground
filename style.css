@@ -36,6 +36,7 @@ button {
     background-color: #000000;
 }
 .wrapper {
+    color: #bebebe;
     text-align: center;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -57,28 +58,10 @@ button {
     grid-column: 2 / 4;
     grid-row-start: 2;
 }
-
 .section5 {
     padding: 5px;
     grid-column: 1 / 4;
 }
-
-.tablegrid {
-    text-align: center;
-    display: grid;
-    grid-template-columns: 2fr 7fr 1fr;
-}
-.column1 {
-   text-align: left;
-}
-.column2 {
-    text-align: center;
-}
-.column3 {
-    text-align: center;
-}
-
-
 DIV.table {
     display:table;
     table-layout: fixed;
@@ -93,23 +76,10 @@ SPAN.td
 {
     display:table-cell; 
 }
-
-.tableColumn1 {
-    width: 20%
-}
-.tableColumn2 {
-    width: 70%
-}
-.tableColumn3 {
-    width: 10%
-}
 input[type=range] {
   width: 75%;
 }
-
-
 .card {
-    color: #bebebe;
     background-color: rgb(36, 36, 36);
     padding: 10px;
 }
@@ -143,7 +113,6 @@ input[type=range] {
 .reading {
     font-size: 1.8rem;
 }
-
 .credits {
     color: #aaaaaa;
     font-size: .8rem;

@@ -15,6 +15,9 @@ Basic Framework
   - To drive a physical LED panel using web BLE and a custom UI        
 
 
+NOTE:  I have not used the Screen Test/ WASM functionality since very early development of the playground. Certain variables/UI elements may be broken/missing.
+
+
 Uses
 - To allow users to explore/create custom animations for their own projects
 - To allow for "guest" access control of a display (e.g., at a party) through BLE with a mobile device
@@ -24,8 +27,8 @@ TODO
 - Fine-tune parameter:
   - functions (how they affect an animation)
   - values (ranges/steps/etc.)
-  - control (e.g., add oscilation?) 
-
+  - control (e.g., add oscilation?)
+- UI feedback/indication of which parameters do/do not affect the current animation 
 
 
 The Controls

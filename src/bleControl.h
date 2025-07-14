@@ -1,9 +1,12 @@
 #pragma once
 
 #include "FastLED.h" 
-#include <ArduinoJson.h> 
+#include <ArduinoJson.h>
 
-/* If you use more than around 4 characteristics, you need to increase numHandles in this file:
+#include "LittleFS.h"
+#define FORMAT_LITTLEFS_IF_FAILED true 
+
+/* If you use more than ~4 characteristics, you need to increase numHandles in this file:
 C:\Users\...\.platformio\packages\framework-arduinoespressif32\libraries\BLE\src\BLEServer.h
 Setting numHandles = 60 has worked for 7 characteristics.  
 */
@@ -26,12 +29,15 @@ uint8_t switchNumber = 1;
 
 String elementID;
 String receivedString;
+String newPreset;
 
 uint8_t dummy = 1;
 
 // UI Elements *************************************************************************************
 
 #ifdef SCREEN_TEST
+
+   //I have not used the Screen Test/ WASM functionality in some time. Certain variables/UI elements may be broken/missing
 
    using namespace fl;
 
@@ -65,6 +71,8 @@ uint8_t dummy = 1;
 
    using namespace ArduinoJson;
 
+   String preset = "default";
+
    uint8_t adjustBrightness = 25;
   
    bool rotateAnimations = false;
@@ -97,6 +105,29 @@ uint8_t dummy = 1;
 
    ArduinoJson::JsonDocument sendDoc;
    ArduinoJson::JsonDocument receivedJSON;
+   ArduinoJson::JsonDocument jsonPreset;
+
+
+   struct Preset {
+      uint8_t pBrightness;
+      float pSpeed;
+      uint8_t pColorOrder;
+      float pRatiosBase;
+      float pRatiosDiff;
+      float pOffsetsBase;
+      float pOffsetsDiff;
+      float pScale;	
+      float pAngle;	
+      float pDistance;
+      float pRadiusA;
+      float pRadiusB;	
+      float pZ;	
+      float pRed;
+      float pGreen;	
+      float pBlue;   
+   };
+
+   Preset preset1;
 
 #endif
 
@@ -107,6 +138,7 @@ BLEServer* pServer = NULL;
 BLECharacteristic* pButtonCharacteristic = NULL;
 BLECharacteristic* pCheckboxCharacteristic = NULL;
 BLECharacteristic* pNumberCharacteristic = NULL;
+BLECharacteristic* pPresetCharacteristic = NULL;
 bool deviceConnected = false;
 bool wasConnected = false;
 
@@ -114,10 +146,12 @@ bool wasConnected = false;
 #define BUTTON_CHARACTERISTIC_UUID     "19b10001-e8f2-537e-4f6c-d104768a1214"
 #define CHECKBOX_CHARACTERISTIC_UUID   "19b10002-e8f2-537e-4f6c-d104768a1214"
 #define NUMBER_CHARACTERISTIC_UUID     "19b10003-e8f2-537e-4f6c-d104768a1214"
+#define PRESET_CHARACTERISTIC_UUID     "19b10004-e8f2-537e-4f6c-d104768a1214"
 
 BLEDescriptor pButtonDescriptor(BLEUUID((uint16_t)0x2902));
 BLEDescriptor pCheckboxDescriptor(BLEUUID((uint16_t)0x2902));
 BLEDescriptor pNumberDescriptor(BLEUUID((uint16_t)0x2902));
+BLEDescriptor pPresetDescriptor(BLEUUID((uint16_t)0x2902));
 
 // CONTROL FUNCTIONS ***************************************************************
 
@@ -129,6 +163,11 @@ void animationAdjust(uint8_t newAnimation) {
       Serial.println(newAnimation);
    }
 }
+
+
+//void loadPreset(String newPreset) {}
+
+
 
 void sendReceiptNumber(String receivedID, float receivedValue) {
    // Prepare the JSON document to send
@@ -154,6 +193,8 @@ void sendReceiptNumber(String receivedID, float receivedValue) {
    }
 }
 
+//void processPreset(String receivedID, String receivedValue) {}
+
 void processNumber(String receivedID, float receivedValue ) {
 
    if (receivedID == "inputBrightness") {adjustBrightness = receivedValue;};
@@ -171,11 +212,63 @@ void processNumber(String receivedID, float receivedValue ) {
    if (receivedID == "inputZ") {adjustZ = receivedValue;};	
    if (receivedID == "inputRed") {adjustRed = receivedValue;};	
    if (receivedID == "inputGreen") {adjustGreen = receivedValue;};	
-   if (receivedID == "inputBlue") {adjustBlue = receivedValue;};	
+   if (receivedID == "inputBlue") {adjustBlue = receivedValue;};
  
    sendReceiptNumber(receivedID, receivedValue);
 
 }
+
+/*
+void loadPreset(String presetName) {
+
+   // Open the applicable file store
+   File configFile = LittleFS.open("/config.json", "r"); // replace "config.json" with "presetName.json")
+   if (!configFile) {
+     Serial.println("Failed to open config file for reading");
+     return;
+   }
+
+   //Extract preset variable data into JSON document
+   DynamicJsonDocument jsonPreset(1024);
+   DeserializationError error = deserializeJson(jsonPreset, configFile);
+   if (error) {
+     Serial.print(F("deserializeJson() failed: "));
+     Serial.println(error.c_str());
+     configFile.close();
+     return;
+   }
+   
+   // Retrieve parameter settings from the JSON document
+   
+
+
+
+
+   // For each parameter with a stored value:
+   if pBrightness
+
+
+         // create a variable that contains the parameterID (e.g., "inputBrightness")  
+         String parameterID = jsonPreset[receivedID];
+         // create a variable that contains the parameter value 
+         float parameterValue = jsonPreset[receivedValue];
+         // send a processNumber request with the applicable arguments
+         processNumber(parameterID, parameterValue);
+   
+
+
+
+
+
+
+   configFile.close();
+
+}
+*/
+
+
+
+
 
 // CALLBACKS ****************************************************************************
 
@@ -305,6 +398,25 @@ class NumberCharacteristicCallbacks : public BLECharacteristicCallbacks {
    }
 };
 
+class PresetCharacteristicCallbacks : public BLECharacteristicCallbacks {
+   void onWrite(BLECharacteristic *characteristic) {
+      
+      String receivedValue = characteristic->getValue();
+      
+      if (receivedValue.length() > 0) {
+      
+         if (debug) {
+            Serial.print("Received value: ");
+            Serial.println(receivedValue);
+         }
+      
+         newPreset = receivedValue;
+
+         //loadPreset(newPreset);
+      }
+   }
+};
+
 //*******************************************************************************************
 
 void bleSetup() {
@@ -345,6 +457,17 @@ void bleSetup() {
    pNumberCharacteristic->setCallbacks(new NumberCharacteristicCallbacks());
    pNumberCharacteristic->setValue(String(dummy).c_str());
    pNumberCharacteristic->addDescriptor(new BLE2902());
+
+      
+   pPresetCharacteristic = pService->createCharacteristic(
+                     PRESET_CHARACTERISTIC_UUID,
+                     BLECharacteristic::PROPERTY_WRITE |
+                     BLECharacteristic::PROPERTY_READ |
+                     BLECharacteristic::PROPERTY_NOTIFY
+                  );
+   pPresetCharacteristic->setCallbacks(new PresetCharacteristicCallbacks());
+   pPresetCharacteristic->setValue(String(preset).c_str());
+   pPresetCharacteristic->addDescriptor(new BLE2902());
       
    //**********************************************************
 
@@ -358,3 +481,181 @@ void bleSetup() {
    if (debug) {Serial.println("Waiting a client connection to notify...");}
 
 }
+
+
+
+// PRESET STRUCTURE *******************************************************************
+
+void littleFSsetup() {
+
+  if(!LittleFS.begin(FORMAT_LITTLEFS_IF_FAILED)){
+   Serial.println("LittleFS Mount Failed");
+   return;
+  }
+}
+
+void readFile(fs::FS &fs, const char * path){
+    Serial.printf("Reading file: %s\r\n", path);
+
+    File file = fs.open(path);
+    if(!file || file.isDirectory()){
+        Serial.println("- failed to open file for reading");
+        return;
+    }
+
+    Serial.println("- read from file:");
+    while(file.available()){
+        Serial.write(file.read());
+    }
+    file.close();
+}
+
+void writeFile(fs::FS &fs, const char * path, const char * message){
+    Serial.printf("Writing file: %s\r\n", path);
+
+    File file = fs.open(path, FILE_WRITE);
+    if(!file){
+        Serial.println("- failed to open file for writing");
+        return;
+    }
+    if(file.print(message)){
+        Serial.println("- file written");
+    } else {
+        Serial.println("- write failed");
+    }
+    file.close();
+}
+
+void appendFile(fs::FS &fs, const char * path, const char * message){
+    Serial.printf("Appending to file: %s\r\n", path);
+
+    File file = fs.open(path, FILE_APPEND);
+    if(!file){
+        Serial.println("- failed to open file for appending");
+        return;
+    }
+    if(file.print(message)){
+        Serial.println("- message appended");
+    } else {
+        Serial.println("- append failed");
+    }
+    file.close();
+}
+
+void renameFile(fs::FS &fs, const char * path1, const char * path2){
+    Serial.printf("Renaming file %s to %s\r\n", path1, path2);
+    if (fs.rename(path1, path2)) {
+        Serial.println("- file renamed");
+    } else {
+        Serial.println("- rename failed");
+    }
+}
+
+void deleteFile(fs::FS &fs, const char * path){
+    Serial.printf("Deleting file: %s\r\n", path);
+    if(fs.remove(path)){
+        Serial.println("- file deleted");
+    } else {
+        Serial.println("- delete failed");
+    }
+}
+
+void testFileIO(fs::FS &fs, const char * path){
+    Serial.printf("Testing file I/O with %s\r\n", path);
+
+    static uint8_t buf[512];
+    size_t len = 0;
+    File file = fs.open(path, FILE_WRITE);
+    if(!file){
+        Serial.println("- failed to open file for writing");
+        return;
+    }
+
+    size_t i;
+    Serial.print("- writing" );
+    uint32_t start = millis();
+    for(i=0; i<2048; i++){
+        if ((i & 0x001F) == 0x001F){
+          Serial.print(".");
+        }
+        file.write(buf, 512);
+    }
+    Serial.println("");
+    uint32_t end = millis() - start;
+    Serial.printf(" - %u bytes written in %u ms\r\n", 2048 * 512, end);
+    file.close();
+
+    file = fs.open(path);
+    start = millis();
+    end = start;
+    i = 0;
+    if(file && !file.isDirectory()){
+        len = file.size();
+        size_t flen = len;
+        start = millis();
+        Serial.print("- reading" );
+        while(len){
+            size_t toRead = len;
+            if(toRead > 512){
+                toRead = 512;
+            }
+            file.read(buf, toRead);
+            if ((i++ & 0x001F) == 0x001F){
+              Serial.print(".");
+            }
+            len -= toRead;
+        }
+        Serial.println("");
+        end = millis() - start;
+        Serial.printf("- %u bytes read in %u ms\r\n", flen, end);
+        file.close();
+    } else {
+        Serial.println("- failed to open file for reading");
+    }
+}
+
+
+/* EXAMPLE COMMANDS ***************************************
+    createDir(LittleFS, "/mydir"); // Create a mydir folder
+    writeFile(LittleFS, "/mydir/hello1.txt", "Hello1"); // Create a hello1.txt file with the content "Hello1"
+    listDir(LittleFS, "/", 1); // List the directories up to one level beginning at the root directory
+    deleteFile(LittleFS, "/mydir/hello1.txt"); //delete the previously created file
+    removeDir(LittleFS, "/mydir"); //delete the previously created folder
+    listDir(LittleFS, "/", 1); // list all directories to make sure they were deleted
+    
+    writeFile(LittleFS, "/hello.txt", "Hello "); //Create and write a new file in the root directory
+    appendFile(LittleFS, "/hello.txt", "World!\r\n"); //Append some text to the previous file
+    readFile(LittleFS, "/hello.txt"); // Read the complete file
+    renameFile(LittleFS, "/hello.txt", "/foo.txt"); //Rename the previous file
+    readFile(LittleFS, "/foo.txt"); //Read the file with the new name
+    deleteFile(LittleFS, "/foo.txt"); //Delete the file
+    testFileIO(LittleFS, "/test.txt"); //Testin
+    deleteFile(LittleFS, "/test.txt"); //Delete the file
+   */
+
+
+void createPreset(char* testText) {
+ 
+   writeFile(LittleFS, "/config.json", testText);    
+
+   File configFile = LittleFS.open("/config.json", "w");
+      if (!configFile) {
+      Serial.println("Failed to open config file for writing");
+      return;
+      }
+   
+   DynamicJsonDocument doc(1024); // Adjust size as needed
+   // Add variables to the JSON document
+   doc["ssid"] = "your_ssid";
+   doc["password"] = "your_password";
+   doc["some_setting"] = 123;
+   
+   serializeJson(doc, configFile);
+   configFile.close();
+
+}
+
+
+
+
+

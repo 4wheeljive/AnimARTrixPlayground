@@ -47,7 +47,6 @@ parameters.forEach(name => {
 
 	  	const debounced = debounce(input.id, input.value);
 		controls[name].debounced = debounced;
-
 	  
 		form.addEventListener('input', () => {
 			value.innerHTML = input.value;
@@ -64,6 +63,10 @@ parameters.forEach(name => {
         }
 });
 
+const formPreset = document.getElementById('formPreset');
+const inputPreset = document.getElementById('inputPreset');
+const valuePreset = document.getElementById('valuePreset');
+
 const latestValueSent = document.getElementById('valueSent');
 const bleStateContainer = document.getElementById('bleState');
 
@@ -75,6 +78,7 @@ var bleService =                '19b10000-e8f2-537e-4f6c-d104768a1214';
 var ButtonCharacteristic =      '19b10001-e8f2-537e-4f6c-d104768a1214';
 var CheckboxCharacteristic =    '19b10002-e8f2-537e-4f6c-d104768a1214';
 var NumberCharacteristic =      '19b10003-e8f2-537e-4f6c-d104768a1214';
+var PresetCharacteristic =      '19b10004-e8f2-537e-4f6c-d104768a1214';
 
 //Declare Global Variables to Handle Bluetooth
 var bleDevice;
@@ -83,6 +87,7 @@ var bleServiceFound;
 var buttonCharacteristicFound;
 var checkboxCharacteristicFound;
 var numberCharacteristicFound;
+var presetCharacteristicFound;
 
 // UTILITY FUNCTIONS *******************************************************************
 
@@ -170,6 +175,14 @@ function resetAll() {
         }
     });
 
+   
+    formPreset.addEventListener('submit', (event) => {
+        event.preventDefault();
+        writePresetCharacteristic(inputPreset.value);
+    });
+        
+        
+
 //	buttonResetAll.addEventListener('click', (event) => resetAll());
 
 
@@ -236,6 +249,15 @@ function connectToDevice(){
                 characteristic.addEventListener('characteristicvaluechanged', handleNumberCharacteristicChange);
                 characteristic.startNotifications();				
                 })
+    
+            service.getCharacteristic(PresetCharacteristic)
+            .then(characteristic => {
+                presetCharacteristicFound = characteristic;
+                characteristic.addEventListener('characteristicvaluechanged', handlePresetCharacteristicChange);
+                characteristic.startNotifications();				
+                })
+
+                
     })
      
 }
@@ -340,6 +362,27 @@ function writeNumberCharacteristic(sendBuffer){
         })
         .catch(error => {
             console.error("Error writing to Number characteristic: ", error);
+        });
+    } 
+    else {
+        console.error ("Bluetooth is not connected. Cannot write to characteristic.")
+        window.alert("Bluetooth is not connected. Cannot write to characteristic. \n Connect to BLE first!")
+    }
+}
+
+function writePresetCharacteristic(value){
+    if (bleServer && bleServer.connected) {
+        bleServiceFound.getCharacteristic(PresetCharacteristic)
+        .then(characteristic => {
+            return characteristic.writeValue(value);
+        })
+        .then(() => {
+            const decodedBuffer = new TextDecoder().decode(value);
+            latestValueSent.innerHTML = decodedBuffer;
+            console.log("Value written to Preset characteristic: ", decodedBuffer);
+        })
+        .catch(error => {
+            console.error("Error writing to Preset characteristic: ", error);
         });
     } 
     else {
