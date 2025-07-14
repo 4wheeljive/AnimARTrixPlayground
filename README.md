@@ -13,22 +13,22 @@ BASIC FRAMEWORK:
 
 LED PANEL MODE:
     
-    1.  Ensure your MCU is BLE capable and enabled. 
+1.  Ensure your MCU is BLE capable and enabled. 
 
-    2.  Comment/uncomment the SCREEN_TEST defs in main.cpp as follows:
+2.  Comment/uncomment the SCREEN_TEST defs in main.cpp as follows:
 
-        //#define SCREEN_TEST
-        #undef SCREEN_TEST
+    //#define SCREEN_TEST
+    #undef SCREEN_TEST
 
-    3.  
-    
-    4.  Load https://4wheeljive.github.io/AnimARTrixPlayground/ from a Web BLE-capable browser.
+3.  Adjust your data pins, mappings and other LED settings as needed in main.cpp
 
-        NOTE:   On iOS devices, standard browsers (e.g., Safari, Chrome) do not currently support Web BLE.
-                I've had success using the Bluefy browser:
-                https://apps.apple.com/us/app/bluefy-web-ble-browser/id1492822055
-                If Bluefy doesn't connect to your device on its own, the nRF Connect app might help:
-                https://apps.apple.com/us/app/nrf-connect-for-mobile/id1054362403
+4.  Load https://4wheeljive.github.io/AnimARTrixPlayground/ from a Web BLE-capable browser.
+
+    NOTE:   On iOS devices, standard browsers (e.g., Safari, Chrome) do not currently support Web BLE.
+            I've had success using the Bluefy browser:
+            https://apps.apple.com/us/app/bluefy-web-ble-browser/id1492822055
+            If Bluefy doesn't connect to your device on its own, the nRF Connect app might help:
+            https://apps.apple.com/us/app/nrf-connect-for-mobile/id1054362403
 
 When running in the actual LED panel mode, this sketch can accommodate two different setups, 
 selected by defining/undefining BIG_BOARD in main.cpp as follows:
