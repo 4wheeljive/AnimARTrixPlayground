@@ -140,7 +140,7 @@ BLEServer* pServer = NULL;
 BLECharacteristic* pButtonCharacteristic = NULL;
 BLECharacteristic* pCheckboxCharacteristic = NULL;
 BLECharacteristic* pNumberCharacteristic = NULL;
-BLECharacteristic* pPresetCharacteristic = NULL;
+//BLECharacteristic* pPresetCharacteristic = NULL;
 bool deviceConnected = false;
 bool wasConnected = false;
 
@@ -148,12 +148,12 @@ bool wasConnected = false;
 #define BUTTON_CHARACTERISTIC_UUID     "19b10001-e8f2-537e-4f6c-d104768a1214"
 #define CHECKBOX_CHARACTERISTIC_UUID   "19b10002-e8f2-537e-4f6c-d104768a1214"
 #define NUMBER_CHARACTERISTIC_UUID     "19b10003-e8f2-537e-4f6c-d104768a1214"
-#define PRESET_CHARACTERISTIC_UUID     "19b10004-e8f2-537e-4f6c-d104768a1214"
+//#define PRESET_CHARACTERISTIC_UUID     "19b10004-e8f2-537e-4f6c-d104768a1214"
 
 BLEDescriptor pButtonDescriptor(BLEUUID((uint16_t)0x2902));
 BLEDescriptor pCheckboxDescriptor(BLEUUID((uint16_t)0x2902));
 BLEDescriptor pNumberDescriptor(BLEUUID((uint16_t)0x2902));
-BLEDescriptor pPresetDescriptor(BLEUUID((uint16_t)0x2902));
+//BLEDescriptor pPresetDescriptor(BLEUUID((uint16_t)0x2902));
 
 // CONTROL FUNCTIONS ***************************************************************
 
@@ -381,6 +381,7 @@ class NumberCharacteristicCallbacks : public BLECharacteristicCallbacks {
    }
 };
 
+/*
 class PresetCharacteristicCallbacks : public BLECharacteristicCallbacks {
    void onWrite(BLECharacteristic *characteristic) {
       
@@ -399,6 +400,7 @@ class PresetCharacteristicCallbacks : public BLECharacteristicCallbacks {
       }
    }
 };
+*/
 
 //*******************************************************************************************
 
@@ -442,6 +444,7 @@ void bleSetup() {
    pNumberCharacteristic->addDescriptor(new BLE2902());
 
       
+   /*
    pPresetCharacteristic = pService->createCharacteristic(
                      PRESET_CHARACTERISTIC_UUID,
                      BLECharacteristic::PROPERTY_WRITE |
@@ -451,6 +454,7 @@ void bleSetup() {
    pPresetCharacteristic->setCallbacks(new PresetCharacteristicCallbacks());
    pPresetCharacteristic->setValue(String(preset).c_str());
    pPresetCharacteristic->addDescriptor(new BLE2902());
+   */
       
    //**********************************************************
 

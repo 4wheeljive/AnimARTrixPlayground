@@ -132,13 +132,14 @@ using namespace fl;
     
     // Set ther LED mapping by selecting (comment/uncomment) one of the following:
 
-        // For a generic mapping
+        // For a generic mapping:
         XYMap myXYmap(WIDTH, HEIGHT, true);  
 
-        // For a custom mapping
-        //XYMap myXYmap = XYMap::constructWithUserFunction(WIDTH, HEIGHT, myXYFunction);
+        // For a custom mapping:
+        /* -------
+        XYMap myXYmap = XYMap::constructWithUserFunction(WIDTH, HEIGHT, myXYFunction);
 
-        // Custom XYMap mapping
+        Custom XYMap mapping
 
             uint16_t ledNum = 0;
     
@@ -153,6 +154,8 @@ using namespace fl;
             }
 
             uint16_t myXYFunction(uint16_t x, uint16_t y, uint16_t width, uint16_t height);
+        ----- */
+
 
 #else
 
