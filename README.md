@@ -1,9 +1,7 @@
-This is a test "playground" for adding user controls to selected animations included in FastLED's Animartrix library:
+This is a test "playground" for adding user controls to selected animations included in FastLED's AnimARTrix library:
 https://github.com/FastLED/FastLED/tree/master/examples/Animartrix
 
 This is all very rough, experimental, etc.
-
-Background
 
 
 Basic Framework
@@ -14,13 +12,17 @@ Basic Framework
   - To drive FastLED's WASM compiler/browser with built-in FastLED UI controls
   - To drive a physical LED panel using web BLE and a custom UI        
 
+NOTE:  I have not used the Screen Test/ WASM functionality since very early development of the playground. Certain variables/UI elements may be broken/missing/disconnected. Known current/potential issues for using the compiler:
+  - The UINumberField controls for fxIndex and colorOrder were producing floats. It seemed to work better for me for those paramaters to be uint8_t, so that's how everything else is currently set up.
+  - I have not updated the min/max/step values for the UISliders to reflect the current settings I have in the index.html file for BLE control
 
-NOTE:  I have not used the Screen Test/ WASM functionality since very early development of the playground. Certain variables/UI elements may be broken/missing.
-
+Please see the Wiki for a basic explanation of what the parameter sliders do. As an early-stage, poor-man's "preset" system, the Wiki also includes screenshots of some parameter combinations that produced cool results.     
 
 Uses
 - To allow users to explore/create custom animations for their own projects
 - To allow for "guest" access control of a display (e.g., at a party) through BLE with a mobile device
+- I think this may be along the lines of what Stefan Petrick has mentioned in the past: https://www.reddit.com/r/FastLED/comments/1amlnvn/comment/kpx4199/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+
 
 TODO
 - Create framework for saving and retrieving animation presets
@@ -31,19 +33,3 @@ TODO
 - UI feedback/indication of which parameters do/do not affect the current animation 
 
 
-The Controls
-
-The sliders are a handful of parameter variables that are included in various combinations and configurations in each of the Animation functions in myAnimartrix_detail.hpp.
-
-Each slider has its own min/max/step values that I've mapped to be reasonably useful across various animations.
-
-With three exceptions, the Pattern Control parameters are multiplication factors that range from 0.1 to an integer between 2 and 10.
-
-RadiusA and RadiusB values range from -10 to +30 and are added to a radius function in several animations.
-
-RatiosBase is a decimal value that ranges from -0.25 to + 0.50, which is added (one way or another) to certain of the animations' timings.ratios.
-Depending on the animation, the RatiosBase:
-(1) Is either used as is or divided by 10 or 100 (or in some cases another divisor), and
-(2) Is then multiplied by the RatiosDiff parameter and another multiplication factor hard-coded in the animation so that adjustments to the RatiosBase can impact an animation's different ratios in different ways.
-
-The same approach is used for the OffsetsBase and OffsetsDiff parameters (although OffsetsBase is a multiplication factor, unlike RatiosBase).

@@ -60,7 +60,7 @@ uint8_t dummy = 1;
    UISlider adjustRadiusB("Radius", 0, -10, 10, 1);  // added/subtracted
 
    UISlider adjustAngle("Angle", 1, .1, 10, -1); //multiplied
-   UISlider adjustDistance("Distance", 1, .1, 10, -1); //multiplied
+   //UISlider adjustDistance("Distance", 1, .1, 10, -1); //multiplied
    UISlider adjustZ("Magic Z", 1, .1, 2, -1); //multiplied
 
    UISlider adjustRed("Red", 1, .1, 10, -1);  //multiplied 
