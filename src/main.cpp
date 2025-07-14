@@ -223,9 +223,7 @@ void setup() {
     #ifndef SCREEN_TEST
         bleSetup();
     #endif
-
-    preset1.pBrightness = 100;
-
+    
  }
 
 //************************************************************************************************************
@@ -240,13 +238,7 @@ void loop() {
         FastLED.setBrightness(adjustBrightness);
         fxEngine.setSpeed(1);
         //fxEngine.setSpeed(timeSpeed);
- 
-        /*
-        if (colorOrderChanged){
-            setColorOrder(colorOrder);
-            colorOrderChanged = false;
-        }
-        */
+
 
         static auto lastColorOrder = -1;
         if (adjustColorOrder != lastColorOrder) {
@@ -278,10 +270,7 @@ void loop() {
 
       // while connected
       /*if (deviceConnected) {
-        if (brightnessChanged) { 
-          pBrightnessCharacteristic->notify();
-          brightnessChanged = false;
-        }
+
       }*/
 
       // upon disconnect

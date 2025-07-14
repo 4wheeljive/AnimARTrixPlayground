@@ -3,8 +3,8 @@
 #include "FastLED.h" 
 #include <ArduinoJson.h>
 
-#include "LittleFS.h"
-#define FORMAT_LITTLEFS_IF_FAILED true 
+//#include "LittleFS.h"
+//#define FORMAT_LITTLEFS_IF_FAILED true 
 
 /* If you use more than ~4 characteristics, you need to increase numHandles in this file:
 C:\Users\...\.platformio\packages\framework-arduinoespressif32\libraries\BLE\src\BLEServer.h
@@ -37,7 +37,7 @@ uint8_t dummy = 1;
 
 #ifdef SCREEN_TEST
 
-   //I have not used the Screen Test/ WASM functionality in some time. Certain variables/UI elements may be broken/missing
+   //I have not used the Screen Test/ WASM functionality in some time. Certain variables/UI elements may be broken/missing/disconnected
 
    using namespace fl;
 
@@ -105,10 +105,11 @@ uint8_t dummy = 1;
 
    ArduinoJson::JsonDocument sendDoc;
    ArduinoJson::JsonDocument receivedJSON;
-   ArduinoJson::JsonDocument jsonPreset;
+   //ArduinoJson::JsonDocument jsonPreset;
 
 
-   struct Preset {
+  /*
+  struct Preset {
       uint8_t pBrightness;
       float pSpeed;
       uint8_t pColorOrder;
@@ -128,6 +129,7 @@ uint8_t dummy = 1;
    };
 
    Preset preset1;
+   */
 
 #endif
 
@@ -164,11 +166,6 @@ void animationAdjust(uint8_t newAnimation) {
    }
 }
 
-
-//void loadPreset(String newPreset) {}
-
-
-
 void sendReceiptNumber(String receivedID, float receivedValue) {
    // Prepare the JSON document to send
    sendDoc.clear();
@@ -192,8 +189,6 @@ void sendReceiptNumber(String receivedID, float receivedValue) {
       Serial.println(receivedValue);
    }
 }
-
-//void processPreset(String receivedID, String receivedValue) {}
 
 void processNumber(String receivedID, float receivedValue ) {
 
@@ -241,9 +236,6 @@ void loadPreset(String presetName) {
    // Retrieve parameter settings from the JSON document
    
 
-
-
-
    // For each parameter with a stored value:
    if pBrightness
 
@@ -257,18 +249,9 @@ void loadPreset(String presetName) {
    
 
 
-
-
-
-
    configFile.close();
-
 }
 */
-
-
-
-
 
 // CALLBACKS ****************************************************************************
 
@@ -482,10 +465,8 @@ void bleSetup() {
 
 }
 
-
-
 // PRESET STRUCTURE *******************************************************************
-
+/*
 void littleFSsetup() {
 
   if(!LittleFS.begin(FORMAT_LITTLEFS_IF_FAILED)){
@@ -633,7 +614,7 @@ void testFileIO(fs::FS &fs, const char * path){
     deleteFile(LittleFS, "/test.txt"); //Delete the file
    */
 
-
+/*
 void createPreset(char* testText) {
  
    writeFile(LittleFS, "/config.json", testText);    
@@ -654,7 +635,7 @@ void createPreset(char* testText) {
    configFile.close();
 
 }
-
+*/
 
 
 
