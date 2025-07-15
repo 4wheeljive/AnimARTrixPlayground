@@ -3,7 +3,7 @@
 /*
 My personal learning playground for working with:
     FastLED Adapter for the animartrix fx library.
-    Copyright Stefen Petrick 2023.
+    Copyright Stefan Petrick 2023.
     Adapted to C++ by Netmindz 2023.
     Adapted to FastLED by Zach Vorhies 2024.
     For details on the animartrix library and licensing information, 

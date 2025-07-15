@@ -18,7 +18,26 @@ const valueAnimation = document.getElementById('valueAnimation');
 //const formResetAll = document.getElementById('formResetAll');
 //const buttonResetAll = document.getElementById('buttonResetAll');
 
-const rotateAnimationCheckbox = document.getElementById('rotateAnimationCheckbox');
+
+// Checkbox controls ********************************************** 
+
+var checkboxStatus = true;
+const checkboxes = [ 'RotateAnimation', 'Layer1', 'Layer2', 'Layer3', 'Layer4', 'Layer5' ]
+
+checkboxes.forEach(name => {
+
+    const checkbox  = document.getElementById(`checkbox${name}`);
+
+    checkbox.addEventListener('change', () => {
+        if (checkbox.checked) {checkboxStatus=true}            
+        else {checkboxStatus=false} 
+        sendCheckboxCharacteristic(checkbox.id,checkboxStatus);
+    });
+
+});
+
+
+// Parameter slider controls ********************************************** 
 
 const parameters = [ 'Brightness', 'Speed', 'ColorOrder', 'Red', 'Green', 'Blue', 'Scale', 'Angle', 'RadiusA', 'RadiusB', 'Z', 'RatiosBase', 'RatiosDiff', 'OffsetsBase', 'OffsetsDiff' ];
 
@@ -37,40 +56,45 @@ const debounce = (inputID, inputValue) => {
 
 parameters.forEach(name => {
 
-        const form  = document.getElementById(`form${name}`);
-        const input = document.getElementById(`input${name}`);
-        const value = document.getElementById(`value${name}`);
-        const reset = document.getElementById(`reset${name}`);
-        controlsById[input.id] = { input, value };
+    const form  = document.getElementById(`form${name}`);
+    const input = document.getElementById(`input${name}`);
+    const value = document.getElementById(`value${name}`);
+    const reset = document.getElementById(`reset${name}`);
+    controlsById[input.id] = { input, value };
 
-	  	controls[name] = { form, input, value, reset };
+    controls[name] = { form, input, value, reset };
 
-	  	const debounced = debounce(input.id, input.value);
-		controls[name].debounced = debounced;
-	  
-		form.addEventListener('input', () => {
-			value.innerHTML = input.value;
-			debounced(input.id, input.value);
-		});
+    const debounced = debounce(input.id, input.value);
+    controls[name].debounced = debounced;
+    
+    form.addEventListener('input', () => {
+        value.innerHTML = input.value;
+        debounced(input.id, input.value);
+    });
 
-	    if (reset) {
-            reset.addEventListener('click', (event) => {
-                event.preventDefault();
-                sendNumberCharacteristic(input.id, input.defaultValue);
-                form.reset();
-                value.innerHTML = input.defaultValue;
-            });
-        }
+    if (reset) {
+        reset.addEventListener('click', (event) => {
+            event.preventDefault();
+            sendNumberCharacteristic(input.id, input.defaultValue);
+            form.reset();
+            value.innerHTML = input.defaultValue;
+        });
+    }
 });
 
-const formPreset = document.getElementById('formPreset');
+
+/*const formPreset = document.getElementById('formPreset');
 const inputPreset = document.getElementById('inputPreset');
 const valuePreset = document.getElementById('valuePreset');
+*/
 
 const latestValueSent = document.getElementById('valueSent');
 const bleStateContainer = document.getElementById('bleState');
 
 const debounceDelay = 300;
+
+
+// BLE *******************************************************************************
 
 //Define BLE Device Specs
 var deviceName ='AnimARTrix Playground';
@@ -118,6 +142,18 @@ function sendNumberCharacteristic(inputID, inputValue) {
         writeNumberCharacteristic(sendBuffer);
 }
 
+function sendCheckboxCharacteristic(inputID, inputValue) {
+        var sendDoc = {
+            "id" : inputID,
+            "value" : inputValue
+        }
+        sendString = JSON.stringify(sendDoc);
+        sendBuffer = str2ab(sendString);        
+        writeCheckboxCharacteristic(sendBuffer);
+}
+
+
+
 // handler for any incoming BLE update:
 
 function applyReceivedById(receivedDoc) {
@@ -130,6 +166,7 @@ function applyReceivedById(receivedDoc) {
   ctrl.value.innerHTML   = receivedDoc.value;
 
 }
+
 /*
 function resetAll() {
     parameters.forEach((parameter) => {
@@ -166,15 +203,6 @@ function resetAll() {
     offButton.addEventListener('click', () => writeButtonCharacteristic(99));
 
 // Rotate Animation Toggle (Checkbox)
-    rotateAnimationCheckbox.addEventListener('change', () => {
-        if (rotateAnimationCheckbox.checked) {
-            writeCheckboxCharacteristic(100);
-        }
-        else { 
-            writeCheckboxCharacteristic(101); 
-        }
-    });
-
    
 /*
     formPreset.addEventListener('submit', (event) => {
@@ -294,8 +322,9 @@ function handleButtonCharacteristicChange(event){
 }
 
 function handleCheckboxCharacteristicChange(event){
-    const newValueReceived = new TextDecoder().decode(event.target.value);
-    console.log("Server receipt: Checkbox value - ",newValueReceived);
+    const changeReceived = new TextDecoder().decode(event.target.value);
+    const receivedDoc = JSON.parse(changeReceived);
+    console.log("Server receipt: ",receivedDoc.id," - ",receivedDoc.value);
 }
 
 function handleNumberCharacteristicChange(event){
@@ -331,16 +360,16 @@ function writeButtonCharacteristic(value){
     }
 }
 
-function writeCheckboxCharacteristic(value){
+function writeCheckboxCharacteristic(sendBuffer){
     if (bleServer && bleServer.connected) {
         bleServiceFound.getCharacteristic(CheckboxCharacteristic)
         .then(characteristic => {
-            const data = new Uint8Array([value]);
-            return characteristic.writeValue(data);
+            return characteristic.writeValue(sendBuffer);
         })
         .then(() => {
-            latestValueSent.innerHTML = value;
-            console.log("Value written to Checkbox characteristic: ", value);
+            const decodedBuffer = new TextDecoder().decode(sendBuffer);
+            latestValueSent.innerHTML = decodedBuffer;
+            console.log("Value written to Checkbox characteristic: ", decodedBuffer);
         })
         .catch(error => {
             console.error("Error writing to Checkbox characteristic: ", error);

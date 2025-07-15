@@ -18,6 +18,7 @@ LED PANEL MODE:
 2.  Comment/uncomment the SCREEN_TEST defs in main.cpp as follows:
 
     //#define SCREEN_TEST
+    
     #undef SCREEN_TEST
 
 3.  Adjust your data pins, mappings and other LED settings as needed in main.cpp
@@ -67,7 +68,8 @@ TODO
   - functions (how they affect an animation)
   - values (ranges/steps/etc.)
   - control (e.g., add oscilation?)
-- UI feedback/indication of which parameters do/do not affect the current animation 
+- UI feedback/indication of which parameters do/do not affect the current animation
+- Identify/resolve issues to get SCREEN_TEST mode working with current program structure   
 
 
 DISCUSSION

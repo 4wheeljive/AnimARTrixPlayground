@@ -2,7 +2,7 @@
 /*
 My personal learning playground for working with:
     FastLED Adapter for the animartrix fx library.
-    Copyright Stefen Petrick 2023.
+    Copyright Stefan Petrick 2023.
     Adapted to C++ by Netmindz 2023.
     Adapted to FastLED by Zach Vorhies 2024.
     For details on the animartrix library and licensing information, 
@@ -551,6 +551,8 @@ class ANIMartRIX {
                     polar_theta[x][y] * (double)adjustAngle
                     - animation.dist * 0.1
                     + move.radial[0];
+                    // can add noise_angle for non-periodic rotation
+                    // add multiple noise_angle for additional variation
                 animation.z = ((animation.dist * 1.5) - 10 * move.linear[0]) * (double)adjustZ;
                 animation.scale_x = 0.15 * (double)adjustScale;
                 animation.scale_y = 0.15 * (double)adjustScale;
