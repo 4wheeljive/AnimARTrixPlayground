@@ -202,15 +202,14 @@ function resetAll() {
     experimentSM1Button.addEventListener('click', () => writeButtonCharacteristic(10));
     offButton.addEventListener('click', () => writeButtonCharacteristic(99));
 
-// Rotate Animation Toggle (Checkbox)
-   
+
 /*
     formPreset.addEventListener('submit', (event) => {
         event.preventDefault();
         writePresetCharacteristic(inputPreset.value);
     });
 */        
-        
+       
 
 //	buttonResetAll.addEventListener('click', (event) => resetAll());
 
@@ -329,7 +328,6 @@ function handleCheckboxCharacteristicChange(event){
 
 function handleNumberCharacteristicChange(event){
     const changeReceived = new TextDecoder().decode(event.target.value);
-    //console.log("Number received: ", changeReceived);
     const receivedDoc = JSON.parse(changeReceived);
     console.log("Server receipt: ",receivedDoc.id," - ",receivedDoc.value);
 

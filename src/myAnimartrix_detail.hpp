@@ -557,30 +557,29 @@ class ANIMartRIX {
                 animation.scale_x = 0.15 * (double)adjustScale;
                 animation.scale_y = 0.15 * (double)adjustScale;
                 animation.offset_x = move.linear[0];
-
-                float show1 = render_value(animation);
+                show1 = { Layer1 ? render_value(animation) : 0};
+                
                 animation.angle =
                     polar_theta[x][y] * (double)adjustAngle
                     - animation.dist * 0.1
                     + move.radial[1];
                 animation.z = ((animation.dist * 1.5) - 10 * move.linear[1]) * (double)adjustZ;
                 animation.offset_x = move.linear[1];
+                show2 = { Layer2 ? render_value(animation) : 0 };
 
-                float show2 = render_value(animation);
                 animation.angle =
                     polar_theta[x][y] * (double)adjustAngle
                     - animation.dist * 0.1 
                     + move.radial[2];
                 animation.z = ((animation.dist * 1.5) - 10 * move.linear[2]) * (double)adjustZ;
                 animation.offset_x = move.linear[2];
-
-                float show3 = render_value(animation);
+                show3 = { Layer3 ? render_value(animation) : 0 };
 
                 float radius = radial_filter_radius + (double)adjustRadiusA;
                 float radial = (radius + (double)adjustRadiusB - distance[x][y]) / distance[x][y];
 
                 pixel.red = radial * show1 * (double)adjustRed; 
-                pixel.green = radial * show2 * (double)adjustGreen;
+                pixel.green = radial * show2 * (double)adjustGreen; 
                 pixel.blue = radial * show3 * (double)adjustBlue;
 
                 pixel = rgb_sanity_check(pixel);
@@ -633,7 +632,7 @@ class ANIMartRIX {
                 animation.offset_x = 0;
                 animation.offset_z = 0;
                 animation.z = move.linear[1] * (double)adjustZ;
-                float show1 = render_value(animation);
+                show1 = { Layer1 ? render_value(animation) : 0};
 
                 animation.angle = 
                     2 * polar_theta[x][y] * (double)adjustAngle
@@ -641,7 +640,7 @@ class ANIMartRIX {
                     + move.directional[5] * move.noise_angle[8] * animation.dist / 10;
                 animation.offset_y = -move.linear[1];
                 animation.z = move.linear[2] * (double)adjustZ;
-                float show2 = render_value(animation);
+                show2 = { Layer2 ? render_value(animation) : 0};
 
                 animation.angle = 
                     2 * polar_theta[x][y] * (double)adjustAngle
@@ -649,7 +648,7 @@ class ANIMartRIX {
                     + move.directional[6] * move.noise_angle[7] * animation.dist / 10;
                 animation.offset_y = move.linear[2];
                 animation.z = move.linear[0] * (double)adjustZ;
-                float show3 = render_value(animation);
+                show3 = { Layer3 ? render_value(animation) : 0};
 
                 pixel.red =     (show1 + show2) * (double)adjustRed;
                 pixel.green =   (show1 - show2) * (double)adjustGreen;
@@ -698,7 +697,7 @@ class ANIMartRIX {
                 animation.offset_x = 0;
                 animation.offset_z = 0;
                 animation.z = move.linear[0] * (double)adjustZ;
-                float show1 = render_value(animation);
+                show1 = { Layer1 ? render_value(animation) : 0};
 
                 animation.dist = distance[x][y] * (2 + move.directional[1]) / 3;
                 animation.angle = 
@@ -707,7 +706,7 @@ class ANIMartRIX {
                     + move.radial[4];
                 animation.offset_x = 2 * move.linear[1];
                 animation.z = move.linear[1] * (double)adjustZ;
-                float show2 = render_value(animation);
+                show2 = { Layer2 ? render_value(animation) : 0};
 
                 animation.dist = distance[x][y] * (2 + move.directional[2]) / 3;
                 animation.angle = 
@@ -716,7 +715,7 @@ class ANIMartRIX {
                     + move.radial[4];
                 animation.offset_y = 2 * move.linear[2];
                 animation.z = move.linear[2] * (double)adjustZ;
-                float show3 = render_value(animation);
+               show3 = { Layer3 ? render_value(animation) : 0};
 
                 animation.dist = distance[x][y] * (2 + move.directional[3]) / 3;
                 animation.angle = 
@@ -725,7 +724,7 @@ class ANIMartRIX {
                     + move.radial[4];
                 animation.offset_x = 2 * move.linear[3];
                 animation.z = move.linear[3] * (double)adjustZ;
-                float show4 = render_value(animation);
+                show4 = { Layer4 ? render_value(animation) : 0};
 
                 pixel.red = show1 * (double)adjustRed;
                 pixel.green = (show3 * distance[x][y] / 10) * (double)adjustGreen;
@@ -767,12 +766,12 @@ class ANIMartRIX {
                 animation.offset_y = 0;
                 animation.offset_x = 0;
                 animation.z = (2 * distance[x][y] - move.linear[0]) * (double)adjustZ;
-                float show1 = render_value(animation);
+                show1 = { Layer1 ? render_value(animation) : 0};
 
                 animation.angle = polar_theta[x][y];
                 animation.dist = distance[x][y];
                 animation.z = (2 * distance[x][y] - move.linear[1]) * (double)adjustZ;
-                float show2 = render_value(animation);
+                show2 = { Layer2 ? render_value(animation) : 0};
 
                 pixel.red = show1;
                 pixel.green = 0;
@@ -818,21 +817,21 @@ class ANIMartRIX {
                 animation.offset_y = 0;
                 animation.offset_z = 0;
                 animation.z = 0;
-                float show1 = render_value(animation);
+                show1 = { Layer1 ? render_value(animation) : 0};
 
                 animation.angle =
                     3 * polar_theta[x][y] * (double)adjustAngle
                     + move.radial[1] 
                     - distance[x][y] / 3;
                 animation.offset_x = move.linear[1];
-                float show2 = render_value(animation);
+                show2 = { Layer2 ? render_value(animation) : 0};
 
                 animation.angle =
                     3 * polar_theta[x][y] * (double)adjustAngle
                     + move.radial[2] 
                     - distance[x][y] / 3;
                 animation.offset_x = move.linear[2];
-                float show3 = render_value(animation);
+                show3 = { Layer3 ? render_value(animation) : 0};
 
                 float radius = radial_filter_radius + (double)adjustRadiusA;
                 float radial_filter = (radius + (double)adjustRadiusB - distance[x][y]) / ( radius + (double)adjustRadiusB);
@@ -876,15 +875,15 @@ class ANIMartRIX {
                 animation.dist = distance[x][y] ;
                 animation.offset_y = -move.linear[0];
                 animation.offset_x = 0;
-                float show1 = render_value(animation);
+                show1 = { Layer1 ? render_value(animation) : 0};
 
                 animation.angle = 10;
                 animation.offset_y = -move.linear[1];
-                float show2 = render_value(animation);
+                show2 = { Layer2 ? render_value(animation) : 0};
 
                 animation.angle = 12;
                 animation.offset_y = -move.linear[2];
-                float show3 = render_value(animation);
+                show3 = { Layer3 ? render_value(animation) : 0};
         
                 pixel.red = show1 * (double)adjustRed;
                 pixel.green = show2 * (double)adjustGreen;
@@ -929,7 +928,7 @@ class ANIMartRIX {
                 animation.offset_y = 10 * move.noise_angle[0];
                 animation.offset_x = 10 * move.noise_angle[4];
                 animation.low_limit = 0;
-                show1 = render_value(animation);
+                show1 = { Layer1 ? render_value(animation) : 0};
 
                 animation.angle = 
                     16 * polar_theta[x][y] * (double)adjustAngle
@@ -941,7 +940,7 @@ class ANIMartRIX {
                 animation.offset_y = 10 * move.noise_angle[1];
                 animation.offset_x = 10 * move.noise_angle[3];
                 animation.low_limit = 0;
-                show2 = render_value(animation);
+                show2 = { Layer2 ? render_value(animation) : 0};
 
                 // float radius = radial_filter_radius;   // radius of a radial
                 // brightness filter float radial =
@@ -993,7 +992,7 @@ class ANIMartRIX {
                 animation.offset_y = 10;
                 animation.offset_x = 10;
                 animation.low_limit = 0;
-                show1 = render_value(animation);
+                show1 = { Layer1 ? render_value(animation) : 0};
 
                 animation.dist = 
                     (10 + move.directional[0]) * FL_SIN_F(-move.radial[5] + 
@@ -1006,7 +1005,7 @@ class ANIMartRIX {
                 animation.offset_y = 20 * move.linear[0];
                 animation.offset_x = 10;
                 animation.low_limit = 0;
-                show2 = render_value(animation);
+                show2 = { Layer2 ? render_value(animation) : 0};
 
                 animation.dist = 
                     (10 + move.directional[1]) * FL_SIN_F(-move.radial[5] + 
@@ -1019,7 +1018,7 @@ class ANIMartRIX {
                 animation.offset_y = 20 * move.linear[1];
                 animation.offset_x = 10;
                 animation.low_limit = 0;
-                show3 = render_value(animation);
+                show3 = { Layer3 ? render_value(animation) : 0};
 
                 animation.dist = 
                     (10 + move.directional[2]) * FL_SIN_F(-move.radial[5] + 
@@ -1032,7 +1031,7 @@ class ANIMartRIX {
                 animation.offset_y = 20 * move.linear[2];
                 animation.offset_x = 10;
                 animation.low_limit = 0;
-                show4 = render_value(animation);
+                show4 = { Layer4 ? render_value(animation) : 0};
 
                 // float radius = radial_filter_radius;   // radius of a radial
                 // brightness filter float radial =
@@ -1082,7 +1081,7 @@ class ANIMartRIX {
                 animation.offset_z = 50 * move.linear[0];
                 animation.offset_x = 150 * move.directional[0];
                 animation.offset_y = 150 * move.directional[1];
-                float show1 = render_value(animation);
+                float show1 = { Layer1 ? render_value(animation) : 0};
 
                 animation.angle = 
                     polar_theta[x][y] * double(adjustAngle) 
@@ -1093,7 +1092,7 @@ class ANIMartRIX {
                 animation.offset_z = 50 * move.linear[1];
                 animation.offset_x = 150 * move.directional[1];
                 animation.offset_y = 150 * move.directional[2];
-                float show2 = render_value(animation);
+                float show2 = { Layer2 ? render_value(animation) : 0};
 
                 animation.angle = 
                     polar_theta[x][y] * double(adjustAngle) 
@@ -1104,7 +1103,7 @@ class ANIMartRIX {
                 animation.offset_z = 50 * move.linear[2];
                 animation.offset_x = 150 * move.directional[2];
                 animation.offset_y = 150 * move.directional[3];
-                float show3 = render_value(animation);
+                float show3 = { Layer3 ? render_value(animation) : 0};
 
                 animation.angle = 
                     polar_theta[x][y] * double(adjustAngle) 
@@ -1115,7 +1114,7 @@ class ANIMartRIX {
                 animation.offset_z = 50 * move.linear[3];
                 animation.offset_x = 150 * move.directional[3];
                 animation.offset_y = 150 * move.directional[4];
-                float show4 = render_value(animation);
+                float show4 = { Layer4 ? render_value(animation) : 0};
 
                 animation.angle = 
                     polar_theta[x][y] * double(adjustAngle) 
@@ -1126,7 +1125,7 @@ class ANIMartRIX {
                 animation.offset_z = 50 * move.linear[4];
                 animation.offset_x = 150 * move.directional[4];
                 animation.offset_y = 150 * move.directional[5];
-                float show5 = render_value(animation);
+                float show5 = { Layer5 ? render_value(animation) : 0};
 
                 pixel.red = (show1 + show2) * (double)adjustRed;
                 pixel.green = (show3 + show4) * (double)adjustGreen;
@@ -1191,7 +1190,7 @@ class ANIMartRIX {
                 animation.offset_y = -5 * r * move.linear[0];
                 animation.offset_x = 10;
                 animation.low_limit = 0;
-                show1 = render_value(animation);
+                show1 = { Layer1 ? render_value(animation) : 0};
 
                 animation.dist =
                     4 + distance[x][y] +
@@ -1208,7 +1207,7 @@ class ANIMartRIX {
                 animation.offset_y = -5 * r * move.linear[1];
                 animation.offset_x = 100;
                 animation.low_limit = 0;
-                show2 = render_value(animation);
+                show2 = { Layer2 ? render_value(animation) : 0};
 
                 animation.dist =
                     5 + distance[x][y]
@@ -1225,7 +1224,7 @@ class ANIMartRIX {
                 animation.offset_y = -5 * r * move.linear[2];
                 animation.offset_x = 1000;
                 animation.low_limit = 0;
-                show3 = render_value(animation);
+                show3 = { Layer3 ? render_value(animation) : 0};
 
                 show4 = colordodge(show1, show2);
 
@@ -1282,7 +1281,7 @@ class ANIMartRIX {
                 animation.offset_y = 20 * move.linear[2];
                 animation.offset_x = 10;
                 animation.low_limit = 0;
-                show1 = render_value(animation);
+                show1 = { Layer1 ? render_value(animation) : 0};
 
                 pixel.red = 0;
                 pixel.green = 0;

@@ -20,16 +20,9 @@ Setting numHandles = 60 has worked for 7 characteristics.
 using namespace fl;
 
 bool displayOn = true;
-bool debug = false;
-//bool colorOrderChanged = false;
+bool debug = true;
 
 uint8_t initialFxIndex = 0;
-
-//uint8_t switchNumber = 1;
-
-//String elementID;
-//String receivedString;
-//String newPreset;
 
 uint8_t dummy = 1;
 
@@ -246,12 +239,12 @@ void processNumber(String receivedID, float receivedValue ) {
 
 void processCheckbox(String receivedID, bool receivedValue ) {
 
-   if (receivedID == "RotateAnimations") {rotateAnimations = receivedValue;};
-   if (receivedID == "Layer1") {Layer1 = receivedValue;};
-   if (receivedID == "Layer2") {Layer2 = receivedValue;};
-   if (receivedID == "Layer3") {Layer3 = receivedValue;};
-   if (receivedID == "Layer4") {Layer4 = receivedValue;};
-   if (receivedID == "Layer5") {Layer5 = receivedValue;};
+   if (receivedID == "checkboxRotateAnimations") {rotateAnimations = receivedValue;};
+   if (receivedID == "checkboxLayer1") {Layer1 = receivedValue;};
+   if (receivedID == "checkboxLayer2") {Layer2 = receivedValue;};
+   if (receivedID == "checkboxLayer3") {Layer3 = receivedValue;};
+   if (receivedID == "checkboxLayer4") {Layer4 = receivedValue;};
+   if (receivedID == "checkboxLayer5") {Layer5 = receivedValue;};
     
    sendReceiptCheckbox(receivedID, receivedValue);
 
