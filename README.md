@@ -1,5 +1,7 @@
 https://youtu.be/l7NDfyx3RAU
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/l7NDfyx3RAU?si=SqBvTPRagEwVJgL7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 This is a test "playground" for adding user controls to selected animations included in FastLED's AnimARTrix library:
 https://github.com/FastLED/FastLED/tree/master/examples/Animartrix
 
