@@ -1,11 +1,13 @@
-https://youtu.be/l7NDfyx3RAU
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/l7NDfyx3RAU?si=SqBvTPRagEwVJgL7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
 This is a test "playground" for adding user controls to selected animations included in FastLED's AnimARTrix library:
 https://github.com/FastLED/FastLED/tree/master/examples/Animartrix
 
 This is all very rough, experimental, etc.
+
+Following are links to a couple of low-tech demos:
+- This one shows some of the different animation modes and roughly demonstrates the major adjustment factors:
+  https://youtu.be/bHqvAAaftNA
+- This one shows more deliberate fine-tuning of a particular animation (particularly after around 3:30):  
+  https://youtu.be/l7NDfyx3RAU
 
 BASIC FRAMEWORK:
 - The src folder here includes custom "myAnimartrix" versions of the standard /fx/2d/animartrix.hpp and /fx/2d/animartrix_detail.hpp files
