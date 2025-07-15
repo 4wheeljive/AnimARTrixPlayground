@@ -40,27 +40,49 @@ button {
     text-align: center;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr 3fr 1fr 1fr;
 }
-.section1 {
-    padding: 5px;  
-}
-.section2 {
+.section1 { /*connection*/
     padding: 5px;
-    grid-column: 2 / 4;
+    grid-column-start: 1;
+    grid-column-end: 2;
     grid-row-start: 1;
+    grid-row-end: 2;  
 }
-.section3 {
+.section2 { /*animation*/
     padding: 5px;
+    grid-column-start: 2;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 2; 
+}
+.section3 { /*brightness/color*/
+    padding: 5px;
+    grid-column-start: 1;
+    grid-column-end: 2;
     grid-row-start: 2;
+    grid-row-end: 3; 
 }
-.section4 {
+.section4 { /*layers*/
     padding: 5px;
-    grid-column: 2 / 4;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 3;
+    grid-row-end: 4; 
+}
+.section5 { /*pattern control*/
+    padding: 5px;
+    grid-column-start: 2;
+    grid-column-end: 4;
     grid-row-start: 2;
+    grid-row-end: 4; 
 }
-.section5 {
+.section6 { /*last value sent*/
     padding: 5px;
-    grid-column: 1 / 4;
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 4;
+    grid-row-end: 5; 
 }
 DIV.table {
     display:table;

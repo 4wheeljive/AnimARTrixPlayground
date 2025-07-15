@@ -21,15 +21,8 @@ using namespace fl;
 
 bool displayOn = true;
 bool debug = true;
-bool colorOrderChanged = false;
 
 uint8_t initialFxIndex = 0;
-
-uint8_t switchNumber = 1;
-
-String elementID;
-String receivedString;
-String newPreset;
 
 uint8_t dummy = 1;
 
@@ -71,11 +64,12 @@ uint8_t dummy = 1;
 
    using namespace ArduinoJson;
 
-   String preset = "default";
+   //String preset = "default";
 
    uint8_t adjustBrightness = 25;
   
    bool rotateAnimations = false;
+
    uint8_t adjustColorOrder = 0;                  
    uint8_t fxIndex = initialFxIndex;
 
@@ -102,6 +96,12 @@ uint8_t dummy = 1;
    float adjustRed = 1.f; 
    float adjustGreen = 1.f; 
    float adjustBlue = 1.f; 
+
+   bool Layer1 = true;
+   bool Layer2 = true;
+   bool Layer3 = true;
+   bool Layer4 = true;
+   bool Layer5 = true;
 
    ArduinoJson::JsonDocument sendDoc;
    ArduinoJson::JsonDocument receivedJSON;
@@ -190,6 +190,30 @@ void sendReceiptNumber(String receivedID, float receivedValue) {
    }
 }
 
+void sendReceiptCheckbox(String receivedID, bool receivedValue) {
+   // Prepare the JSON document to send
+   sendDoc.clear();
+   sendDoc["id"] = receivedID;
+   sendDoc["value"] = receivedValue;
+
+   // Convert the JSON document to a string
+   String jsonString;
+   serializeJson(sendDoc, jsonString);
+
+   // Set the value of the characteristic
+   pCheckboxCharacteristic->setValue(jsonString);
+   
+   // Notify connected clients
+   pCheckboxCharacteristic->notify();
+   
+   if (debug) {
+      Serial.print("Sent receipt for ");
+      Serial.print(receivedID);
+      Serial.print(": ");
+      Serial.println(receivedValue);
+   }
+}
+
 void processNumber(String receivedID, float receivedValue ) {
 
    if (receivedID == "inputBrightness") {adjustBrightness = receivedValue;};
@@ -212,6 +236,20 @@ void processNumber(String receivedID, float receivedValue ) {
    sendReceiptNumber(receivedID, receivedValue);
 
 }
+
+void processCheckbox(String receivedID, bool receivedValue ) {
+
+   if (receivedID == "checkboxRotateAnimations") {rotateAnimations = receivedValue;};
+   if (receivedID == "checkboxLayer1") {Layer1 = receivedValue;};
+   if (receivedID == "checkboxLayer2") {Layer2 = receivedValue;};
+   if (receivedID == "checkboxLayer3") {Layer3 = receivedValue;};
+   if (receivedID == "checkboxLayer4") {Layer4 = receivedValue;};
+   if (receivedID == "checkboxLayer5") {Layer5 = receivedValue;};
+    
+   sendReceiptCheckbox(receivedID, receivedValue);
+
+}
+
 
 /*
 void loadPreset(String presetName) {
@@ -330,9 +368,30 @@ class ButtonCharacteristicCallbacks : public BLECharacteristicCallbacks {
 class CheckboxCharacteristicCallbacks : public BLECharacteristicCallbacks {
    void onWrite(BLECharacteristic *characteristic) {
   
-      String value = characteristic->getValue();
+      String receivedBuffer = characteristic->getValue();
   
-      if (value.length() > 0) {
+      if (receivedBuffer.length() > 0) {
+                  
+         if (debug) {
+            Serial.print("Received buffer: ");
+            Serial.println(receivedBuffer);
+         }
+      
+         ArduinoJson::deserializeJson(receivedJSON, receivedBuffer);
+         String receivedID = receivedJSON["id"] ;
+         bool receivedValue = receivedJSON["value"];
+      
+         if (debug) {
+            Serial.print(receivedID);
+            Serial.print(": ");
+            Serial.println(receivedValue);
+         }
+      
+         processCheckbox(receivedID, receivedValue);
+      
+      }
+         
+         /*       
          uint8_t receivedValue = value[0];
   
          if (debug) {
@@ -351,6 +410,8 @@ class CheckboxCharacteristicCallbacks : public BLECharacteristicCallbacks {
       pCheckboxCharacteristic->notify();
 
       }
+   */
+
    }
 };
 
