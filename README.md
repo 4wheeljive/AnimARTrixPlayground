@@ -1,3 +1,5 @@
+<img width="2702" height="1347" alt="Screenshot 2025-07-15 101004" src="https://github.com/user-attachments/assets/3cc94aef-4ea8-49b0-926b-136e1fc244db" />
+
 This is a test "playground" for adding user controls to selected animations included in FastLED's AnimARTrix library:
 https://github.com/FastLED/FastLED/tree/master/examples/Animartrix
 
