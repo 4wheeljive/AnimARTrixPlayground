@@ -36,8 +36,8 @@ namespace fl {
         RINGS,
         COMPLEX_KALEIDO_6,
         WATER,
-        MODULE_EXPERIMENT10,
-        MODULE_EXPERIMENT_SM1,
+        EXPERIMENT10,
+        EXPERIMENT_SM1,
         NUM_ANIMATIONS
     };
 
@@ -155,8 +155,8 @@ namespace fl {
         {RINGS, "RINGS", &FastLEDANIMartRIX::Rings},
         {COMPLEX_KALEIDO_6, "COMPLEX_KALEIDO_6", &FastLEDANIMartRIX::Complex_Kaleido_6},
         {WATER, "WATER", &FastLEDANIMartRIX::Water},
-        {MODULE_EXPERIMENT10, "MODULE_EXPERIMENT10", &FastLEDANIMartRIX::Module_Experiment10},
-        {MODULE_EXPERIMENT_SM1, "MODULE_EXPERIMENT_SM1", &FastLEDANIMartRIX::SM1},
+        {EXPERIMENT10, "EXPERIMENT10", &FastLEDANIMartRIX::Experiment10},
+        {EXPERIMENT_SM1, "EXPERIMENT_SM1", &FastLEDANIMartRIX::EXPERIMENT_SM1},
     };
 
 

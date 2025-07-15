@@ -1053,7 +1053,7 @@ class ANIMartRIX {
 
     //*******************************************************************************
     
-    void SM1() { // nice one
+    void EXPERIMENT_SM1() { // nice one
 
         //get_ready();
 
@@ -1068,8 +1068,8 @@ class ANIMartRIX {
 
         calculate_oscillators(timings);
 
-        for (int x = 0; x < num_x / 2; x++) {
-            for (int y = 0; y < num_y / 2; y++) {
+        for (int x = 0; x < num_x ; x++) {
+            for (int y = 0; y < num_y ; y++) {
 
                 animation.dist = distance[x][y];
                 animation.angle = 
@@ -1081,7 +1081,7 @@ class ANIMartRIX {
                 animation.offset_z = 50 * move.linear[0];
                 animation.offset_x = 150 * move.directional[0];
                 animation.offset_y = 150 * move.directional[1];
-                float show1 = { Layer1 ? render_value(animation) : 0};
+                show1 = { Layer1 ? render_value(animation) : 0};
 
                 animation.angle = 
                     polar_theta[x][y] * double(adjustAngle) 
@@ -1092,7 +1092,7 @@ class ANIMartRIX {
                 animation.offset_z = 50 * move.linear[1];
                 animation.offset_x = 150 * move.directional[1];
                 animation.offset_y = 150 * move.directional[2];
-                float show2 = { Layer2 ? render_value(animation) : 0};
+                show2 = { Layer2 ? render_value(animation) : 0};
 
                 animation.angle = 
                     polar_theta[x][y] * double(adjustAngle) 
@@ -1103,7 +1103,7 @@ class ANIMartRIX {
                 animation.offset_z = 50 * move.linear[2];
                 animation.offset_x = 150 * move.directional[2];
                 animation.offset_y = 150 * move.directional[3];
-                float show3 = { Layer3 ? render_value(animation) : 0};
+                show3 = { Layer3 ? render_value(animation) : 0};
 
                 animation.angle = 
                     polar_theta[x][y] * double(adjustAngle) 
@@ -1114,7 +1114,7 @@ class ANIMartRIX {
                 animation.offset_z = 50 * move.linear[3];
                 animation.offset_x = 150 * move.directional[3];
                 animation.offset_y = 150 * move.directional[4];
-                float show4 = { Layer4 ? render_value(animation) : 0};
+                show4 = { Layer4 ? render_value(animation) : 0};
 
                 animation.angle = 
                     polar_theta[x][y] * double(adjustAngle) 
@@ -1125,7 +1125,7 @@ class ANIMartRIX {
                 animation.offset_z = 50 * move.linear[4];
                 animation.offset_x = 150 * move.directional[4];
                 animation.offset_y = 150 * move.directional[5];
-                float show5 = { Layer5 ? render_value(animation) : 0};
+                show5 = { Layer5 ? render_value(animation) : 0};
 
                 pixel.red = (show1 + show2) * (double)adjustRed;
                 pixel.green = (show3 + show4) * (double)adjustGreen;
@@ -1133,12 +1133,10 @@ class ANIMartRIX {
 
                 pixel = rgb_sanity_check(pixel);
                 //leds[xyMap(x, y)] = CRGB(pixel.red, pixel.green, pixel.blue);
-                //setPixelColorInternal(x, y, pixel);
+                setPixelColorInternal(x, y, pixel);
                 //setPixelColorInternal((num_x - 1) - x, y, pixel);
                 //setPixelColorInternal((num_x - 1) - x, (num_y - 1) - y, pixel);
-                setPixelColorInternal(x, (num_y - 1) - y, pixel);
-
-
+                //setPixelColorInternal(x, (num_y - 1) - y, pixel);
             }
         }
         // show_frame();
@@ -1146,7 +1144,7 @@ class ANIMartRIX {
 
     //*******************************************************************************
 
-    void Module_Experiment10() {
+    void Experiment10() {
 
         //get_ready();
 
@@ -1253,6 +1251,7 @@ class ANIMartRIX {
 
     //*******************************************************************************
 
+    /*
     void Module_Experiment1() {
 
         //get_ready();
@@ -1293,6 +1292,7 @@ class ANIMartRIX {
             }
         }
     }
+    */
 
 };
 
