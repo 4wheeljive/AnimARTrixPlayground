@@ -75,7 +75,7 @@ When BIG_BOARD is undefined:
 //#define SCREEN_TEST
 #undef SCREEN_TEST
 
-#define FIRST_ANIMATION RINGS
+#define FIRST_ANIMATION POLAR_WAVES
 #define SECONDS_PER_ANIMATION 10
 
 #define DATA_PIN_1 2

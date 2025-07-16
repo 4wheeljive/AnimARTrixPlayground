@@ -37,11 +37,11 @@
                 <button id="caleido1Button" class="onButton">CALEIDO1</button>
                 <button id="wavesButton" class="onButton">WAVES</button>
                 <button id="chasingSpiralsButton" class="onButton">CHASING SPIRALS</button>
-                <button id="ringsButton" class="onButton">RINGS</button>
                 <button id="complexKaleidoButton" class="onButton">COMPLEX KALEIDO 6</button>
                 <button id="waterButton" class="onButton">WATER</button>
                 <button id="experiment10Button" class="onButton">EXPERIMENT 10</button>
                 <button id="experimentSM1Button" class="onButton">EXPERIMENT SM1</button>
+                <button id="testButton" class="onButton">TEST</button>
                 <button id="offButton" class="offButton">OFF</button>
 
                 <div class="table">
@@ -63,8 +63,8 @@
                 <h3>Brightness</h3>
  
                     <form id="formBrightness">
-                        <input type="range" id="inputBrightness" name="inputBrightness"  min="25" max="150" step="5"/>
-                        <span id="valueBrightness"></span>
+                        <input type="range" id="inputBrightness" name="inputBrightness"  min="25" max="150" step="5" value="50"/>
+                        <span id="valueBrightness">50</span>
                     </form>
                         
                 <h3>Color Order</h3>
@@ -155,7 +155,16 @@
                             <span class="td"><button id="resetSpeed" class="resetButton">&#8634</button></span>
                         </form> 
 												
-						<form id="formScale" class="tr">
+						<form id="formZoom" class="tr">
+                            <span class="td">Zoom: </span>
+                            <span class="td">
+                                <input type="range" id="inputZoom" name="inputZoom" min=".1" max="3" step=".1" value="1">
+                                <span id="valueZoom">1.0</span>
+                            </span>
+                            <span class="td"><button id="resetZoom" class="resetButton">&#8634</button></span>
+                        </form>
+
+                        <form id="formScale" class="tr">
                             <span class="td">Scale: </span>
                             <span class="td">
                                 <input type="range" id="inputScale" name="inputScale" min=".1" max="3" step=".1" value="1">
@@ -163,17 +172,6 @@
                             </span>
                             <span class="td"><button id="resetScale" class="resetButton">&#8634</button></span>
                         </form>
-						
-						<!--
-                        <form id="formDistance" class="tr">
-                            <span class="td">Distance: </span>
-                            <span class="td">
-                                <input type="range" id="inputDistance" name="inputDistance" min=".5" max="2" step=".1" value="1">
-                                <span id="valueDistance">1.0</span>
-                            </span>
-                            <span class="td"><button id="resetDistance" class="resetButton">&#8634</button></span>
-                        </form>
-                        -->
                         
                         <form id="formAngle" class="tr">
                             <span class="td">Angle: </span>
@@ -185,19 +183,19 @@
                         </form> 
 						
 						<form id="formRadiusA" class="tr">
-                            <span class="td">Radius A: </span>
+                            <span class="td">Radius: </span>
                             <span class="td">
-                                <input type="range" id="inputRadiusA" name="inputRadiusA" min="-10" max="30" step="1" value="0">
-                                <span id="valueRadiusA">0</span>
+                                <input type="range" id="inputRadiusA" name="inputRadiusA" min=".1" max="2" step=".1" value="1">
+                                <span id="valueRadiusA">1</span>
                             </span>
                             <span class="td"><button id="resetRadiusA" class="resetButton">&#8634</button></span>
                         </form> 
 						
                         <form id="formRadiusB" class="tr">
-                            <span class="td">Radius B: </span>
+                            <span class="td">Edge: </span>
                             <span class="td">
-                                <input type="range" id="inputRadiusB" name="inputRadiusB" min="-10" max="30" step="1" value="0">
-                                <span id="valueRadiusB">0</span>
+                                <input type="range" id="inputRadiusB" name="inputRadiusB" min=".1" max="5" step=".1" value="1">
+                                <span id="valueRadiusB">1</span>
                             </span>
                             <span class="td"><button id="resetRadiusB" class="resetButton">&#8634</button></span>
                         </form>

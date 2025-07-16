@@ -53,7 +53,7 @@ uint8_t dummy = 1;
    UISlider adjustRadiusB("Radius", 0, -10, 10, 1);  // added/subtracted
 
    UISlider adjustAngle("Angle", 1, .1, 10, -1); //multiplied
-   //UISlider adjustDistance("Distance", 1, .1, 10, -1); //multiplied
+   //UISlider adjustZoom("Zoom", 1, .1, 10, -1); //multiplied
    UISlider adjustZ("Magic Z", 1, .1, 2, -1); //multiplied
 
    UISlider adjustRed("Red", 1, .1, 10, -1);  //multiplied 
@@ -84,10 +84,10 @@ uint8_t dummy = 1;
 
    float adjustScale = 1.f; 
 
-   float adjustRadiusA = 0.0f; 
-   float adjustRadiusB = 0.0f;
+   float adjustRadiusA = 1.0f; 
+   float adjustRadiusB = 1.0f;
 
-   float adjustDistance = 1.f;
+   float adjustZoom = 1.f;
 
    float adjustAngle = 1.f; 
 
@@ -225,7 +225,7 @@ void processNumber(String receivedID, float receivedValue ) {
    if (receivedID == "inputOffsetsDiff") {adjustOffsetsDiff = receivedValue;};
    if (receivedID == "inputScale") {adjustScale = receivedValue;};	
    if (receivedID == "inputAngle") {adjustAngle = receivedValue;};	
-   if (receivedID == "inputDistance") {adjustDistance = receivedValue;};
+   if (receivedID == "inputZoom") {adjustZoom = receivedValue;};
    if (receivedID == "inputRadiusA") {adjustRadiusA = receivedValue;};
    if (receivedID == "inputRadiusB") {adjustRadiusB = receivedValue;};	
    if (receivedID == "inputZ") {adjustZ = receivedValue;};	
@@ -336,22 +336,22 @@ class ButtonCharacteristicCallbacks : public BLECharacteristicCallbacks {
             if (receivedValue == 5) { // chasing spirals
                fxIndex = 4;
             }
-            if (receivedValue == 6) { // rings
+            if (receivedValue == 6) { // complex kaleido 6 
                fxIndex = 5;
             }
-            if (receivedValue == 7) { // complex kaleido 6 
+            if (receivedValue == 7) { // water
                fxIndex = 6;
             }
-            if (receivedValue == 8) { // water
+            if (receivedValue == 8) { // experiment 10
                fxIndex = 7;
             }
-            if (receivedValue == 9) { // experiment 10
+            if (receivedValue == 9) { // experiment sm1
                fxIndex = 8;
             }
-            if (receivedValue == 10) { // experiment sm1
+            if (receivedValue == 10) { // test
                fxIndex = 9;
             }
-            
+
             displayOn = true;
             animationAdjust(fxIndex);
        

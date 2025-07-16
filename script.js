@@ -1,4 +1,3 @@
-
 const connectButton = document.getElementById('connectBleButton');
 const disconnectButton = document.getElementById('disconnectBleButton');
 
@@ -7,7 +6,7 @@ const spiralusButton = document.getElementById('spiralusButton');
 const caleido1Button = document.getElementById('caleido1Button');
 const wavesButton = document.getElementById('wavesButton');
 const chasingSpiralsButton = document.getElementById('chasingSpiralsButton');
-const ringsButton = document.getElementById('ringsButton');
+const testButton = document.getElementById('testButton');
 const complexKaleidoButton = document.getElementById('complexKaleidoButton');
 const waterButton = document.getElementById('waterButton');
 const experiment10Button = document.getElementById('experiment10Button');
@@ -39,7 +38,7 @@ checkboxes.forEach(name => {
 
 // Parameter slider controls ********************************************** 
 
-const parameters = [ 'Brightness', 'Speed', 'ColorOrder', 'Red', 'Green', 'Blue', 'Scale', 'Angle', 'RadiusA', 'RadiusB', 'Z', 'RatiosBase', 'RatiosDiff', 'OffsetsBase', 'OffsetsDiff' ];
+const parameters = [ 'Brightness', 'Speed', 'ColorOrder', 'Red', 'Green', 'Blue', 'Scale', 'Angle', 'Zoom', 'RadiusA', 'RadiusB', 'Z', 'RatiosBase', 'RatiosDiff', 'OffsetsBase', 'OffsetsDiff' ];
 
 const controls = {};  
 const controlsById = {};
@@ -195,11 +194,11 @@ function resetAll() {
     caleido1Button.addEventListener('click', () => writeButtonCharacteristic(3));
     wavesButton.addEventListener('click', () => writeButtonCharacteristic(4));
     chasingSpiralsButton.addEventListener('click', () => writeButtonCharacteristic(5));
-    ringsButton.addEventListener('click', () => writeButtonCharacteristic(6));
-    complexKaleidoButton.addEventListener('click', () => writeButtonCharacteristic(7));
-    waterButton.addEventListener('click', () => writeButtonCharacteristic(8));
-    experiment10Button.addEventListener('click', () => writeButtonCharacteristic(9));
-    experimentSM1Button.addEventListener('click', () => writeButtonCharacteristic(10));
+    complexKaleidoButton.addEventListener('click', () => writeButtonCharacteristic(6));
+    waterButton.addEventListener('click', () => writeButtonCharacteristic(7));
+    experiment10Button.addEventListener('click', () => writeButtonCharacteristic(8));
+    experimentSM1Button.addEventListener('click', () => writeButtonCharacteristic(9));
+    testButton.addEventListener('click', () => writeButtonCharacteristic(10));
     offButton.addEventListener('click', () => writeButtonCharacteristic(99));
 
 

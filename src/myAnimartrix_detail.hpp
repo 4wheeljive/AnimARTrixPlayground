@@ -114,8 +114,6 @@ FASTLED_USING_NAMESPACE
 
 struct render_parameters {
 
-    // TODO float center_x = (num_x / 2) - 0.5;   // center of the matrix
-    // TODO float center_y = (num_y / 2) - 0.5;
     float center_x = (999 / 2) - 0.5; // center of the matrix
     float center_y = (999 / 2) - 0.5;
     float dist, angle;
@@ -181,8 +179,10 @@ class ANIMartRIX {
 
     float speed_factor = 1; // 0.1 to 10
 
-    float radial_filter_radius = 23.0; // on 32x32, use 11 for 16x16   ...... so 22x22 should be ~16 
-    
+    float radial_filter_radius = 23.0; // on 32x32, use 11 for 16x16
+    float radialDimmer = 1;
+    float radialFilterFalloff = 1;
+
     bool serpentine;
 
     render_parameters animation; // all animation parameters in one place
@@ -219,11 +219,13 @@ class ANIMartRIX {
 
         this->num_x = w;
         this->num_y = h;
+        /*
         if (w <= 16) {
             this->radial_filter_radius = 11;
         } else {
             this->radial_filter_radius = 23; // on 32x32, use 11 for 16x16
-        }
+        }*/
+        this->radial_filter_radius = std::min(w,h) * 0.75;
        
         // precalculate all polar coordinates; polar origin is set to matrix centre
         render_polar_lookup_table(
@@ -240,6 +242,12 @@ class ANIMartRIX {
      * @param speed
      */
     void setSpeedFactor(float speed) { this->speed_factor = speed; }
+
+    float radialFilterFactor( float radius, float distance, float falloff) {
+        if (distance >= radius) return 0.0f;
+        float factor = 1.0f - (distance / radius);
+        return powf(factor, falloff);
+    }
 
     // Dynamic darkening methods *************************************
 
@@ -342,8 +350,8 @@ class ANIMartRIX {
            
         }
     }
-
-    void run_default_oscillators(float master_speed = 0.005) {
+    /*
+    void run_default_oscillators(float master_speed ) {
        
         timings.master_speed = master_speed;
 
@@ -374,6 +382,7 @@ class ANIMartRIX {
         calculate_oscillators(timings);
 
     }
+    */
 
     //***************************************************************
 
@@ -525,9 +534,6 @@ class ANIMartRIX {
     }
 
 
-
-
-
     //********************************************************************************************************************
     // EFFECTS ***********************************************************************************************************
 
@@ -546,7 +552,7 @@ class ANIMartRIX {
         for (int x = 0; x < num_x; x++) {
             for (int y = 0; y < num_y; y++) {
 
-                animation.dist = distance[x][y];
+                animation.dist = distance[x][y] * (double)adjustZoom;
                 animation.angle =
                     polar_theta[x][y] * (double)adjustAngle
                     - animation.dist * 0.1
@@ -575,12 +581,17 @@ class ANIMartRIX {
                 animation.offset_x = move.linear[2];
                 show3 = { Layer3 ? render_value(animation) : 0 };
 
-                float radius = radial_filter_radius + (double)adjustRadiusA;
-                float radial = (radius + (double)adjustRadiusB - distance[x][y]) / distance[x][y];
-
-                pixel.red = radial * show1 * (double)adjustRed; 
-                pixel.green = radial * show2 * (double)adjustGreen; 
-                pixel.blue = radial * show3 * (double)adjustBlue;
+                
+                //float radial = (radius - distance[x][y]) / distance[x][y];
+                //float radialFilter = (radius - distance[x][y]) / distance[x][y];
+                
+                float radius = radial_filter_radius * (double)adjustRadiusA;
+                radialFilterFalloff = adjustRadiusB;
+                radialDimmer = radialFilterFactor(radius, distance[x][y], radialFilterFalloff);
+               
+                pixel.red = show1 * (double)adjustRed * radialDimmer; 
+                pixel.green = show2 * (double)adjustGreen * radialDimmer; 
+                pixel.blue = show3 * (double)adjustBlue * radialDimmer;
 
                 pixel = rgb_sanity_check(pixel);
                 setPixelColorInternal(x, y, pixel);
@@ -620,14 +631,14 @@ class ANIMartRIX {
         for (int x = 0; x < num_x; x++) {
             for (int y = 0; y < num_y; y++) {
 
-                animation.dist = distance[x][y] ;
+                animation.dist = distance[x][y] * (double)adjustZoom;
                 animation.angle = 
                     2 * polar_theta[x][y] * (double)adjustAngle
                     + move.noise_angle[5] 
                     + move.directional[3] * move.noise_angle[6] * animation.dist / 10;
                 animation.scale_x = 0.08 * (double)adjustScale;
                 animation.scale_y = 0.08 * (double)adjustScale;
-                animation.scale_z = 0.02 * (double)adjustScale;
+                animation.scale_z = 0.02; 
                 animation.offset_y = -move.linear[0];
                 animation.offset_x = 0;
                 animation.offset_z = 0;
@@ -650,9 +661,14 @@ class ANIMartRIX {
                 animation.z = move.linear[0] * (double)adjustZ;
                 show3 = { Layer3 ? render_value(animation) : 0};
 
-                pixel.red =     (show1 + show2) * (double)adjustRed;
-                pixel.green =   (show1 - show2) * (double)adjustGreen;
-                pixel.blue =    (show3 - show1) * (double)adjustBlue;
+                float radius = radial_filter_radius * (double)adjustRadiusA;
+                radialFilterFalloff = adjustRadiusB;
+                //radialDimmer = radialFilterFactor(radius, distance[x][y], radialFilterFalloff);
+                radialDimmer = 1;   
+
+                pixel.red =     (show1 + show2) * (double)adjustRed * radialDimmer;
+                pixel.green =   (show1 - show2) * (double)adjustGreen * radialDimmer;
+                pixel.blue =    (show3 - show1) * (double)adjustBlue * radialDimmer;
 
                 pixel = rgb_sanity_check(pixel);
                 setPixelColorInternal(x, y, pixel);
@@ -685,21 +701,21 @@ class ANIMartRIX {
         for (int x = 0; x < num_x; x++) {
             for (int y = 0; y < num_y; y++) {
 
-                animation.dist = distance[x][y] * (2 + move.directional[0]) / 3;
+                animation.dist = distance[x][y] * (double)adjustZoom * (2 + move.directional[0]) / 3;
                 animation.angle = 
                     3 * polar_theta[x][y] * (double)adjustAngle
                     + 3 * move.noise_angle[0] 
                     + move.radial[4];
                 animation.scale_x = 0.1 * (double)adjustScale;
                 animation.scale_y = 0.1 * (double)adjustScale;
-                animation.scale_z = 0.1 * (double)adjustScale;
+                animation.scale_z = 0.1;
                 animation.offset_y = 2 * move.linear[0];
                 animation.offset_x = 0;
                 animation.offset_z = 0;
                 animation.z = move.linear[0] * (double)adjustZ;
                 show1 = { Layer1 ? render_value(animation) : 0};
 
-                animation.dist = distance[x][y] * (2 + move.directional[1]) / 3;
+                animation.dist = distance[x][y] * (double)adjustZoom * (2 + move.directional[1]) / 3;
                 animation.angle = 
                     4 * polar_theta[x][y] * (double)adjustAngle
                     + 3 * move.noise_angle[1] 
@@ -708,7 +724,7 @@ class ANIMartRIX {
                 animation.z = move.linear[1] * (double)adjustZ;
                 show2 = { Layer2 ? render_value(animation) : 0};
 
-                animation.dist = distance[x][y] * (2 + move.directional[2]) / 3;
+                animation.dist = distance[x][y] * (double)adjustZoom * (2 + move.directional[2]) / 3;
                 animation.angle = 
                     5 * polar_theta[x][y] * (double)adjustAngle
                     + 3 * move.noise_angle[2]
@@ -717,7 +733,7 @@ class ANIMartRIX {
                 animation.z = move.linear[2] * (double)adjustZ;
                show3 = { Layer3 ? render_value(animation) : 0};
 
-                animation.dist = distance[x][y] * (2 + move.directional[3]) / 3;
+                animation.dist = distance[x][y] * (double)adjustZoom * (2 + move.directional[3]) / 3;
                 animation.angle = 
                     4 * polar_theta[x][y] * (double)adjustAngle
                     + 3 * move.noise_angle[3]
@@ -761,15 +777,14 @@ class ANIMartRIX {
                 animation.angle = polar_theta[x][y] *(double)adjustAngle;
                 animation.scale_x = 0.1 * (double)adjustScale;
                 animation.scale_y = 0.1 * (double)adjustScale;
-                animation.scale_z = 0.1 * (double)adjustScale;
-                animation.dist = distance[x][y] ;
+                animation.scale_z = 0.1;
+                animation.dist = distance[x][y] * (double)adjustZoom;
                 animation.offset_y = 0;
                 animation.offset_x = 0;
                 animation.z = (2 * distance[x][y] - move.linear[0]) * (double)adjustZ;
                 show1 = { Layer1 ? render_value(animation) : 0};
 
                 animation.angle = polar_theta[x][y];
-                animation.dist = distance[x][y];
                 animation.z = (2 * distance[x][y] - move.linear[1]) * (double)adjustZ;
                 show2 = { Layer2 ? render_value(animation) : 0};
 
@@ -809,8 +824,8 @@ class ANIMartRIX {
                     3 * polar_theta[x][y] * (double)adjustAngle
                     + move.radial[0] 
                     - distance[x][y] / 3;
-                animation.dist = distance[x][y] ;
-                animation.scale_z = .1 * (double)adjustScale;
+                animation.dist = distance[x][y] * (double)adjustZoom;
+                animation.scale_z = .1;
                 animation.scale_y = .1 * (double)adjustScale;
                 animation.scale_x = .1 * (double)adjustScale;
                 animation.offset_x = move.linear[0];
@@ -833,61 +848,16 @@ class ANIMartRIX {
                 animation.offset_x = move.linear[2];
                 show3 = { Layer3 ? render_value(animation) : 0};
 
-                float radius = radial_filter_radius + (double)adjustRadiusA;
-                float radial_filter = (radius + (double)adjustRadiusB - distance[x][y]) / ( radius + (double)adjustRadiusB);
+                //float radius = radial_filter_radius + (double)adjustRadiusA;
+                //float radial_filter = (radius + (double)adjustRadiusB - distance[x][y]) / ( radius + (double)adjustRadiusB);
 
-                pixel.red =     (3 * show1 * radial_filter * (double)adjustRed);
-                pixel.green =   (show2 * radial_filter * (double)adjustGreen) / 2;
-                pixel.blue =    (show3 * radial_filter * (double)adjustBlue) / 4;
+                float radius = radial_filter_radius * (double)adjustRadiusA;
+                radialFilterFalloff = adjustRadiusB;
+                radialDimmer = radialFilterFactor(radius, distance[x][y], radialFilterFalloff);
 
-                pixel = rgb_sanity_check(pixel);
-
-                setPixelColorInternal(x, y, pixel);
-            }
-        }
-    }
-
-    //*******************************************************************************
-
-    void Rings() {
-
-        //get_ready();
-
-        timings.master_speed = 0.01 * (double)adjustSpeed;
-
-        timings.ratio[0] = 1 + (double)adjustRatiosBase;   
-        timings.ratio[1] = 1.1 + (double)adjustRatiosBase * (double)adjustRatiosDiff;
-        timings.ratio[2] = 1.2 + (double)adjustRatiosBase * 2 * (double)adjustRatiosDiff;
-
-        timings.offset[1] = 100 * (double)adjustOffsetsBase;
-        timings.offset[2] = 200 * (double)adjustOffsetsBase * (double)adjustOffsetsDiff;
-        timings.offset[3] = 300 * (double)adjustOffsetsBase * 2 * (double)adjustOffsetsDiff;
-
-        calculate_oscillators(timings); 
-
-        for (int x = 0; x < num_x; x++) {
-            for (int y = 0; y < num_y; y++) {
-
-                animation.angle = 5;
-                animation.scale_x = 0.2 * (double)adjustScale;
-                animation.scale_y = 0.2 * (double)adjustScale;
-                animation.scale_z = 1 * (double)adjustScale;
-                animation.dist = distance[x][y] ;
-                animation.offset_y = -move.linear[0];
-                animation.offset_x = 0;
-                show1 = { Layer1 ? render_value(animation) : 0};
-
-                animation.angle = 10;
-                animation.offset_y = -move.linear[1];
-                show2 = { Layer2 ? render_value(animation) : 0};
-
-                animation.angle = 12;
-                animation.offset_y = -move.linear[2];
-                show3 = { Layer3 ? render_value(animation) : 0};
-        
-                pixel.red = show1 * (double)adjustRed;
-                pixel.green = show2 * (double)adjustGreen;
-                pixel.blue = show3 * (double)adjustBlue;
+                pixel.red =     (3 * show1 * (double)adjustRed) * radialDimmer;
+                pixel.green =   (show2 * (double)adjustGreen) / 2 * radialDimmer;
+                pixel.blue =    (show3 * (double)adjustBlue) / 4 * radialDimmer;
 
                 pixel = rgb_sanity_check(pixel);
 
@@ -917,7 +887,7 @@ class ANIMartRIX {
         for (int x = 0; x < num_x; x++) {
             for (int y = 0; y < num_y; y++) {
 
-                animation.dist = distance[x][y] ;
+                animation.dist = distance[x][y] * (double)adjustZoom;
                 animation.angle = 
                     16 * polar_theta[x][y] * (double)adjustAngle 
                     + 16 * move.radial[0];
@@ -934,8 +904,8 @@ class ANIMartRIX {
                     16 * polar_theta[x][y] * (double)adjustAngle
                     + 16 * move.radial[1];
                 animation.z = 500 * (double)adjustZ;
-                animation.scale_x = 0.06;
-                animation.scale_y = 0.06;
+                animation.scale_x = 0.06 * (double)adjustScale;;
+                animation.scale_y = 0.06 * (double)adjustScale;;
                 animation.offset_z = -10 * move.linear[1];
                 animation.offset_y = 10 * move.noise_angle[1];
                 animation.offset_x = 10 * move.noise_angle[3];
@@ -945,10 +915,14 @@ class ANIMartRIX {
                 // float radius = radial_filter_radius;   // radius of a radial
                 // brightness filter float radial =
                 // (radius-distance[x][y])/distance[x][y];
+                
+                float radius = radial_filter_radius * (double)adjustRadiusA;
+                radialFilterFalloff = adjustRadiusB;
+                radialDimmer = radialFilterFactor(radius, distance[x][y], radialFilterFalloff);
 
-                pixel.red = show1;
-                pixel.green = 0;
-                pixel.blue = show2;
+                pixel.red = show1 * radialDimmer;
+                pixel.green = 0 * radialDimmer;
+                pixel.blue = show2 * radialDimmer;
 
                 pixel = rgb_sanity_check(pixel);
 
@@ -1071,7 +1045,7 @@ class ANIMartRIX {
         for (int x = 0; x < num_x ; x++) {
             for (int y = 0; y < num_y ; y++) {
 
-                animation.dist = distance[x][y];
+                animation.dist = distance[x][y] * (double)adjustZoom;
                 animation.angle = 
                     polar_theta[x][y] * double(adjustAngle) 
                     + 5 * move.noise_angle[0];
@@ -1226,7 +1200,12 @@ class ANIMartRIX {
 
                 show4 = colordodge(show1, show2);
 
-                float rad = FL_SIN_F(PI / 2 + distance[x][y] / 14); // better radial filter?!
+                //float rad = FL_SIN_F(PI / 2 + distance[x][y] / 14); // better radial filter?!
+
+                float radius = radial_filter_radius * (double)adjustRadiusA;
+                radialFilterFalloff = adjustRadiusB;
+                radialDimmer = radialFilterFactor(radius, distance[x][y], radialFilterFalloff);
+
 
                 /*
                 pixel.red    = show1;
@@ -1234,7 +1213,7 @@ class ANIMartRIX {
                 pixel.blue   = show2-show1;
                 */
 
-                CHSV(rad * ((show1 + show2) + show3), 255, 255);
+                CHSV(radialDimmer * ((show1 + show2) + show3), 255, 255);
 
                 pixel = rgb_sanity_check(pixel);
 
@@ -1251,48 +1230,54 @@ class ANIMartRIX {
 
     //*******************************************************************************
 
-    /*
-    void Module_Experiment1() {
 
-        //get_ready();
+    void Test() {
 
-        timings.master_speed = 0.03 * (double)adjustSpeed;
+        timings.master_speed = 0.01 * (double)adjustSpeed; 
 
-        timings.ratio[0] = 0.0025 + (double)adjustRatiosBase/100; 
-        timings.ratio[1] = 0.0027 + (double)adjustRatiosBase/100 * (double)adjustRatiosDiff;
-        timings.ratio[2] = 0.029 + (double)adjustRatiosBase/10 * 1.25 * (double)adjustRatiosDiff;
-        timings.ratio[3] = 0.033 + (double)adjustRatiosBase/10 * 1.5 * (double)adjustRatiosDiff; 
-
+        timings.ratio[0] = 0.01 + (double)adjustRatiosBase/10;
+        timings.ratio[1] = 0.011 + (double)adjustRatiosBase/10;
+        timings.ratio[2] = 0.013 + (double)adjustRatiosBase/10;
+        timings.ratio[3] = 0.33 + (double)adjustRatiosBase * (double)adjustRatiosDiff;
+        
+        timings.offset[0] = 0;
+        timings.offset[1] = 100 * (double)adjustOffsetsBase * (double)adjustOffsetsDiff;
+        timings.offset[2] = 200 * (double)adjustOffsetsBase * 1.2 * (double)adjustOffsetsDiff;
+        timings.offset[3] = 300 * (double)adjustOffsetsBase * 1.4 * (double)adjustOffsetsDiff;
+        
         calculate_oscillators(timings);
 
         for (int x = 0; x < num_x; x++) {
             for (int y = 0; y < num_y; y++) {
 
-                animation.dist = distance[x][y] + 20 * move.directional[0];
-                animation.angle = 
-                    polar_theta[x][y] * (double)adjustAngle   
-                    + move.noise_angle[0] 
-                    + move.noise_angle[1];
+                animation.dist = distance[x][y] * (double)adjustZoom;
+                animation.angle = polar_theta[x][y] * (double)adjustAngle;
                 animation.z = 5 * (double)adjustZ;
                 animation.scale_x = 0.1 * (double)adjustScale;
                 animation.scale_y = 0.1 * (double)adjustScale;
-                animation.offset_z = -10;
-                animation.offset_y = 20 * move.linear[2];
-                animation.offset_x = 10;
+                animation.offset_x = 100 * move.linear[0];
+                animation.offset_y = 0;
+                //animation.offset_z = 10 * move.linear[0];
                 animation.low_limit = 0;
                 show1 = { Layer1 ? render_value(animation) : 0};
 
-                pixel.red = 0;
-                pixel.green = 0;
-                pixel.blue = show1;
+                //show2 = { Layer2 ? render_value(animation) : 0};
 
-                pixel = rgb_sanity_check(pixel);
+                //show3 = { Layer3 ? render_value(animation) : 0};
 
+                float radius = radial_filter_radius * (double)adjustRadiusA;
+                radialFilterFalloff = adjustRadiusB;
+                radialDimmer = radialFilterFactor(radius, distance[x][y], radialFilterFalloff);
+               
+                pixel.red    = show1;
+                pixel.green  = 0;
+                pixel.blue   = 0;
                 setPixelColorInternal(x, y, pixel);
             }
         }
     }
-    */
+
+//*******************************************************************************
 
 };
 
