@@ -71,6 +71,7 @@ USES
 
 
 TODO
+- Get UI to reflect current controller parameters on BLE reconnect
 - Create framework for saving and retrieving animation presets
 - Fine-tune parameter:
   - functions (how they affect an animation)

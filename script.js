@@ -12,7 +12,14 @@ const waterButton = document.getElementById('waterButton');
 const experiment10Button = document.getElementById('experiment10Button');
 const experimentSM1Button = document.getElementById('experimentSM1Button');
 const offButton = document.getElementById('offButton');
-const valueAnimation = document.getElementById('valueAnimation');
+const presetSaveButton1 = document.getElementById('presetSaveButton1');
+const presetLoadButton1 = document.getElementById('presetLoadButton1');
+const presetSaveButton2 = document.getElementById('presetSaveButton2');
+const presetLoadButton2 = document.getElementById('presetLoadButton2');
+
+
+const valAnim = document.getElementById('valAnim');
+
 
 //const formResetAll = document.getElementById('formResetAll');
 //const buttonResetAll = document.getElementById('buttonResetAll');
@@ -21,11 +28,11 @@ const valueAnimation = document.getElementById('valueAnimation');
 // Checkbox controls ********************************************** 
 
 var checkboxStatus = true;
-const checkboxes = [ 'RotateAnimation', 'Layer1', 'Layer2', 'Layer3', 'Layer4', 'Layer5' ]
+const checkboxes = [ 'RotateAnim', 'Layer1', 'Layer2', 'Layer3', 'Layer4', 'Layer5' ]
 
 checkboxes.forEach(name => {
 
-    const checkbox  = document.getElementById(`checkbox${name}`);
+    const checkbox = document.getElementById(`cx${name}`);
 
     checkbox.addEventListener('change', () => {
         if (checkbox.checked) {checkboxStatus=true}            
@@ -38,7 +45,7 @@ checkboxes.forEach(name => {
 
 // Parameter slider controls ********************************************** 
 
-const parameters = [ 'Brightness', 'Speed', 'ColorOrder', 'Red', 'Green', 'Blue', 'Scale', 'Angle', 'Zoom', 'RadiusA', 'RadiusB', 'Z', 'RatiosBase', 'RatiosDiff', 'OffsetsBase', 'OffsetsDiff' ];
+const parameters = [ 'Bright', 'Speed', 'ColOrd', 'Red', 'Green', 'Blue', 'Scale', 'Angle', 'Zoom', 'Twist', 'Radius', 'Edge', 'Z', 'RatBase', 'RatDiff', 'OffBase', 'OffDiff' ];
 
 const controls = {};  
 const controlsById = {};
@@ -55,10 +62,10 @@ const debounce = (inputID, inputValue) => {
 
 parameters.forEach(name => {
 
-    const form  = document.getElementById(`form${name}`);
-    const input = document.getElementById(`input${name}`);
-    const value = document.getElementById(`value${name}`);
-    const reset = document.getElementById(`reset${name}`);
+    const form = document.getElementById(`form${name}`);
+    const input = document.getElementById(`in${name}`);
+    const value = document.getElementById(`val${name}`);
+    const reset = document.getElementById(`rst${name}`);
     controlsById[input.id] = { input, value };
 
     controls[name] = { form, input, value, reset };
@@ -134,7 +141,7 @@ function ab2str(buf) {
 function sendNumberCharacteristic(inputID, inputValue) {
         var sendDoc = {
             "id" : inputID,
-            "value" : inputValue
+            "val" : inputValue
         }
         sendString = JSON.stringify(sendDoc);
         sendBuffer = str2ab(sendString);        
@@ -144,7 +151,7 @@ function sendNumberCharacteristic(inputID, inputValue) {
 function sendCheckboxCharacteristic(inputID, inputValue) {
         var sendDoc = {
             "id" : inputID,
-            "value" : inputValue
+            "val" : inputValue
         }
         sendString = JSON.stringify(sendDoc);
         sendBuffer = str2ab(sendString);        
@@ -161,8 +168,8 @@ function applyReceivedById(receivedDoc) {
     console.warn('Unknown parameter id:', receivedDoc.id);
     return;
   }
-  ctrl.input.value     	 = receivedDoc.value;
-  ctrl.value.innerHTML   = receivedDoc.value;
+  ctrl.input.value     	 = receivedDoc.val;
+  ctrl.value.innerHTML   = receivedDoc.val;
 
 }
 
@@ -201,6 +208,11 @@ function resetAll() {
     testButton.addEventListener('click', () => writeButtonCharacteristic(10));
     offButton.addEventListener('click', () => writeButtonCharacteristic(99));
 
+// Presets
+    presetSaveButton1.addEventListener('click', () => writeButtonCharacteristic(20));
+    presetLoadButton1.addEventListener('click', () => writeButtonCharacteristic(21));
+    presetSaveButton2.addEventListener('click', () => writeButtonCharacteristic(22));
+    presetLoadButton2.addEventListener('click', () => writeButtonCharacteristic(23));
 
 /*
     formPreset.addEventListener('submit', (event) => {
@@ -316,19 +328,19 @@ function disconnectDevice() {
 function handleButtonCharacteristicChange(event){
     const changeReceived = new TextDecoder().decode(event.target.value);
     console.log("Server receipt: Animation - ",changeReceived);
-    valueAnimation.innerHTML = changeReceived;
+    valAnim.innerHTML = changeReceived;
 }
 
 function handleCheckboxCharacteristicChange(event){
     const changeReceived = new TextDecoder().decode(event.target.value);
     const receivedDoc = JSON.parse(changeReceived);
-    console.log("Server receipt: ",receivedDoc.id," - ",receivedDoc.value);
+    console.log("Server receipt: ",receivedDoc.id," - ",receivedDoc.val);
 }
 
 function handleNumberCharacteristicChange(event){
     const changeReceived = new TextDecoder().decode(event.target.value);
     const receivedDoc = JSON.parse(changeReceived);
-    console.log("Server receipt: ",receivedDoc.id," - ",receivedDoc.value);
+    console.log("Server receipt: ",receivedDoc.id," - ",receivedDoc.val);
 
 	applyReceivedById(receivedDoc);
 

@@ -1,10 +1,7 @@
 #pragma once
 
-#include "FastLED.h" 
+#include "FastLED.h"
 #include <ArduinoJson.h>
-
-//#include "LittleFS.h"
-//#define FORMAT_LITTLEFS_IF_FAILED true 
 
 /* If you use more than ~4 characteristics, you need to increase numHandles in this file:
 C:\Users\...\.platformio\packages\framework-arduinoespressif32\libraries\BLE\src\BLEServer.h
@@ -17,10 +14,13 @@ Setting numHandles = 60 has worked for 7 characteristics.
 #include <BLE2902.h>
 #include <string>
 
-using namespace fl;
+#include <FS.h>
+#include "LittleFS.h"
+#define FORMAT_LITTLEFS_IF_FAILED true 
 
 bool displayOn = true;
 bool debug = true;
+uint16_t debugDelay = 500;
 
 uint8_t initialFxIndex = 0;
 
@@ -37,65 +37,67 @@ uint8_t dummy = 1;
    UITitle title("AnimARTrix Playground");
    UIDescription description("Test of user-controlled inputs for selected Animartrix effects. @author of fx is StefanPetrick");
    UISlider brightness("Brightness", BRIGHTNESS, 0, 255);
-   UINumberField fxIndex("Animartrix - index", initialFxIndex, 0, 9); // NUM_ANIMATIONS - 1 // currently creates a float; rest of program assumes uint8_t; not sure it will work
+   UINumberField cFxIndex("Animartrix - index", initialFxIndex, 0, 9); // NUM_ANIMATIONS - 1 // currently creates a float; rest of program assumes uint8_t; not sure it will work
    UINumberField colorOrder("Color Order", 0, 0, 5); // currently creates a float; rest of program assumes uint8_t; not sure it will work
    UISlider timeSpeed("Speed", 1, .1, 10, -1); //multiplied
 
-   UISlider adjustRatiosBase("Ratios: Base", 0, -1, 1, -1);  // added/subtracted
-   UISlider adjustRatiosDiff("Ratios: Diff", 1, .1, 10, -1);  // multiplied
+   UISlider cRatBase("Ratios: Base", 0, -1, 1, -1);  // added/subtracted
+   UISlider cRatDiff("Ratios: Diff", 1, .1, 10, -1);  // multiplied
 
-   UISlider adjustOffsetsBase("Offsets: Base", 1, .1, 10, -1);  // multiplied
-   UISlider adjustOffsetsDiff("Offsets: Diff" , 1, .1, 10, -1);  //multiplied
+   UISlider cOffBase("Offsets: Base", 1, .1, 10, -1);  // multiplied
+   UISlider cOffDiff("Offsets: Diff" , 1, .1, 10, -1);  //multiplied
 
-   UISlider adjustScale("Scale", 1, .3, 3, -1); //multiplied
+   UISlider cScale("Scale", 1, .3, 3, -1); //multiplied
 
-   UISlider adjustRadiusA("Radius", 0, -10, 30, 1);  // added/subtracted
-   UISlider adjustRadiusB("Radius", 0, -10, 10, 1);  // added/subtracted
+   UISlider cRadiusA("Radius", 0, -10, 30, 1);  // added/subtracted
+   UISlider cRadiusB("Radius", 0, -10, 10, 1);  // added/subtracted
 
-   UISlider adjustAngle("Angle", 1, .1, 10, -1); //multiplied
-   //UISlider adjustZoom("Zoom", 1, .1, 10, -1); //multiplied
-   UISlider adjustZ("Magic Z", 1, .1, 2, -1); //multiplied
+   UISlider cAngle("Angle", 1, .1, 10, -1); //multiplied
+   //UISlider cZoom("Zoom", 1, .1, 10, -1); //multiplied
+   UISlider cZ("Magic Z", 1, .1, 2, -1); //multiplied
 
-   UISlider adjustRed("Red", 1, .1, 10, -1);  //multiplied 
-   UISlider adjustGreen("Green", 1, .1, 10, -1);   //multiplied
-   UISlider adjustBlue("Blue", 1, .1, 10, -1);  //multiplied
+   UISlider cRed("Red", 1, .1, 10, -1);  //multiplied 
+   UISlider cGreen("Green", 1, .1, 10, -1);   //multiplied
+   UISlider cBlue("Blue", 1, .1, 10, -1);  //multiplied
 
 #else
 
+   //#include <map>
+
    using namespace ArduinoJson;
 
-   //String preset = "default";
-
-   uint8_t adjustBrightness = 25;
-  
    bool rotateAnimations = false;
+   
+   String cPresetName;
 
-   uint8_t adjustColorOrder = 0;                  
-   uint8_t fxIndex = initialFxIndex;
+   uint8_t cBright = 75;
+   uint8_t cColOrd = 0;                  
+   uint8_t cFxIndex = initialFxIndex;
 
-   float timeSpeed = 1.f; 
-   float adjustSpeed = 1.f;
+   //float timeSpeed = 1.f; 
+   float cSpeed = 1.f;
 
-   float adjustRatiosBase = 0.0f; 
-   float adjustRatiosDiff= 1.f; 
+   float cRatBase = 0.0f; 
+   float cRatDiff= 1.f; 
 
-   float adjustOffsetsBase = 1.f; 
-   float adjustOffsetsDiff = 1.f; 
+   float cOffBase = 1.f; 
+   float cOffDiff = 1.f; 
 
-   float adjustScale = 1.f; 
+   float cScale = 1.f; 
+   float cTwist = 1.f;
 
-   float adjustRadiusA = 1.0f; 
-   float adjustRadiusB = 1.0f;
+   float cRadius = 1.0f; 
+   float cEdge = 1.0f;
 
-   float adjustZoom = 1.f;
+   float cZoom = 1.f;
 
-   float adjustAngle = 1.f; 
+   float cAngle = 1.f; 
 
-   float adjustZ = 1.f; 
+   float cZ = 1.f; 
 
-   float adjustRed = 1.f; 
-   float adjustGreen = 1.f; 
-   float adjustBlue = 1.f; 
+   float cRed = 1.f; 
+   float cGreen = 1.f; 
+   float cBlue = 1.f; 
 
    bool Layer1 = true;
    bool Layer2 = true;
@@ -105,36 +107,11 @@ uint8_t dummy = 1;
 
    ArduinoJson::JsonDocument sendDoc;
    ArduinoJson::JsonDocument receivedJSON;
-   //ArduinoJson::JsonDocument jsonPreset;
-
-
-  /*
-  struct Preset {
-      uint8_t pBrightness;
-      float pSpeed;
-      uint8_t pColorOrder;
-      float pRatiosBase;
-      float pRatiosDiff;
-      float pOffsetsBase;
-      float pOffsetsDiff;
-      float pScale;	
-      float pAngle;	
-      float pDistance;
-      float pRadiusA;
-      float pRadiusB;	
-      float pZ;	
-      float pRed;
-      float pGreen;	
-      float pBlue;   
-   };
-
-   Preset preset1;
-   */
 
 #endif
 
-
-//BLE configuration *************************************************************
+//*******************************************************************************
+//BLE CONFIGURATION *************************************************************
 
 BLEServer* pServer = NULL;
 BLECharacteristic* pButtonCharacteristic = NULL;
@@ -155,9 +132,10 @@ BLEDescriptor pCheckboxDescriptor(BLEUUID((uint16_t)0x2902));
 BLEDescriptor pNumberDescriptor(BLEUUID((uint16_t)0x2902));
 //BLEDescriptor pPresetDescriptor(BLEUUID((uint16_t)0x2902));
 
-// CONTROL FUNCTIONS ***************************************************************
+//*******************************************************************************
+// CONTROL FUNCTIONS ************************************************************
 
-void animationAdjust(uint8_t newAnimation) {
+void animationc(uint8_t newAnimation) {
    pButtonCharacteristic->setValue(String(newAnimation).c_str());
    pButtonCharacteristic->notify();
    if (debug) {
@@ -166,11 +144,13 @@ void animationAdjust(uint8_t newAnimation) {
    }
 }
 
+// UI update functions ***********************************************
+
 void sendReceiptNumber(String receivedID, float receivedValue) {
    // Prepare the JSON document to send
    sendDoc.clear();
    sendDoc["id"] = receivedID;
-   sendDoc["value"] = receivedValue;
+   sendDoc["val"] = receivedValue;
 
    // Convert the JSON document to a string
    String jsonString;
@@ -191,10 +171,11 @@ void sendReceiptNumber(String receivedID, float receivedValue) {
 }
 
 void sendReceiptCheckbox(String receivedID, bool receivedValue) {
+  
    // Prepare the JSON document to send
    sendDoc.clear();
    sendDoc["id"] = receivedID;
-   sendDoc["value"] = receivedValue;
+   sendDoc["val"] = receivedValue;
 
    // Convert the JSON document to a string
    String jsonString;
@@ -214,84 +195,313 @@ void sendReceiptCheckbox(String receivedID, bool receivedValue) {
    }
 }
 
+// Handle UI request functions ***********************************************
+
 void processNumber(String receivedID, float receivedValue ) {
 
-   if (receivedID == "inputBrightness") {adjustBrightness = receivedValue;};
-   if (receivedID == "inputSpeed") {adjustSpeed = receivedValue;};
-   if (receivedID == "inputColorOrder") {adjustColorOrder = receivedValue;};
-   if (receivedID == "inputRatiosBase") {adjustRatiosBase = receivedValue;};
-   if (receivedID == "inputRatiosDiff") {adjustRatiosDiff = receivedValue;};
-   if (receivedID == "inputOffsetsBase") {adjustOffsetsBase = receivedValue;};
-   if (receivedID == "inputOffsetsDiff") {adjustOffsetsDiff = receivedValue;};
-   if (receivedID == "inputScale") {adjustScale = receivedValue;};	
-   if (receivedID == "inputAngle") {adjustAngle = receivedValue;};	
-   if (receivedID == "inputZoom") {adjustZoom = receivedValue;};
-   if (receivedID == "inputRadiusA") {adjustRadiusA = receivedValue;};
-   if (receivedID == "inputRadiusB") {adjustRadiusB = receivedValue;};	
-   if (receivedID == "inputZ") {adjustZ = receivedValue;};	
-   if (receivedID == "inputRed") {adjustRed = receivedValue;};	
-   if (receivedID == "inputGreen") {adjustGreen = receivedValue;};	
-   if (receivedID == "inputBlue") {adjustBlue = receivedValue;};
- 
+   if (receivedID == "inBright") {cBright = receivedValue;};
+   if (receivedID == "inSpeed") {cSpeed = receivedValue;};
+   if (receivedID == "inColOrd") {cColOrd = receivedValue;};
+   if (receivedID == "inRatBase") {cRatBase = receivedValue;};
+   if (receivedID == "inRatDiff") {cRatDiff = receivedValue;};
+   if (receivedID == "inOffBase") {cOffBase = receivedValue;};
+   if (receivedID == "inOffDiff") {cOffDiff = receivedValue;};
+   if (receivedID == "inScale") {cScale = receivedValue;};	
+   if (receivedID == "inAngle") {cAngle = receivedValue;};	
+   if (receivedID == "inZoom") {cZoom = receivedValue;};
+   if (receivedID == "inRadius") {cRadius = receivedValue;};
+   if (receivedID == "inEdge") {cEdge = receivedValue;};	
+   if (receivedID == "inZ") {cZ = receivedValue;};	
+   if (receivedID == "inRed") {cRed = receivedValue;};	
+   if (receivedID == "inGreen") {cGreen = receivedValue;};	
+   if (receivedID == "inBlue") {cBlue = receivedValue;};
+   if (receivedID == "inTwist") {cTwist = receivedValue;};
+   
    sendReceiptNumber(receivedID, receivedValue);
 
 }
 
 void processCheckbox(String receivedID, bool receivedValue ) {
 
-   if (receivedID == "checkboxRotateAnimations") {rotateAnimations = receivedValue;};
-   if (receivedID == "checkboxLayer1") {Layer1 = receivedValue;};
-   if (receivedID == "checkboxLayer2") {Layer2 = receivedValue;};
-   if (receivedID == "checkboxLayer3") {Layer3 = receivedValue;};
-   if (receivedID == "checkboxLayer4") {Layer4 = receivedValue;};
-   if (receivedID == "checkboxLayer5") {Layer5 = receivedValue;};
+   if (receivedID == "cxRotateAnim") {rotateAnimations = receivedValue;};
+   if (receivedID == "cxLayer1") {Layer1 = receivedValue;};
+   if (receivedID == "cxLayer2") {Layer2 = receivedValue;};
+   if (receivedID == "cxLayer3") {Layer3 = receivedValue;};
+   if (receivedID == "cxLayer4") {Layer4 = receivedValue;};
+   if (receivedID == "cxLayer5") {Layer5 = receivedValue;};
     
    sendReceiptCheckbox(receivedID, receivedValue);
+}
+
+//*******************************************************************************
+// PRESETS **********************************************************************
+
+//String pPresetName;
+
+struct Preset {
+   String pPresetName;
+   uint8_t pFxIndex;
+   uint8_t pBright;
+   uint8_t pColOrd;
+   float pSpeed;
+   float pRatBase;
+   float pRatDiff;
+   float pOffBase;
+   float pOffDiff;
+   float pScale;	
+   float pAngle;
+   float pZoom;
+   float pTwist;
+   float pRadius;
+   float pEdge;	
+   float pZ;	
+   float pRed;
+   float pGreen;	
+   float pBlue;   
+};
+
+Preset preset1 = {.pPresetName ="preset1"};
+Preset preset2 = {.pPresetName ="preset2"};
+Preset preset3 = {.pPresetName ="preset3"};
+
+void savePreset(const char* name, const Preset &preset) {
+   String path = "/";
+   path += name;
+   path += ".txt"; 
+   File file = LittleFS.open(path, "w");
+
+   if (!file) {
+      Serial.print("Failed to open file for writing: ");
+      Serial.println(path);
+   }
+
+   FastLED.delay(debugDelay);
+   file.printf("%d\n", preset.pFxIndex);
+   FastLED.delay(debugDelay);
+   file.printf("%d\n", preset.pBright);
+   FastLED.delay(debugDelay);
+   file.printf("%d\n", preset.pColOrd);
+   FastLED.delay(debugDelay);
+   file.printf("%f\n", preset.pSpeed);
+   FastLED.delay(debugDelay);
+   file.printf("%f\n", preset.pRatBase);
+   FastLED.delay(debugDelay);
+   file.printf("%f\n", preset.pRatDiff);
+   FastLED.delay(debugDelay);
+   file.printf("%f\n", preset.pOffBase);
+   FastLED.delay(debugDelay);
+   file.printf("%f\n", preset.pOffDiff);
+   FastLED.delay(debugDelay);
+   file.printf("%f\n", preset.pScale);
+   FastLED.delay(debugDelay);
+   file.printf("%f\n", preset.pAngle);
+   FastLED.delay(debugDelay);
+   file.printf("%f\n", preset.pZoom);
+   FastLED.delay(debugDelay);
+   file.printf("%f\n", preset.pTwist);
+   FastLED.delay(debugDelay);
+   file.printf("%f\n", preset.pRadius);
+   FastLED.delay(debugDelay);
+   file.printf("%f\n", preset.pEdge);
+   FastLED.delay(debugDelay);
+   file.printf("%f\n", preset.pZ);
+   FastLED.delay(debugDelay);
+   file.printf("%f\n", preset.pRed);
+   FastLED.delay(debugDelay);
+   file.printf("%f\n", preset.pGreen);
+   FastLED.delay(debugDelay);
+   file.printf("%f\n", preset.pBlue);
+   FastLED.delay(debugDelay);
+   
+   if (debug) {
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pFxIndex);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pBright);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pColOrd);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pSpeed);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pZoom);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pScale);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pAngle);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pTwist);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pRadius);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pEdge);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pZ);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pRatBase);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pRatDiff);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pOffBase);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pOffDiff);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pRed);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pGreen);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pBlue);
+   }
+
+
+   file.close();
+   Serial.print("Preset saved to ");
+   Serial.println(path);
 
 }
 
+void capturePreset(Preset &preset) {
+   FastLED.delay(debugDelay);
+   preset.pFxIndex = cFxIndex;
+   FastLED.delay(debugDelay);
+   preset.pBright = cBright;
+   FastLED.delay(debugDelay);
+   preset.pColOrd = cColOrd;
+   FastLED.delay(debugDelay);
+   preset.pSpeed = cSpeed;
+   FastLED.delay(debugDelay);
+   preset.pRatBase = cRatBase; 
+   FastLED.delay(debugDelay);
+   preset.pRatDiff = cRatDiff; 
+   FastLED.delay(debugDelay);
+   preset.pOffBase = cOffBase; 
+   FastLED.delay(debugDelay);
+   preset.pOffDiff = cOffDiff; 
+   FastLED.delay(debugDelay);
+   preset.pScale = cScale; 	
+   FastLED.delay(debugDelay);
+   preset.pAngle = cAngle; 
+   FastLED.delay(debugDelay);
+   preset.pZoom = cZoom; 
+   FastLED.delay(debugDelay);
+   preset.pTwist = cTwist; 
+   FastLED.delay(debugDelay);
+   preset.pRadius = cRadius; 
+   FastLED.delay(debugDelay);
+   preset.pEdge = cEdge; 	
+   FastLED.delay(debugDelay);
+   preset.pZ = cZ; 	
+   FastLED.delay(debugDelay);
+   preset.pRed = cRed; 
+   FastLED.delay(debugDelay);
+   preset.pGreen = cGreen; 	
+   FastLED.delay(debugDelay);
+   preset.pBlue = cBlue; 
+   FastLED.delay(debugDelay);
 
-/*
-void loadPreset(String presetName) {
-
-   // Open the applicable file store
-   File configFile = LittleFS.open("/config.json", "r"); // replace "config.json" with "presetName.json")
-   if (!configFile) {
-     Serial.println("Failed to open config file for reading");
-     return;
+   if (debug) {
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pFxIndex);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pBright);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pColOrd);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pSpeed);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pZoom);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pScale);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pAngle);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pTwist);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pRadius);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pEdge);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pZ);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pRatBase);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pRatDiff);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pOffBase);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pOffDiff);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pRed);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pGreen);
+      FastLED.delay(debugDelay);
+      Serial.println(preset.pBlue);
    }
 
-   //Extract preset variable data into JSON document
-   DynamicJsonDocument jsonPreset(1024);
-   DeserializationError error = deserializeJson(jsonPreset, configFile);
-   if (error) {
-     Serial.print(F("deserializeJson() failed: "));
-     Serial.println(error.c_str());
-     configFile.close();
-     return;
-   }
-   
-   // Retrieve parameter settings from the JSON document
-   
+   //savePreset(preset.pPresetName.c_str(), preset);
 
-   // For each parameter with a stored value:
-   if pBrightness
-
-
-         // create a variable that contains the parameterID (e.g., "inputBrightness")  
-         String parameterID = jsonPreset[receivedID];
-         // create a variable that contains the parameter value 
-         float parameterValue = jsonPreset[receivedValue];
-         // send a processNumber request with the applicable arguments
-         processNumber(parameterID, parameterValue);
-   
-
-
-   configFile.close();
 }
-*/
 
-// CALLBACKS ****************************************************************************
+void applyPreset(const Preset &preset) {
+   cFxIndex = preset.pFxIndex;
+   cBright = preset.pBright;
+   cColOrd = preset.pColOrd;
+   cSpeed = preset.pSpeed;
+   cRatBase = preset.pRatBase;
+   cRatDiff = preset.pRatDiff;
+   cOffBase = preset.pOffBase;
+   cOffDiff = preset.pOffDiff;
+   cScale = preset.pScale;
+   cAngle = preset.pAngle;
+   cZoom = preset.pZoom;
+   cTwist = preset.pTwist;
+   cRadius = preset.pRadius;
+   cEdge = preset.pEdge;
+   cZ = preset.pZ;
+   cRed = preset.pRed;
+   cGreen = preset.pGreen;
+   cBlue = preset.pBlue;
+}
+
+void retrievePreset(const char* name, Preset &preset) {
+   String path = "/";
+   path += name;
+   path += ".txt"; 
+   File file = LittleFS.open(path, "r");
+
+   if (!file) {
+      Serial.print("Failed to open file for reading: ");
+      Serial.println(path);
+   }
+  
+   preset.pFxIndex = file.readStringUntil('\n').toInt();
+   preset.pBright = file.readStringUntil('\n').toInt();
+   preset.pSpeed = file.readStringUntil('\n').toFloat();
+   preset.pColOrd = file.readStringUntil('\n').toInt();
+   preset.pRatBase = file.readStringUntil('\n').toFloat();
+   preset.pRatDiff = file.readStringUntil('\n').toFloat();
+   preset.pOffBase = file.readStringUntil('\n').toFloat();
+   preset.pOffDiff = file.readStringUntil('\n').toFloat();
+   preset.pScale = file.readStringUntil('\n').toFloat();
+   preset.pAngle = file.readStringUntil('\n').toFloat();
+   preset.pZoom = file.readStringUntil('\n').toFloat();
+   preset.pTwist = file.readStringUntil('\n').toFloat();
+   preset.pRadius = file.readStringUntil('\n').toFloat();
+   preset.pEdge = file.readStringUntil('\n').toFloat();
+   preset.pZ = file.readStringUntil('\n').toFloat();
+   preset.pRed = file.readStringUntil('\n').toFloat();
+   preset.pGreen = file.readStringUntil('\n').toFloat();
+   preset.pBlue = file.readStringUntil('\n').toFloat();
+
+   file.close();
+   Serial.print("Preset loaded from: ");
+   Serial.println(path);
+
+   applyPreset(preset);
+
+}
+
+//*******************************************************************************
+// CALLBACKS ********************************************************************
 
 class MyServerCallbacks: public BLEServerCallbacks {
   void onConnect(BLEServer* pServer) {
@@ -321,40 +531,55 @@ class ButtonCharacteristicCallbacks : public BLECharacteristicCallbacks {
        
          if (receivedValue != 99) {
          
-            if (receivedValue == 1) { //polar waves
-               fxIndex = 0;
-            }
-            if (receivedValue == 2) { // spiralus
-               fxIndex = 1;
-            }
-            if (receivedValue == 3) { // caleido1
-               fxIndex = 2;
-            }
-            if (receivedValue == 4) { // waves
-               fxIndex = 3;
-            }
-            if (receivedValue == 5) { // chasing spirals
-               fxIndex = 4;
-            }
-            if (receivedValue == 6) { // complex kaleido 6 
-               fxIndex = 5;
-            }
-            if (receivedValue == 7) { // water
-               fxIndex = 6;
-            }
-            if (receivedValue == 8) { // experiment 10
-               fxIndex = 7;
-            }
-            if (receivedValue == 9) { // experiment sm1
-               fxIndex = 8;
-            }
-            if (receivedValue == 10) { // test
-               fxIndex = 9;
-            }
+            if (receivedValue < 20) {
 
-            displayOn = true;
-            animationAdjust(fxIndex);
-       
+               if (receivedValue == 1) { //polar waves
+                  cFxIndex = 0;
+               }
+               if (receivedValue == 2) { // spiralus
+                  cFxIndex = 1;
+               }
+               if (receivedValue == 3) { // caleido1
+                  cFxIndex = 2;
+               }
+               if (receivedValue == 4) { // waves
+                  cFxIndex = 3;
+               }
+               if (receivedValue == 5) { // chasing spirals
+                  cFxIndex = 4;
+               }
+               if (receivedValue == 6) { // complex kaleido 6 
+                  cFxIndex = 5;
+               }
+               if (receivedValue == 7) { // water
+                  cFxIndex = 6;
+               }
+               if (receivedValue == 8) { // experiment 10
+                  cFxIndex = 7;
+               }
+               if (receivedValue == 9) { // experiment sm1
+                  cFxIndex = 8;
+               }
+               if (receivedValue == 10) { // test
+                  cFxIndex = 9;
+               }
+
+               displayOn = true;
+               animationc(cFxIndex);
+            }
+         
+         if (receivedValue >= 20 && receivedValue < 30) {
+
+            if (receivedValue == 20) { capturePreset(preset1); }
+
+            if (receivedValue == 21) { retrievePreset("preset1", preset1); }
+
+            if (receivedValue == 22) { capturePreset(preset2); }
+
+            if (receivedValue == 23) { retrievePreset("preset2", preset2); }
+
+         }
+
        }
 
        if (receivedValue == 99) { //off
@@ -379,7 +604,7 @@ class CheckboxCharacteristicCallbacks : public BLECharacteristicCallbacks {
       
          ArduinoJson::deserializeJson(receivedJSON, receivedBuffer);
          String receivedID = receivedJSON["id"] ;
-         bool receivedValue = receivedJSON["value"];
+         bool receivedValue = receivedJSON["val"];
       
          if (debug) {
             Serial.print(receivedID);
@@ -390,28 +615,6 @@ class CheckboxCharacteristicCallbacks : public BLECharacteristicCallbacks {
          processCheckbox(receivedID, receivedValue);
       
       }
-         
-         /*       
-         uint8_t receivedValue = value[0];
-  
-         if (debug) {
-            Serial.print("Checkbox: ");
-            Serial.println(receivedValue);
-         } 
-  
-         if (receivedValue == 100) {
-            rotateAnimations = true;
-         }
-         if (receivedValue == 101) {
-            rotateAnimations = false;
-         }
-  
-      pCheckboxCharacteristic->setValue(String(receivedValue).c_str());
-      pCheckboxCharacteristic->notify();
-
-      }
-   */
-
    }
 };
 
@@ -429,7 +632,7 @@ class NumberCharacteristicCallbacks : public BLECharacteristicCallbacks {
       
          ArduinoJson::deserializeJson(receivedJSON, receivedBuffer);
          String receivedID = receivedJSON["id"] ;
-         float receivedValue = receivedJSON["value"];
+         float receivedValue = receivedJSON["val"];
       
          if (debug) {
             Serial.print(receivedID);
@@ -463,7 +666,8 @@ class PresetCharacteristicCallbacks : public BLECharacteristicCallbacks {
 };
 */
 
-//*******************************************************************************************
+//*******************************************************************************
+// BLE SETUP FUNCTION ***********************************************************
 
 void bleSetup() {
 
@@ -481,7 +685,7 @@ void bleSetup() {
                      BLECharacteristic::PROPERTY_NOTIFY
                   );
    pButtonCharacteristic->setCallbacks(new ButtonCharacteristicCallbacks());
-   pButtonCharacteristic->setValue(String(fxIndex).c_str());
+   pButtonCharacteristic->setValue(String(cFxIndex).c_str());
    pButtonCharacteristic->addDescriptor(new BLE2902());
 
    pCheckboxCharacteristic = pService->createCharacteristic(
@@ -529,179 +733,3 @@ void bleSetup() {
    if (debug) {Serial.println("Waiting a client connection to notify...");}
 
 }
-
-// PRESET STRUCTURE *******************************************************************
-/*
-void littleFSsetup() {
-
-  if(!LittleFS.begin(FORMAT_LITTLEFS_IF_FAILED)){
-   Serial.println("LittleFS Mount Failed");
-   return;
-  }
-}
-
-void readFile(fs::FS &fs, const char * path){
-    Serial.printf("Reading file: %s\r\n", path);
-
-    File file = fs.open(path);
-    if(!file || file.isDirectory()){
-        Serial.println("- failed to open file for reading");
-        return;
-    }
-
-    Serial.println("- read from file:");
-    while(file.available()){
-        Serial.write(file.read());
-    }
-    file.close();
-}
-
-void writeFile(fs::FS &fs, const char * path, const char * message){
-    Serial.printf("Writing file: %s\r\n", path);
-
-    File file = fs.open(path, FILE_WRITE);
-    if(!file){
-        Serial.println("- failed to open file for writing");
-        return;
-    }
-    if(file.print(message)){
-        Serial.println("- file written");
-    } else {
-        Serial.println("- write failed");
-    }
-    file.close();
-}
-
-void appendFile(fs::FS &fs, const char * path, const char * message){
-    Serial.printf("Appending to file: %s\r\n", path);
-
-    File file = fs.open(path, FILE_APPEND);
-    if(!file){
-        Serial.println("- failed to open file for appending");
-        return;
-    }
-    if(file.print(message)){
-        Serial.println("- message appended");
-    } else {
-        Serial.println("- append failed");
-    }
-    file.close();
-}
-
-void renameFile(fs::FS &fs, const char * path1, const char * path2){
-    Serial.printf("Renaming file %s to %s\r\n", path1, path2);
-    if (fs.rename(path1, path2)) {
-        Serial.println("- file renamed");
-    } else {
-        Serial.println("- rename failed");
-    }
-}
-
-void deleteFile(fs::FS &fs, const char * path){
-    Serial.printf("Deleting file: %s\r\n", path);
-    if(fs.remove(path)){
-        Serial.println("- file deleted");
-    } else {
-        Serial.println("- delete failed");
-    }
-}
-
-void testFileIO(fs::FS &fs, const char * path){
-    Serial.printf("Testing file I/O with %s\r\n", path);
-
-    static uint8_t buf[512];
-    size_t len = 0;
-    File file = fs.open(path, FILE_WRITE);
-    if(!file){
-        Serial.println("- failed to open file for writing");
-        return;
-    }
-
-    size_t i;
-    Serial.print("- writing" );
-    uint32_t start = millis();
-    for(i=0; i<2048; i++){
-        if ((i & 0x001F) == 0x001F){
-          Serial.print(".");
-        }
-        file.write(buf, 512);
-    }
-    Serial.println("");
-    uint32_t end = millis() - start;
-    Serial.printf(" - %u bytes written in %u ms\r\n", 2048 * 512, end);
-    file.close();
-
-    file = fs.open(path);
-    start = millis();
-    end = start;
-    i = 0;
-    if(file && !file.isDirectory()){
-        len = file.size();
-        size_t flen = len;
-        start = millis();
-        Serial.print("- reading" );
-        while(len){
-            size_t toRead = len;
-            if(toRead > 512){
-                toRead = 512;
-            }
-            file.read(buf, toRead);
-            if ((i++ & 0x001F) == 0x001F){
-              Serial.print(".");
-            }
-            len -= toRead;
-        }
-        Serial.println("");
-        end = millis() - start;
-        Serial.printf("- %u bytes read in %u ms\r\n", flen, end);
-        file.close();
-    } else {
-        Serial.println("- failed to open file for reading");
-    }
-}
-
-
-/* EXAMPLE COMMANDS ***************************************
-    createDir(LittleFS, "/mydir"); // Create a mydir folder
-    writeFile(LittleFS, "/mydir/hello1.txt", "Hello1"); // Create a hello1.txt file with the content "Hello1"
-    listDir(LittleFS, "/", 1); // List the directories up to one level beginning at the root directory
-    deleteFile(LittleFS, "/mydir/hello1.txt"); //delete the previously created file
-    removeDir(LittleFS, "/mydir"); //delete the previously created folder
-    listDir(LittleFS, "/", 1); // list all directories to make sure they were deleted
-    
-    writeFile(LittleFS, "/hello.txt", "Hello "); //Create and write a new file in the root directory
-    appendFile(LittleFS, "/hello.txt", "World!\r\n"); //Append some text to the previous file
-    readFile(LittleFS, "/hello.txt"); // Read the complete file
-    renameFile(LittleFS, "/hello.txt", "/foo.txt"); //Rename the previous file
-    readFile(LittleFS, "/foo.txt"); //Read the file with the new name
-    deleteFile(LittleFS, "/foo.txt"); //Delete the file
-    testFileIO(LittleFS, "/test.txt"); //Testin
-    deleteFile(LittleFS, "/test.txt"); //Delete the file
-   */
-
-/*
-void createPreset(char* testText) {
- 
-   writeFile(LittleFS, "/config.json", testText);    
-
-   File configFile = LittleFS.open("/config.json", "w");
-      if (!configFile) {
-      Serial.println("Failed to open config file for writing");
-      return;
-      }
-   
-   DynamicJsonDocument doc(1024); // Adjust size as needed
-   // Add variables to the JSON document
-   doc["ssid"] = "your_ssid";
-   doc["password"] = "your_password";
-   doc["some_setting"] = 123;
-   
-   serializeJson(doc, configFile);
-   configFile.close();
-
-}
-*/
-
-
-
-

@@ -67,15 +67,22 @@ When BIG_BOARD is undefined:
 #include "myAnimartrix.hpp"
 #include "fl/ui.h"
 
-//*********************************************
+#include <FS.h>
+#include "LittleFS.h"
+#define FORMAT_LITTLEFS_IF_FAILED true 
 
-//#define BIG_BOARD
-#undef BIG_BOARD
+//*********************************************
 
 //#define SCREEN_TEST
 #undef SCREEN_TEST
 
-#define FIRST_ANIMATION POLAR_WAVES
+//#define BIG_BOARD
+#undef BIG_BOARD
+
+//#define CUSTOM_MAP
+#undef CUSTOM_MAP
+
+#define FIRST_ANIMATION TEST
 #define SECONDS_PER_ANIMATION 10
 
 #define DATA_PIN_1 2
@@ -130,32 +137,29 @@ using namespace fl;
 
 #ifndef SCREEN_TEST
     
-    // Set ther LED mapping by selecting (comment/uncomment) one of the following:
+    #ifdef CUSTOM_MAP
 
-        // For a generic mapping:
-        XYMap myXYmap(WIDTH, HEIGHT, true);  
+        uint16_t ledNum = 0;
 
-        // For a custom mapping:
-        /* -------
+        extern const uint16_t loc2indProgByRow[HEIGHT][WIDTH] PROGMEM;
+
+        uint16_t myXYFunction(uint16_t x, uint16_t y, uint16_t width, uint16_t height) {
+            width = WIDTH;
+            height = HEIGHT;
+            if (x >= width || y >= height) return 0;
+            ledNum = loc2indProgByRow[y][x];
+            return ledNum;
+        }
+
+        uint16_t myXYFunction(uint16_t x, uint16_t y, uint16_t width, uint16_t height);
+
         XYMap myXYmap = XYMap::constructWithUserFunction(WIDTH, HEIGHT, myXYFunction);
 
-        Custom XYMap mapping
-
-            uint16_t ledNum = 0;
+    #else    
+        
+        XYMap myXYmap(WIDTH, HEIGHT, true); 
     
-            extern const uint16_t loc2indProgByRow[HEIGHT][WIDTH] PROGMEM;
-    
-            uint16_t myXYFunction(uint16_t x, uint16_t y, uint16_t width, uint16_t height) {
-                width = WIDTH;
-                height = HEIGHT;
-                if (x >= width || y >= height) return 0;
-                ledNum = loc2indProgByRow[y][x];
-                return ledNum;
-            }
-
-            uint16_t myXYFunction(uint16_t x, uint16_t y, uint16_t width, uint16_t height);
-        ----- */
-
+    #endif
 
 #else
 
@@ -220,6 +224,17 @@ void setup() {
         bleSetup();
     #endif
     
+
+    delay(3000);
+
+
+    if (!LittleFS.begin(true)) {
+        Serial.println("LittleFS mount failed!");
+        return;
+    }
+    Serial.println("LittleFS mounted successfully.");
+
+
  }
 
 //************************************************************************************************************
@@ -231,21 +246,21 @@ void loop() {
     }
     else {
 
-        FastLED.setBrightness(adjustBrightness);
+        FastLED.setBrightness(cBright);
         fxEngine.setSpeed(1);
         //fxEngine.setSpeed(timeSpeed);
 
 
         static auto lastColorOrder = -1;
-        if (adjustColorOrder != lastColorOrder) {
-            setColorOrder(adjustColorOrder);
-            lastColorOrder = adjustColorOrder;
+        if (cColOrd != lastColorOrder) {
+            setColorOrder(cColOrd);
+            lastColorOrder = cColOrd;
         } 
 
         static auto lastFxIndex = -1;
-        if (fxIndex != lastFxIndex) {
-            lastFxIndex = fxIndex;
-            myAnimartrix.fxSet(fxIndex);
+        if (cFxIndex != lastFxIndex) {
+            lastFxIndex = cFxIndex;
+            myAnimartrix.fxSet(cFxIndex);
         }
         
         fxEngine.draw(millis(), leds);
@@ -254,7 +269,7 @@ void loop() {
         if (rotateAnimations) {
             EVERY_N_SECONDS (SECONDS_PER_ANIMATION) { 
                 fxIndex += 1 % (NUM_ANIMATIONS - 1);
-                animationAdjust(fxIndex);
+                animationc(fxIndex);
             }
         }
         */

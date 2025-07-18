@@ -47,8 +47,8 @@
                 <div class="table">
                     <div class="tr">
                         <span class="td">Rotate animation:
-                        <input type="checkbox" id="checkboxRotateAnimation" unchecked></span>
-                        <span class="td">Current: <span id="valueAnimation">0</span></span>
+                        <input type="checkbox" id="cxRotateAnim" unchecked></span>
+                        <span class="td">Current: <span id="valAnim">0</span></span>
                     </div>
                 </div>    
             
@@ -62,16 +62,16 @@
 
                 <h3>Brightness</h3>
  
-                    <form id="formBrightness">
-                        <input type="range" id="inputBrightness" name="inputBrightness"  min="25" max="150" step="5" value="50"/>
-                        <span id="valueBrightness">50</span>
+                    <form id="formBright">
+                        <input type="range" id="inBright" name="inBright"  min="25" max="150" step="5" value="75"/>
+                        <span id="valBright">75</span>
                     </form>
                         
                 <h3>Color Order</h3>
         
-                    <form id="formColorOrder">
-                        <input type="range" id="inputColorOrder" name="inputColorOrder"  min="0" max="5" step="1" value="0"/>
-                        <span id="valueColorOrder">0</span>
+                    <form id="formColOrd">
+                        <input type="range" id="inColOrd" name="inColOrd"  min="0" max="5" step="1" value="0"/>
+                        <span id="valColOrd">0</span>
                     </form>
 
                     <p></p>                    
@@ -87,28 +87,28 @@
                         <form id="formRed" class="tr">
                             <span class="td">Red: </span>
                             <span class="td">
-                                <input type="range" id="inputRed" name="inputRed" min=".1" max="5" step=".1" value="1">
-                                <span id="valueRed">1.0</span>
+                                <input type="range" id="inRed" name="inRed" min=".1" max="5" step=".1" value="1">
+                                <span id="valRed">1.0</span>
                             </span>
-                            <span class="td"><button id="resetRed" class="resetButton">&#8634</button></span>
+                            <span class="td"><button id="rstRed" class="resetButton">&#8634</button></span>
                         </form>
                         
                         <form id="formGreen" class="tr">
                             <span class="td">Green: </span>
                             <span class="td">
-                                <input type="range" id="inputGreen" name="inputGreen" min=".1" max="5" step=".1" value="1">
-                                <span id="valueGreen">1.0</span>
+                                <input type="range" id="inGreen" name="inGreen" min=".1" max="5" step=".1" value="1">
+                                <span id="valGreen">1.0</span>
                             </span>
-                            <span class="td"><button id="resetGreen" class="resetButton">&#8634</button></span>
+                            <span class="td"><button id="rstGreen" class="resetButton">&#8634</button></span>
                         </form>
                         
                         <form id="formBlue" class="tr">
                             <span class="td">Blue: </span>
                             <span class="td">
-                                <input type="range" id="inputBlue" name="inputBlue" min=".1" max="5" step=".1" value="1">
-                                <span id="valueBlue">1.0</span>
+                                <input type="range" id="inBlue" name="inBlue" min=".1" max="5" step=".1" value="1">
+                                <span id="valBlue">1.0</span>
                             </span>
-                            <span class="td"><button id="resetBlue" class="resetButton">&#8634</button></span>
+                            <span class="td"><button id="rstBlue" class="resetButton">&#8634</button></span>
                         </form> 
                     
                     </div>
@@ -122,11 +122,11 @@
                 <h3>Layers</h3>
                  <div class="table">
                     <div class="tr">
-                        <span class="td">1: <input type="checkbox" id="checkboxLayer1" checked></span>
-                        <span class="td">2: <input type="checkbox" id="checkboxLayer2" checked></span>
-                        <span class="td">3: <input type="checkbox" id="checkboxLayer3" checked></span>
-                        <span class="td">4: <input type="checkbox" id="checkboxLayer4" checked></span>
-                        <span class="td">5: <input type="checkbox" id="checkboxLayer5" checked></span>
+                        <span class="td">1: <input type="checkbox" id="cxLayer1" checked></span>
+                        <span class="td">2: <input type="checkbox" id="cxLayer2" checked></span>
+                        <span class="td">3: <input type="checkbox" id="cxLayer3" checked></span>
+                        <span class="td">4: <input type="checkbox" id="cxLayer4" checked></span>
+                        <span class="td">5: <input type="checkbox" id="cxLayer5" checked></span>
                     </div>
                 </div>    
 
@@ -149,100 +149,109 @@
                         <form id="formSpeed" class="tr">
                             <span class="td">Speed: </span>
                             <span class="td">
-                                <input type="range" id="inputSpeed" name="inputSpeed" min=".1" max="3" step=".1" value="1">
-                                <span id="valueSpeed">1.0</span>
+                                <input type="range" id="inSpeed" name="inSpeed" min=".1" max="3" step=".1" value="1">
+                                <span id="valSpeed">1.0</span>
                             </span>
-                            <span class="td"><button id="resetSpeed" class="resetButton">&#8634</button></span>
+                            <span class="td"><button id="rstSpeed" class="resetButton">&#8634</button></span>
                         </form> 
 												
 						<form id="formZoom" class="tr">
                             <span class="td">Zoom: </span>
                             <span class="td">
-                                <input type="range" id="inputZoom" name="inputZoom" min=".1" max="3" step=".1" value="1">
-                                <span id="valueZoom">1.0</span>
+                                <input type="range" id="inZoom" name="inZoom" min=".1" max="3" step=".1" value="1">
+                                <span id="valZoom">1.0</span>
                             </span>
-                            <span class="td"><button id="resetZoom" class="resetButton">&#8634</button></span>
+                            <span class="td"><button id="rstZoom" class="resetButton">&#8634</button></span>
                         </form>
 
                         <form id="formScale" class="tr">
                             <span class="td">Scale: </span>
                             <span class="td">
-                                <input type="range" id="inputScale" name="inputScale" min=".1" max="3" step=".1" value="1">
-                                <span id="valueScale">1.0</span>
+                                <input type="range" id="inScale" name="inScale" min=".1" max="3" step=".1" value="1">
+                                <span id="valScale">1.0</span>
                             </span>
-                            <span class="td"><button id="resetScale" class="resetButton">&#8634</button></span>
+                            <span class="td"><button id="rstScale" class="resetButton">&#8634</button></span>
                         </form>
                         
                         <form id="formAngle" class="tr">
                             <span class="td">Angle: </span>
                             <span class="td">
-                                <input type="range" id="inputAngle" name="inputAngle" min=".1" max="3" step=".1" value="1">
-                                <span id="valueAngle">1.0</span>
+                                <input type="range" id="inAngle" name="inAngle" min=".1" max="3" step=".1" value="1">
+                                <span id="valAngle">1.0</span>
                             </span>
-                            <span class="td"><button id="resetAngle" class="resetButton">&#8634</button></span>
+                            <span class="td"><button id="rstAngle" class="resetButton">&#8634</button></span>
                         </form> 
 						
-						<form id="formRadiusA" class="tr">
+                        <form id="formTwist" class="tr">
+                            <span class="td">Twist: </span>
+                            <span class="td">
+                                <input type="range" id="inTwist" name="inTwist" min="-3" max="3" step=".1" value="1">
+                                <span id="valTwist">1</span>
+                            </span>
+                            <span class="td"><button id="rstTwist" class="resetButton">&#8634</button></span>
+                        </form>
+						
+                        <form id="formRadius" class="tr">
                             <span class="td">Radius: </span>
                             <span class="td">
-                                <input type="range" id="inputRadiusA" name="inputRadiusA" min=".1" max="2" step=".1" value="1">
-                                <span id="valueRadiusA">1</span>
+                                <input type="range" id="inRadius" name="inRadius" min=".1" max="2" step=".1" value="1">
+                                <span id="valRadius">1</span>
                             </span>
-                            <span class="td"><button id="resetRadiusA" class="resetButton">&#8634</button></span>
+                            <span class="td"><button id="rstRadius" class="resetButton">&#8634</button></span>
                         </form> 
 						
-                        <form id="formRadiusB" class="tr">
+                        <form id="formEdge" class="tr">
                             <span class="td">Edge: </span>
                             <span class="td">
-                                <input type="range" id="inputRadiusB" name="inputRadiusB" min=".1" max="5" step=".1" value="1">
-                                <span id="valueRadiusB">1</span>
+                                <input type="range" id="inEdge" name="inEdge" min=".1" max="5" step=".1" value="1">
+                                <span id="valEdge">1</span>
                             </span>
-                            <span class="td"><button id="resetRadiusB" class="resetButton">&#8634</button></span>
+                            <span class="td"><button id="rstEdge" class="resetButton">&#8634</button></span>
                         </form>
 
                         <form id="formZ" class="tr">
                             <span class="td">Magic Z: </span>
                             <span class="td">
-                                <input type="range" id="inputZ" name="inputZ" min=".1" max="10" step=".1" value="1">
-                                <span id="valueZ">1.0</span>
+                                <input type="range" id="inZ" name="inZ" min=".1" max="10" step=".1" value="1">
+                                <span id="valZ">1.0</span>
                             </span>
-                            <span class="td"><button id="resetZ" class="resetButton">&#8634</button></span>
+                            <span class="td"><button id="rstZ" class="resetButton">&#8634</button></span>
                         </form> 
 						
-						<form id="formRatiosBase" class="tr">
+						<form id="formRatBase" class="tr">
                             <span class="td">Ratios Base: </span>
                             <span class="td">
-                                <input type="range" id="inputRatiosBase" name="inputRatiosBase" min="-.25" max=".5" step=".01" value="0">
-                                <span id="valueRatiosBase">0</span>
+                                <input type="range" id="inRatBase" name="inRatBase" min="-.25" max=".5" step=".01" value="0">
+                                <span id="valRatBase">0</span>
                             </span>
-                            <span class="td"><button id="resetRatiosBase" class="resetButton">&#8634</button></span>
+                            <span class="td"><button id="rstRatBase" class="resetButton">&#8634</button></span>
                         </form> 
 						
-						<form id="formRatiosDiff" class="tr">
+						<form id="formRatDiff" class="tr">
                             <span class="td">Ratios Diff: </span>
                             <span class="td">
-                                <input type="range" id="inputRatiosDiff" name="inputRatiosDiff" min=".1" max="5" step=".1" value="1">
-                                <span id="valueRatiosDiff">1.0</span>
+                                <input type="range" id="inRatDiff" name="inRatDiff" min=".1" max="5" step=".1" value="1">
+                                <span id="valRatDiff">1.0</span>
                             </span>
-                            <span class="td"><button id="resetRatiosDiff" class="resetButton">&#8634</button></span>
+                            <span class="td"><button id="rstRatDiff" class="resetButton">&#8634</button></span>
                         </form> 
 						
-						<form id="formOffsetsBase" class="tr">
+						<form id="formOffBase" class="tr">
                             <span class="td">Offsets Base: </span>
                             <span class="td">
-                                <input type="range" id="inputOffsetsBase" name="inputOffsetsBase" min=".1" max="5" step=".1" value="1">
-                                <span id="valueOffsetsBase">1.0</span>
+                                <input type="range" id="inOffBase" name="inOffBase" min=".1" max="5" step=".1" value="1">
+                                <span id="valOffBase">1.0</span>
                             </span>
-                            <span class="td"><button id="resetOffsetsBase" class="resetButton">&#8634</button></span>
+                            <span class="td"><button id="rstOffBase" class="resetButton">&#8634</button></span>
                         </form> 
 						
-						<form id="formOffsetsDiff" class="tr">
+						<form id="formOffDiff" class="tr">
                             <span class="td">Offsets Diff: </span>
                             <span class="td">
-                                <input type="range" id="inputOffsetsDiff" name="inputOffsetsDiff" min=".1" max="5" step=".1" value="1">
-                                <span id="valueOffsetsDiff">1.0</span>
+                                <input type="range" id="inOffDiff" name="inOffDiff" min=".1" max="5" step=".1" value="1">
+                                <span id="valOffDiff">1.0</span>
                             </span>
-                            <span class="td"><button id="resetOffsetsDiff" class="resetButton">&#8634</button></span>
+                            <span class="td"><button id="rstOffDiff" class="resetButton">&#8634</button></span>
                         </form>
                 <!--
                         <form id="formPreset" class="tr">
@@ -264,6 +273,12 @@
     
         <div class="section6">
             <p class="gray-label" ><i>Last value sent: <span id="valueSent"></span></i></p>
+            <p>
+                <button id="presetSaveButton1" class="onButton">SAVE PRESET 1</button>
+                <button id="presetLoadButton1" class="onButton">LOAD PRESET 1</button>
+                <button id="presetSaveButton2" class="onButton">SAVE PRESET 2</button>
+                <button id="presetLoadButton2" class="onButton">LOAD PRESET 2</button>
+            </p>                
         </div>
 
 
