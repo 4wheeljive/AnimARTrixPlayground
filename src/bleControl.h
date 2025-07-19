@@ -20,7 +20,8 @@ Setting numHandles = 60 has worked for 7 characteristics.
 
 bool displayOn = true;
 bool debug = true;
-uint16_t debugDelay = 500;
+uint16_t debugDelay = 100;
+bool pauseAnimation = false;
 
 uint8_t initialFxIndex = 0;
 
@@ -265,6 +266,7 @@ Preset preset2 = {.pPresetName ="preset2"};
 Preset preset3 = {.pPresetName ="preset3"};
 
 void savePreset(const char* name, const Preset &preset) {
+      
    String path = "/";
    path += name;
    path += ".txt"; 
@@ -313,7 +315,7 @@ void savePreset(const char* name, const Preset &preset) {
    file.printf("%f\n", preset.pBlue);
    FastLED.delay(debugDelay);
    
-   if (debug) {
+   /*if (debug) {
       FastLED.delay(debugDelay);
       Serial.println(preset.pFxIndex);
       FastLED.delay(debugDelay);
@@ -350,7 +352,7 @@ void savePreset(const char* name, const Preset &preset) {
       Serial.println(preset.pGreen);
       FastLED.delay(debugDelay);
       Serial.println(preset.pBlue);
-   }
+   }*/
 
 
    file.close();
@@ -360,6 +362,9 @@ void savePreset(const char* name, const Preset &preset) {
 }
 
 void capturePreset(Preset &preset) {
+  
+  pauseAnimation = true;
+
    FastLED.delay(debugDelay);
    preset.pFxIndex = cFxIndex;
    FastLED.delay(debugDelay);
@@ -398,7 +403,7 @@ void capturePreset(Preset &preset) {
    preset.pBlue = cBlue; 
    FastLED.delay(debugDelay);
 
-   if (debug) {
+   /*if (debug) {
       FastLED.delay(debugDelay);
       Serial.println(preset.pFxIndex);
       FastLED.delay(debugDelay);
@@ -435,9 +440,11 @@ void capturePreset(Preset &preset) {
       Serial.println(preset.pGreen);
       FastLED.delay(debugDelay);
       Serial.println(preset.pBlue);
-   }
+   }*/
 
-   //savePreset(preset.pPresetName.c_str(), preset);
+   savePreset(preset.pPresetName.c_str(), preset);
+
+   pauseAnimation = false;
 
 }
 

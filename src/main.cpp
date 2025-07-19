@@ -79,8 +79,8 @@ When BIG_BOARD is undefined:
 //#define BIG_BOARD
 #undef BIG_BOARD
 
-//#define CUSTOM_MAP
-#undef CUSTOM_MAP
+#define CUSTOM_MAP
+//#undef CUSTOM_MAP
 
 #define FIRST_ANIMATION TEST
 #define SECONDS_PER_ANIMATION 10
@@ -97,10 +97,10 @@ When BIG_BOARD is undefined:
     #define NUM_SEGMENTS 3
     #define NUM_LEDS_PER_SEGMENT 512
 #else 
-    #define HEIGHT 16 
-    #define WIDTH 16
+    #define HEIGHT 24 
+    #define WIDTH 24
     #define NUM_SEGMENTS 1
-    #define NUM_LEDS_PER_SEGMENT 256
+    #define NUM_LEDS_PER_SEGMENT 576
 #endif
 
 //*********************************************
@@ -110,7 +110,8 @@ When BIG_BOARD is undefined:
     #include "bleControl.h"
 
     #ifndef BIG_BOARD
-        #include <matrixMap_22x22.h>
+        //#include <matrixMap_22x22.h>
+        #include <matrixMap_24x24.h>
     #else
         #include <matrixMap_32x48_3pin.h>    
     #endif
@@ -225,15 +226,11 @@ void setup() {
     #endif
     
 
-    delay(3000);
-
-
     if (!LittleFS.begin(true)) {
         Serial.println("LittleFS mount failed!");
         return;
     }
     Serial.println("LittleFS mounted successfully.");
-
 
  }
 
@@ -241,59 +238,53 @@ void setup() {
 
 void loop() {
     
-    if (!displayOn){
-      FastLED.clear();
-    }
-    else {
-
-        FastLED.setBrightness(cBright);
-        fxEngine.setSpeed(1);
-        //fxEngine.setSpeed(timeSpeed);
-
-
-        static auto lastColorOrder = -1;
-        if (cColOrd != lastColorOrder) {
-            setColorOrder(cColOrd);
-            lastColorOrder = cColOrd;
-        } 
-
-        static auto lastFxIndex = -1;
-        if (cFxIndex != lastFxIndex) {
-            lastFxIndex = cFxIndex;
-            myAnimartrix.fxSet(cFxIndex);
-        }
-        
-        fxEngine.draw(millis(), leds);
-        
-        /*
-        if (rotateAnimations) {
-            EVERY_N_SECONDS (SECONDS_PER_ANIMATION) { 
-                fxIndex += 1 % (NUM_ANIMATIONS - 1);
-                animationc(fxIndex);
-            }
-        }
-        */
-    }
+    if (!pauseAnimation) {
     
-    FastLED.show();
+        if (!displayOn){
+            FastLED.clear();
+        }
 
-    // BLE CONTROL....
+        else {
 
-      // while connected
-      /*if (deviceConnected) {
+            FastLED.setBrightness(cBright);
+            fxEngine.setSpeed(1);
+            //fxEngine.setSpeed(timeSpeed);
 
-      }*/
+            static auto lastColorOrder = -1;
+            if (cColOrd != lastColorOrder) {
+                setColorOrder(cColOrd);
+                lastColorOrder = cColOrd;
+            } 
 
-      // upon disconnect
-      if (!deviceConnected && wasConnected) {
+            static auto lastFxIndex = -1;
+            if (cFxIndex != lastFxIndex) {
+                lastFxIndex = cFxIndex;
+                myAnimartrix.fxSet(cFxIndex);
+            }
+            
+            fxEngine.draw(millis(), leds);
+            
+            /*
+            if (rotateAnimations) {
+                EVERY_N_SECONDS (SECONDS_PER_ANIMATION) { 
+                    fxIndex += 1 % (NUM_ANIMATIONS - 1);
+                    animationc(fxIndex);
+                }
+            }
+            */
+        }
+        
+        FastLED.show();
+    }
+
+    // upon BLE disconnect
+    if (!deviceConnected && wasConnected) {
         if (debug) {Serial.println("Device disconnected.");}
         delay(500); // give the bluetooth stack the chance to get things ready
         pServer->startAdvertising();
         if (debug) {Serial.println("Start advertising");}
         wasConnected = false;
-      }
-
-    // ..................
+    }
 
 }
 
