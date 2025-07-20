@@ -174,11 +174,16 @@ function sendCheckboxCharacteristic(inputID, inputValue) {
 
 // handler for any incoming BLE update:
 
-function applyReceivedButton(receivedDoc){
-    valAnim.innerHTML = changeReceived;
+function applyReceivedButton(changeReceived){
+    if (changeReceived < 20) {
+        var newAnimation = changeReceived - 1;
+        valAnim.innerHTML = newAnimation;
+        console.log('New animation:', newAnimation);
+    }
 }
 
 function applyReceivedCheckbox(receivedDoc) {}
+
 
 function applyReceivedNumber(receivedDoc) {
   const ctrl = controlsById[receivedDoc.id];
@@ -345,14 +350,9 @@ function disconnectDevice() {
 
 function handleButtonCharacteristicChange(event){
     const changeReceived = new TextDecoder().decode(event.target.value);
-    const receivedDoc = JSON.parse(changeReceived); 
-    console.log("Server receipt: ___________ - ",changeReceived);
-    applyReceivedButton(receivedDoc);
-    
-
-
-
-
+    //const receivedDoc = JSON.parse(changeReceived); 
+    console.log("Server receipt: Button value - ",changeReceived);
+    applyReceivedButton(changeReceived);
 }
 
 function handleCheckboxCharacteristicChange(event){

@@ -95,6 +95,37 @@ uint8_t dummy = 1;
    bool Layer4 = true;
    bool Layer5 = true;
 
+   struct Preset {
+      String pPresetName;
+      uint8_t pFxIndex;
+      uint8_t pBright;
+      uint8_t pColOrd;
+      float pSpeed;
+      float pZoom;
+      float pScale;	
+      float pAngle;
+      float pTwist;
+      float pRadius;
+      float pEdge;	
+      float pZ;	
+      float pRatBase;
+      float pRatDiff;
+      float pOffBase;
+      float pOffDiff;
+      float pRed;
+      float pGreen;	
+      float pBlue;   
+   };
+
+   Preset presetD = { };
+
+   Preset preset1 = {.pPresetName ="preset1"};
+   Preset preset2 = {.pPresetName ="preset2"};
+   Preset preset3 = {.pPresetName ="preset3"};
+
+   void capturePreset(Preset &preset);
+   void retrievePreset(const char* name, Preset &preset);
+
    ArduinoJson::JsonDocument sendDoc;
    ArduinoJson::JsonDocument receivedJSON;
 
@@ -189,25 +220,89 @@ void sendReceiptNumber(String receivedID, float receivedValue) {
 
 // Handle UI request functions ***********************************************
 
+
+void processButton(uint8_t receivedValue) {
+ 
+   if (receivedValue != 99) {
+         
+      if (receivedValue < 20) {
+
+         if (receivedValue == 1) { //polar waves
+            cFxIndex = 0;
+         }
+         if (receivedValue == 2) { // spiralus
+            cFxIndex = 1;
+         }
+         if (receivedValue == 3) { // caleido1
+            cFxIndex = 2;
+         }
+         if (receivedValue == 4) { // waves
+            cFxIndex = 3;
+         }
+         if (receivedValue == 5) { // chasing spirals
+            cFxIndex = 4;
+         }
+         if (receivedValue == 6) { // complex kaleido 6 
+            cFxIndex = 5;
+         }
+         if (receivedValue == 7) { // water
+            cFxIndex = 6;
+         }
+         if (receivedValue == 8) { // experiment 10
+            cFxIndex = 7;
+         }
+         if (receivedValue == 9) { // experiment sm1
+            cFxIndex = 8;
+         }
+         if (receivedValue == 10) { // test
+            cFxIndex = 9;
+         }
+
+         displayOn = true;
+      
+      }
+         
+      if (receivedValue >= 20 && receivedValue < 30) {
+
+         if (receivedValue == 20) { capturePreset(preset1); }
+
+         if (receivedValue == 21) { retrievePreset("preset1", preset1); }
+
+         if (receivedValue == 22) { capturePreset(preset2); }
+
+         if (receivedValue == 23) { retrievePreset("preset2", preset2); }
+
+      }
+
+      sendReceiptButton(receivedValue);
+
+   }
+
+   if (receivedValue == 99) { //off
+      displayOn = false;
+   }
+
+}
+
 void processNumber(String receivedID, float receivedValue ) {
 
    if (receivedID == "inBright") {cBright = receivedValue;};
-   if (receivedID == "inSpeed") {cSpeed = receivedValue;};
    if (receivedID == "inColOrd") {cColOrd = receivedValue;};
+   if (receivedID == "inSpeed") {cSpeed = receivedValue;};
+   if (receivedID == "inZoom") {cZoom = receivedValue;};    
+   if (receivedID == "inScale") {cScale = receivedValue;};	
+   if (receivedID == "inAngle") {cAngle = receivedValue;};	
+   if (receivedID == "inTwist") {cTwist = receivedValue;};
+   if (receivedID == "inRadius") {cRadius = receivedValue;};
+   if (receivedID == "inEdge") {cEdge = receivedValue;};	
+   if (receivedID == "inZ") {cZ = receivedValue;};	
    if (receivedID == "inRatBase") {cRatBase = receivedValue;};
    if (receivedID == "inRatDiff") {cRatDiff = receivedValue;};
    if (receivedID == "inOffBase") {cOffBase = receivedValue;};
    if (receivedID == "inOffDiff") {cOffDiff = receivedValue;};
-   if (receivedID == "inScale") {cScale = receivedValue;};	
-   if (receivedID == "inAngle") {cAngle = receivedValue;};	
-   if (receivedID == "inZoom") {cZoom = receivedValue;};
-   if (receivedID == "inRadius") {cRadius = receivedValue;};
-   if (receivedID == "inEdge") {cEdge = receivedValue;};	
-   if (receivedID == "inZ") {cZ = receivedValue;};	
    if (receivedID == "inRed") {cRed = receivedValue;};	
    if (receivedID == "inGreen") {cGreen = receivedValue;};	
    if (receivedID == "inBlue") {cBlue = receivedValue;};
-   if (receivedID == "inTwist") {cTwist = receivedValue;};
    
    sendReceiptNumber(receivedID, receivedValue);
 
@@ -230,33 +325,6 @@ void processCheckbox(String receivedID, bool receivedValue ) {
 
 //String pPresetName;
 
-struct Preset {
-   String pPresetName;
-   uint8_t pFxIndex;
-   uint8_t pBright;
-   uint8_t pColOrd;
-   float pSpeed;
-   float pRatBase;
-   float pRatDiff;
-   float pOffBase;
-   float pOffDiff;
-   float pScale;	
-   float pAngle;
-   float pZoom;
-   float pTwist;
-   float pRadius;
-   float pEdge;	
-   float pZ;	
-   float pRed;
-   float pGreen;	
-   float pBlue;   
-};
-
-Preset presetD = { };
-
-Preset preset1 = {.pPresetName ="preset1"};
-Preset preset2 = {.pPresetName ="preset2"};
-Preset preset3 = {.pPresetName ="preset3"};
 
 void savePreset(const char* name, const Preset &preset) {
       
@@ -274,17 +342,17 @@ void savePreset(const char* name, const Preset &preset) {
    file.printf("%d\n", preset.pBright);
    file.printf("%d\n", preset.pColOrd);
    file.printf("%f\n", preset.pSpeed);
-   file.printf("%f\n", preset.pRatBase);
-   file.printf("%f\n", preset.pRatDiff);
-   file.printf("%f\n", preset.pOffBase);
-   file.printf("%f\n", preset.pOffDiff);
+   file.printf("%f\n", preset.pZoom);
    file.printf("%f\n", preset.pScale);
    file.printf("%f\n", preset.pAngle);
-   file.printf("%f\n", preset.pZoom);
    file.printf("%f\n", preset.pTwist);
    file.printf("%f\n", preset.pRadius);
    file.printf("%f\n", preset.pEdge);
    file.printf("%f\n", preset.pZ);
+   file.printf("%f\n", preset.pRatBase);
+   file.printf("%f\n", preset.pRatDiff);
+   file.printf("%f\n", preset.pOffBase);
+   file.printf("%f\n", preset.pOffDiff);
    file.printf("%f\n", preset.pRed);
    file.printf("%f\n", preset.pGreen);
    file.printf("%f\n", preset.pBlue);
@@ -303,17 +371,17 @@ void capturePreset(Preset &preset) {
    preset.pBright = cBright;
    preset.pColOrd = cColOrd;
    preset.pSpeed = cSpeed;
-   preset.pRatBase = cRatBase; 
-   preset.pRatDiff = cRatDiff; 
-   preset.pOffBase = cOffBase; 
-   preset.pOffDiff = cOffDiff; 
+   preset.pZoom = cZoom; 
    preset.pScale = cScale; 	
    preset.pAngle = cAngle; 
-   preset.pZoom = cZoom; 
    preset.pTwist = cTwist; 
    preset.pRadius = cRadius; 
    preset.pEdge = cEdge; 	
    preset.pZ = cZ; 	
+   preset.pRatBase = cRatBase; 
+   preset.pRatDiff = cRatDiff; 
+   preset.pOffBase = cOffBase; 
+   preset.pOffDiff = cOffDiff; 
    preset.pRed = cRed; 
    preset.pGreen = cGreen; 	
    preset.pBlue = cBlue; 
@@ -328,9 +396,6 @@ void applyPreset(const Preset &preset) {
    
    pauseAnimation = true;
 
-
-   //************************************************************************************* */
-   //needs button alternative
    if (cFxIndex != preset.pFxIndex){
       cFxIndex = preset.pFxIndex;
       sendReceiptButton(cFxIndex);
@@ -364,6 +429,11 @@ void applyPreset(const Preset &preset) {
    if (cAngle != preset.pAngle){
       cAngle = preset.pAngle;
       sendReceiptNumber("inAngle",cAngle);
+   };   
+
+   if (cTwist != preset.pTwist){
+      cTwist = preset.pTwist;
+      sendReceiptNumber("inTwist",cTwist);
    };   
 
    if (cRadius != preset.pRadius){
@@ -433,19 +503,19 @@ void retrievePreset(const char* name, Preset &preset) {
   
    preset.pFxIndex = file.readStringUntil('\n').toInt();
    preset.pBright = file.readStringUntil('\n').toInt();
-   preset.pSpeed = file.readStringUntil('\n').toFloat();
    preset.pColOrd = file.readStringUntil('\n').toInt();
-   preset.pRatBase = file.readStringUntil('\n').toFloat();
-   preset.pRatDiff = file.readStringUntil('\n').toFloat();
-   preset.pOffBase = file.readStringUntil('\n').toFloat();
-   preset.pOffDiff = file.readStringUntil('\n').toFloat();
+   preset.pSpeed = file.readStringUntil('\n').toFloat();
+   preset.pZoom = file.readStringUntil('\n').toFloat();
    preset.pScale = file.readStringUntil('\n').toFloat();
    preset.pAngle = file.readStringUntil('\n').toFloat();
-   preset.pZoom = file.readStringUntil('\n').toFloat();
    preset.pTwist = file.readStringUntil('\n').toFloat();
    preset.pRadius = file.readStringUntil('\n').toFloat();
    preset.pEdge = file.readStringUntil('\n').toFloat();
    preset.pZ = file.readStringUntil('\n').toFloat();
+   preset.pRatBase = file.readStringUntil('\n').toFloat();
+   preset.pRatDiff = file.readStringUntil('\n').toFloat();
+   preset.pOffBase = file.readStringUntil('\n').toFloat();
+   preset.pOffDiff = file.readStringUntil('\n').toFloat();
    preset.pRed = file.readStringUntil('\n').toFloat();
    preset.pGreen = file.readStringUntil('\n').toFloat();
    preset.pBlue = file.readStringUntil('\n').toFloat();
@@ -483,69 +553,12 @@ class ButtonCharacteristicCallbacks : public BLECharacteristicCallbacks {
          uint8_t receivedValue = value[0];
          
          if (debug) {
-            Serial.print("Animation: ");
+            Serial.print("Button value received: ");
             Serial.println(receivedValue);
          }
-       
-         if (receivedValue != 99) {
          
-            if (receivedValue < 20) {
-
-               if (receivedValue == 1) { //polar waves
-                  cFxIndex = 0;
-               }
-               if (receivedValue == 2) { // spiralus
-                  cFxIndex = 1;
-               }
-               if (receivedValue == 3) { // caleido1
-                  cFxIndex = 2;
-               }
-               if (receivedValue == 4) { // waves
-                  cFxIndex = 3;
-               }
-               if (receivedValue == 5) { // chasing spirals
-                  cFxIndex = 4;
-               }
-               if (receivedValue == 6) { // complex kaleido 6 
-                  cFxIndex = 5;
-               }
-               if (receivedValue == 7) { // water
-                  cFxIndex = 6;
-               }
-               if (receivedValue == 8) { // experiment 10
-                  cFxIndex = 7;
-               }
-               if (receivedValue == 9) { // experiment sm1
-                  cFxIndex = 8;
-               }
-               if (receivedValue == 10) { // test
-                  cFxIndex = 9;
-               }
-
-               displayOn = true;
-               sendReceiptButton(cFxIndex);
-            }
-            
-            if (receivedValue >= 20 && receivedValue < 30) {
-
-               if (receivedValue == 20) { capturePreset(preset1); }
-
-               if (receivedValue == 21) { retrievePreset("preset1", preset1); }
-
-               if (receivedValue == 22) { capturePreset(preset2); }
-
-               if (receivedValue == 23) { retrievePreset("preset2", preset2); }
-
-               sendReceiptButton(receivedValue);
-
-            }
-
-       }
-
-       if (receivedValue == 99) { //off
-          displayOn = false;
-       }
-	
+         processButton(receivedValue);
+        
       }
    }
 };
