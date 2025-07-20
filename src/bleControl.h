@@ -63,8 +63,6 @@ uint8_t dummy = 1;
 
 #else
 
-   //#include <map>
-
    using namespace ArduinoJson;
 
    bool rotateAnimations = false;
@@ -75,27 +73,18 @@ uint8_t dummy = 1;
    uint8_t cColOrd = 0;                  
    uint8_t cFxIndex = initialFxIndex;
 
-   //float timeSpeed = 1.f; 
    float cSpeed = 1.f;
-
-   float cRatBase = 0.0f; 
-   float cRatDiff= 1.f; 
-
-   float cOffBase = 1.f; 
-   float cOffDiff = 1.f; 
-
+   float cZoom = 1.f;
    float cScale = 1.f; 
+   float cAngle = 1.f; 
    float cTwist = 1.f;
-
    float cRadius = 1.0f; 
    float cEdge = 1.0f;
-
-   float cZoom = 1.f;
-
-   float cAngle = 1.f; 
-
    float cZ = 1.f; 
-
+   float cRatBase = 0.0f; 
+   float cRatDiff= 1.f; 
+   float cOffBase = 1.f; 
+   float cOffDiff = 1.f; 
    float cRed = 1.f; 
    float cGreen = 1.f; 
    float cBlue = 1.f; 
@@ -136,37 +125,14 @@ BLEDescriptor pNumberDescriptor(BLEUUID((uint16_t)0x2902));
 //*******************************************************************************
 // CONTROL FUNCTIONS ************************************************************
 
-void animationc(uint8_t newAnimation) {
-   pButtonCharacteristic->setValue(String(newAnimation).c_str());
-   pButtonCharacteristic->notify();
-   if (debug) {
-      Serial.print("Animation: ");
-      Serial.println(newAnimation);
-   }
-}
 
 // UI update functions ***********************************************
 
-void sendReceiptNumber(String receivedID, float receivedValue) {
-   // Prepare the JSON document to send
-   sendDoc.clear();
-   sendDoc["id"] = receivedID;
-   sendDoc["val"] = receivedValue;
-
-   // Convert the JSON document to a string
-   String jsonString;
-   serializeJson(sendDoc, jsonString);
-
-   // Set the value of the characteristic
-   pNumberCharacteristic->setValue(jsonString);
-   
-   // Notify connected clients
-   pNumberCharacteristic->notify();
-   
+void sendReceiptButton(uint8_t receivedValue) {
+   pButtonCharacteristic->setValue(String(receivedValue).c_str());
+   pButtonCharacteristic->notify();
    if (debug) {
-      Serial.print("Sent receipt for ");
-      Serial.print(receivedID);
-      Serial.print(": ");
+      Serial.print("Button value received: ");
       Serial.println(receivedValue);
    }
 }
@@ -195,6 +161,31 @@ void sendReceiptCheckbox(String receivedID, bool receivedValue) {
       Serial.println(receivedValue);
    }
 }
+
+void sendReceiptNumber(String receivedID, float receivedValue) {
+   // Prepare the JSON document to send
+   sendDoc.clear();
+   sendDoc["id"] = receivedID;
+   sendDoc["val"] = receivedValue;
+
+   // Convert the JSON document to a string
+   String jsonString;
+   serializeJson(sendDoc, jsonString);
+
+   // Set the value of the characteristic
+   pNumberCharacteristic->setValue(jsonString);
+   
+   // Notify connected clients
+   pNumberCharacteristic->notify();
+   
+   if (debug) {
+      Serial.print("Sent receipt for ");
+      Serial.print(receivedID);
+      Serial.print(": ");
+      Serial.println(receivedValue);
+   }
+}
+
 
 // Handle UI request functions ***********************************************
 
@@ -261,6 +252,8 @@ struct Preset {
    float pBlue;   
 };
 
+Preset presetD = { };
+
 Preset preset1 = {.pPresetName ="preset1"};
 Preset preset2 = {.pPresetName ="preset2"};
 Preset preset3 = {.pPresetName ="preset3"};
@@ -277,84 +270,25 @@ void savePreset(const char* name, const Preset &preset) {
       Serial.println(path);
    }
 
-   FastLED.delay(debugDelay);
    file.printf("%d\n", preset.pFxIndex);
-   FastLED.delay(debugDelay);
    file.printf("%d\n", preset.pBright);
-   FastLED.delay(debugDelay);
    file.printf("%d\n", preset.pColOrd);
-   FastLED.delay(debugDelay);
    file.printf("%f\n", preset.pSpeed);
-   FastLED.delay(debugDelay);
    file.printf("%f\n", preset.pRatBase);
-   FastLED.delay(debugDelay);
    file.printf("%f\n", preset.pRatDiff);
-   FastLED.delay(debugDelay);
    file.printf("%f\n", preset.pOffBase);
-   FastLED.delay(debugDelay);
    file.printf("%f\n", preset.pOffDiff);
-   FastLED.delay(debugDelay);
    file.printf("%f\n", preset.pScale);
-   FastLED.delay(debugDelay);
    file.printf("%f\n", preset.pAngle);
-   FastLED.delay(debugDelay);
    file.printf("%f\n", preset.pZoom);
-   FastLED.delay(debugDelay);
    file.printf("%f\n", preset.pTwist);
-   FastLED.delay(debugDelay);
    file.printf("%f\n", preset.pRadius);
-   FastLED.delay(debugDelay);
    file.printf("%f\n", preset.pEdge);
-   FastLED.delay(debugDelay);
    file.printf("%f\n", preset.pZ);
-   FastLED.delay(debugDelay);
    file.printf("%f\n", preset.pRed);
-   FastLED.delay(debugDelay);
    file.printf("%f\n", preset.pGreen);
-   FastLED.delay(debugDelay);
    file.printf("%f\n", preset.pBlue);
-   FastLED.delay(debugDelay);
    
-   /*if (debug) {
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pFxIndex);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pBright);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pColOrd);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pSpeed);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pZoom);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pScale);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pAngle);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pTwist);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pRadius);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pEdge);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pZ);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pRatBase);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pRatDiff);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pOffBase);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pOffDiff);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pRed);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pGreen);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pBlue);
-   }*/
-
-
    file.close();
    Serial.print("Preset saved to ");
    Serial.println(path);
@@ -363,85 +297,27 @@ void savePreset(const char* name, const Preset &preset) {
 
 void capturePreset(Preset &preset) {
   
-  pauseAnimation = true;
+   pauseAnimation = true;
 
-   FastLED.delay(debugDelay);
    preset.pFxIndex = cFxIndex;
-   FastLED.delay(debugDelay);
    preset.pBright = cBright;
-   FastLED.delay(debugDelay);
    preset.pColOrd = cColOrd;
-   FastLED.delay(debugDelay);
    preset.pSpeed = cSpeed;
-   FastLED.delay(debugDelay);
    preset.pRatBase = cRatBase; 
-   FastLED.delay(debugDelay);
    preset.pRatDiff = cRatDiff; 
-   FastLED.delay(debugDelay);
    preset.pOffBase = cOffBase; 
-   FastLED.delay(debugDelay);
    preset.pOffDiff = cOffDiff; 
-   FastLED.delay(debugDelay);
    preset.pScale = cScale; 	
-   FastLED.delay(debugDelay);
    preset.pAngle = cAngle; 
-   FastLED.delay(debugDelay);
    preset.pZoom = cZoom; 
-   FastLED.delay(debugDelay);
    preset.pTwist = cTwist; 
-   FastLED.delay(debugDelay);
    preset.pRadius = cRadius; 
-   FastLED.delay(debugDelay);
    preset.pEdge = cEdge; 	
-   FastLED.delay(debugDelay);
    preset.pZ = cZ; 	
-   FastLED.delay(debugDelay);
    preset.pRed = cRed; 
-   FastLED.delay(debugDelay);
    preset.pGreen = cGreen; 	
-   FastLED.delay(debugDelay);
    preset.pBlue = cBlue; 
-   FastLED.delay(debugDelay);
-
-   /*if (debug) {
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pFxIndex);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pBright);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pColOrd);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pSpeed);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pZoom);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pScale);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pAngle);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pTwist);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pRadius);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pEdge);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pZ);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pRatBase);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pRatDiff);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pOffBase);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pOffDiff);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pRed);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pGreen);
-      FastLED.delay(debugDelay);
-      Serial.println(preset.pBlue);
-   }*/
-
+   
    savePreset(preset.pPresetName.c_str(), preset);
 
    pauseAnimation = false;
@@ -449,24 +325,99 @@ void capturePreset(Preset &preset) {
 }
 
 void applyPreset(const Preset &preset) {
-   cFxIndex = preset.pFxIndex;
-   cBright = preset.pBright;
-   cColOrd = preset.pColOrd;
-   cSpeed = preset.pSpeed;
-   cRatBase = preset.pRatBase;
-   cRatDiff = preset.pRatDiff;
-   cOffBase = preset.pOffBase;
-   cOffDiff = preset.pOffDiff;
-   cScale = preset.pScale;
-   cAngle = preset.pAngle;
-   cZoom = preset.pZoom;
-   cTwist = preset.pTwist;
-   cRadius = preset.pRadius;
-   cEdge = preset.pEdge;
-   cZ = preset.pZ;
-   cRed = preset.pRed;
-   cGreen = preset.pGreen;
-   cBlue = preset.pBlue;
+   
+   pauseAnimation = true;
+
+
+   //************************************************************************************* */
+   //needs button alternative
+   if (cFxIndex != preset.pFxIndex){
+      cFxIndex = preset.pFxIndex;
+      sendReceiptButton(cFxIndex);
+   };   
+
+   if (cBright != preset.pBright){
+      cBright = preset.pBright;
+      sendReceiptNumber("inBright",cBright);
+   };   
+
+   if (cColOrd != preset.pColOrd){
+      cColOrd = preset.pColOrd;
+      sendReceiptNumber("inColOrd",cColOrd);
+   };   
+
+   if (cSpeed != preset.pSpeed){
+      cSpeed = preset.pSpeed;
+      sendReceiptNumber("inSpeed",cSpeed);
+   };   
+
+   if (cZoom != preset.pZoom){
+      cZoom = preset.pZoom;
+      sendReceiptNumber("inZoom",cZoom);
+   };   
+
+   if (cScale != preset.pScale){
+      cScale = preset.pScale;
+      sendReceiptNumber("inScale",cScale);
+   };   
+
+   if (cAngle != preset.pAngle){
+      cAngle = preset.pAngle;
+      sendReceiptNumber("inAngle",cAngle);
+   };   
+
+   if (cRadius != preset.pRadius){
+      cRadius = preset.pRadius;
+      sendReceiptNumber("inRadius",cRadius);
+      };   
+
+   if (cEdge != preset.pEdge){
+      cEdge = preset.pEdge;
+      sendReceiptNumber("inEdge",cEdge);
+      };   
+
+   if (cZ != preset.pZ){
+      cZ = preset.pZ;
+      sendReceiptNumber("inZ",cZ);
+      };   
+
+   if (cRatBase != preset.pRatBase){
+      cRatBase = preset.pRatBase;
+      sendReceiptNumber("inRatBase",cRatBase);
+      };   
+
+   if (cRatDiff != preset.pRatDiff){
+      cRatDiff = preset.pRatDiff;
+      sendReceiptNumber("inRatDiff",cRatDiff);
+      };   
+
+   if (cOffBase != preset.pOffBase){
+      cOffBase = preset.pOffBase;
+      sendReceiptNumber("inOffBase",cOffBase);
+   };   
+
+   if (cOffDiff != preset.pOffDiff){
+      cOffDiff = preset.pOffDiff;
+      sendReceiptNumber("inOffDiff",cOffDiff);
+   };   
+
+   if (cRed != preset.pRed){
+      cRed = preset.pRed;
+      sendReceiptNumber("inRed",cRed);
+   };   
+
+   if (cGreen != preset.pGreen){
+      cGreen = preset.pGreen;
+      sendReceiptNumber("inGreen",cGreen);
+   };   
+
+   if (cBlue != preset.pBlue){
+      cBlue = preset.pBlue;
+      sendReceiptNumber("inBlue",cBlue);
+   };   
+
+   pauseAnimation = false;
+
 }
 
 void retrievePreset(const char* name, Preset &preset) {
@@ -572,20 +523,22 @@ class ButtonCharacteristicCallbacks : public BLECharacteristicCallbacks {
                }
 
                displayOn = true;
-               animationc(cFxIndex);
+               sendReceiptButton(cFxIndex);
             }
-         
-         if (receivedValue >= 20 && receivedValue < 30) {
+            
+            if (receivedValue >= 20 && receivedValue < 30) {
 
-            if (receivedValue == 20) { capturePreset(preset1); }
+               if (receivedValue == 20) { capturePreset(preset1); }
 
-            if (receivedValue == 21) { retrievePreset("preset1", preset1); }
+               if (receivedValue == 21) { retrievePreset("preset1", preset1); }
 
-            if (receivedValue == 22) { capturePreset(preset2); }
+               if (receivedValue == 22) { capturePreset(preset2); }
 
-            if (receivedValue == 23) { retrievePreset("preset2", preset2); }
+               if (receivedValue == 23) { retrievePreset("preset2", preset2); }
 
-         }
+               sendReceiptButton(receivedValue);
+
+            }
 
        }
 

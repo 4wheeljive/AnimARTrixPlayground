@@ -138,6 +138,18 @@ function ab2str(buf) {
 
 // Create a send buffer for the NumberCharacteristic
 
+/*
+function sendButtonCharacteristic(inputID, inputValue) {
+        var sendDoc = {
+            "id" : inputID,
+            "val" : inputValue
+        }
+        sendString = JSON.stringify(sendDoc);
+        sendBuffer = str2ab(sendString);        
+        writeNumberCharacteristic(sendBuffer);
+}
+*/
+
 function sendNumberCharacteristic(inputID, inputValue) {
         var sendDoc = {
             "id" : inputID,
@@ -162,7 +174,13 @@ function sendCheckboxCharacteristic(inputID, inputValue) {
 
 // handler for any incoming BLE update:
 
-function applyReceivedById(receivedDoc) {
+function applyReceivedButton(receivedDoc){
+    valAnim.innerHTML = changeReceived;
+}
+
+function applyReceivedCheckbox(receivedDoc) {}
+
+function applyReceivedNumber(receivedDoc) {
   const ctrl = controlsById[receivedDoc.id];
   if (!ctrl) {
     console.warn('Unknown parameter id:', receivedDoc.id);
@@ -327,23 +345,28 @@ function disconnectDevice() {
 
 function handleButtonCharacteristicChange(event){
     const changeReceived = new TextDecoder().decode(event.target.value);
-    console.log("Server receipt: Animation - ",changeReceived);
-    valAnim.innerHTML = changeReceived;
+    const receivedDoc = JSON.parse(changeReceived); 
+    console.log("Server receipt: ___________ - ",changeReceived);
+    applyReceivedButton(receivedDoc);
+    
+
+
+
+
 }
 
 function handleCheckboxCharacteristicChange(event){
     const changeReceived = new TextDecoder().decode(event.target.value);
     const receivedDoc = JSON.parse(changeReceived);
     console.log("Server receipt: ",receivedDoc.id," - ",receivedDoc.val);
+	applyReceivedCheckbox(receivedDoc);
 }
 
 function handleNumberCharacteristicChange(event){
     const changeReceived = new TextDecoder().decode(event.target.value);
     const receivedDoc = JSON.parse(changeReceived);
     console.log("Server receipt: ",receivedDoc.id," - ",receivedDoc.val);
-
-	applyReceivedById(receivedDoc);
-
+	applyReceivedNumber(receivedDoc);
 }
 
 // WRITE TO CHARACTERISTIC FUNCTIONS *************************************************

@@ -76,8 +76,8 @@ When BIG_BOARD is undefined:
 //#define SCREEN_TEST
 #undef SCREEN_TEST
 
-//#define BIG_BOARD
-#undef BIG_BOARD
+#define BIG_BOARD
+//#undef BIG_BOARD
 
 #define CUSTOM_MAP
 //#undef CUSTOM_MAP
