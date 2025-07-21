@@ -17,7 +17,7 @@ BASIC FRAMEWORK:
 - There are currently about 15 variables set up for the user to control various parameters within each of the animations
 - The playground can be used in two different ways:
   - To drive a physical LED panel from MCU using web BLE and a custom UI        
-  - To drive FastLED's WASM compiler/browser with built-in FastLED UI controls //*** CURRENTLY INPOERABLE SEE NOTE BELOW ***//
+  - To drive FastLED's WASM compiler/browser with built-in FastLED UI controls //*** CURRENTLY INOPERABLE - SEE NOTE BELOW ***//
 
 LED PANEL MODE:
     
@@ -51,7 +51,9 @@ When BIG_BOARD is undefined:
 - Custom LED mapping may be unnecessary
 
 FASTLED COMPILER MODE:
+
 ***CURRENTLY INOPERABLE***
+
 This mode is basically inoperable since the earliest commits. My personal focus is on learning (and sharing) how someone with no greater know-how than me can:
   - Get a tiny MCU to make a real led panel do really cool stuff, perhaps
   - [based on artistic input] [sent wirelessly (e.g., BLE)] from [virtually any web-enabled device] [operated by][a user of virtually any technical or artistic skill level].     
@@ -90,8 +92,6 @@ TODO
 - Identify/constrain parameter triggers that do nothing other than reset animation positions
 
 - Add alternate/custom color palette functionality
-
-- Identify/resolve issues to get SCREEN_TEST mode working with current program structure :: Probably won't happen for a while   
 
 - Long-term: identify critical resonance factors, and implement guardrails 
 
