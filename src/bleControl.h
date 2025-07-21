@@ -20,7 +20,6 @@ Setting numHandles = 60 has worked for 7 characteristics.
 
 bool displayOn = true;
 bool debug = true;
-uint16_t debugDelay = 100;
 bool pauseAnimation = false;
 
 uint8_t dummy = 1;
@@ -115,7 +114,7 @@ uint8_t dummy = 1;
    };
 
    Preset presetD = {
-      .pPresetID = "presetD",
+      .pPresetID = "PresetD",
       .pPresetName = "Default",
       .pFxIndex = 0,
       .pBright = 75,
@@ -124,6 +123,7 @@ uint8_t dummy = 1;
       .pZoom = 1.f,
       .pScale = 1.f,
       .pAngle = 1.f,
+      .pTwist = 1.f,
       .pRadius = 1.f,
       .pEdge = 1.f,
       .pZ = 1.f,
@@ -178,10 +178,6 @@ BLEDescriptor pNumberDescriptor(BLEUUID((uint16_t)0x2902));
 
 //*******************************************************************************
 // CONTROL FUNCTIONS ************************************************************
-
-
-
-
 
 // UI update functions ***********************************************
 
@@ -245,67 +241,67 @@ void sendReceiptNumber(String receivedID, float receivedValue) {
 
 //***********************************************************************
 
-void resetAll(const Preset &preset) {
+void resetAll() {
 
    pauseAnimation = true;
 
-   if (cSpeed != preset.pSpeed){
-      cSpeed = preset.pSpeed;
+   if (cSpeed != presetD.pSpeed){
+      cSpeed = presetD.pSpeed;
       sendReceiptNumber("inSpeed",cSpeed);
    };   
 
-   if (cZoom != preset.pZoom){
-      cZoom = preset.pZoom;
+   if (cZoom != presetD.pZoom){
+      cZoom = presetD.pZoom;
       sendReceiptNumber("inZoom",cZoom);
    };   
 
-   if (cScale != preset.pScale){
-      cScale = preset.pScale;
+   if (cScale != presetD.pScale){
+      cScale = presetD.pScale;
       sendReceiptNumber("inScale",cScale);
    };   
 
-   if (cAngle != preset.pAngle){
-      cAngle = preset.pAngle;
+   if (cAngle != presetD.pAngle){
+      cAngle = presetD.pAngle;
       sendReceiptNumber("inAngle",cAngle);
    };   
 
-   if (cTwist != preset.pTwist){
-      cTwist = preset.pTwist;
+   if (cTwist != presetD.pTwist){
+      cTwist = presetD.pTwist;
       sendReceiptNumber("inTwist",cTwist);
    };   
 
-   if (cRadius != preset.pRadius){
-      cRadius = preset.pRadius;
+   if (cRadius != presetD.pRadius){
+      cRadius = presetD.pRadius;
       sendReceiptNumber("inRadius",cRadius);
       };   
 
-   if (cEdge != preset.pEdge){
-      cEdge = preset.pEdge;
+   if (cEdge != presetD.pEdge){
+      cEdge = presetD.pEdge;
       sendReceiptNumber("inEdge",cEdge);
       };   
 
-   if (cZ != preset.pZ){
-      cZ = preset.pZ;
+   if (cZ != presetD.pZ){
+      cZ = presetD.pZ;
       sendReceiptNumber("inZ",cZ);
       };   
 
-   if (cRatBase != preset.pRatBase){
-      cRatBase = preset.pRatBase;
+   if (cRatBase != presetD.pRatBase){
+      cRatBase = presetD.pRatBase;
       sendReceiptNumber("inRatBase",cRatBase);
       };   
 
-   if (cRatDiff != preset.pRatDiff){
-      cRatDiff = preset.pRatDiff;
+   if (cRatDiff != presetD.pRatDiff){
+      cRatDiff = presetD.pRatDiff;
       sendReceiptNumber("inRatDiff",cRatDiff);
       };   
 
-   if (cOffBase != preset.pOffBase){
-      cOffBase = preset.pOffBase;
+   if (cOffBase != presetD.pOffBase){
+      cOffBase = presetD.pOffBase;
       sendReceiptNumber("inOffBase",cOffBase);
    };   
 
-   if (cOffDiff != preset.pOffDiff){
-      cOffDiff = preset.pOffDiff;
+   if (cOffDiff != presetD.pOffDiff){
+      cOffDiff = presetD.pOffDiff;
       sendReceiptNumber("inOffDiff",cOffDiff);
    };   
 
@@ -345,7 +341,7 @@ void processButton(uint8_t receivedValue) {
    if (receivedValue == 79) { retrievePreset("Preset9",preset9); }
    if (receivedValue == 80) { retrievePreset("Preset10",preset10); }
 
-   if (receivedValue == 95) { resetAll(presetD); }
+   if (receivedValue == 95) { resetAll(); }
    
    if (receivedValue == 98) { displayOn = true; }
    if (receivedValue == 99) { displayOn = false; }

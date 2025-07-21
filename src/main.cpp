@@ -9,17 +9,20 @@ My personal learning playground for working with:
 
 This playground operates in one of two modes:
 
-    Using the FastLED web compiler and browser UI controls:
+    ***WASM MODE NOT OPERATIONAL***
+        Using the FastLED web compiler and browser UI controls:
 
-        1.  Ensure you are set up to use FastLED compiler:
-            https://github.com/zackees/fastled-wasm/blob/main/README.md
-    
-        2.  Comment/uncomment the SCREEN_TEST defs below as follows:
+            1.  Ensure you are set up to use FastLED compiler:
+                https://github.com/zackees/fastled-wasm/blob/main/README.md
+        
+            2.  Comment/uncomment the SCREEN_TEST defs below as follows:
 
-            #define SCREEN_TEST
-            //#undef SCREEN_TEST
+                #define SCREEN_TEST
+                //#undef SCREEN_TEST
 
-        3.  Run 'fastled' (without quotes) from a command line in the directory where your sketch is saved. 
+            3.  Run 'fastled' (without quotes) from a command line in the directory where your sketch is saved. 
+    ***WASM MODE NOT OPERATIONAL***
+
 
     Driving an actual LED panel from an MCU, which this sketch sets up as a BLE server to enable web control:
     
@@ -65,7 +68,7 @@ When BIG_BOARD is undefined:
 #include "fx/fx_engine.h"
 
 #include "myAnimartrix.hpp"
-#include "fl/ui.h"
+//#include "fl/ui.h"
 
 #include <FS.h>
 #include "LittleFS.h"
@@ -231,7 +234,7 @@ void setup() {
     }
     Serial.println("LittleFS mounted successfully.");
 
-    savePreset("PresetD", presetD);
+    //savePreset("PresetD", presetD);
 
  }
 
@@ -249,8 +252,7 @@ void loop() {
 
             FastLED.setBrightness(cBright);
             fxEngine.setSpeed(1);
-            //fxEngine.setSpeed(timeSpeed);
-
+          
             static auto lastColorOrder = -1;
             if (cColOrd != lastColorOrder) {
                 setColorOrder(cColOrd);

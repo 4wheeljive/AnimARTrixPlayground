@@ -113,7 +113,6 @@ namespace animartrix_detail {
 FASTLED_USING_NAMESPACE
 
 struct render_parameters {
-
     float center_x = (999 / 2) - 0.5; // center of the matrix
     float center_y = (999 / 2) - 0.5;
     float dist, angle;
@@ -127,14 +126,12 @@ struct render_parameters {
 };
 
 struct oscillators {
-
     float master_speed; // global transition speed
     float offset[num_oscillators];  // oscillators can be shifted by a time offset
     float ratio[num_oscillators]; // speed ratios for the individual oscillators
 };
 
 struct modulators {
-
     float linear[num_oscillators];      // returns 0 to FLT_MAX
     float radial[num_oscillators];      // returns 0 to 2*PI
     float directional[num_oscillators]; // returns -1 to 1
@@ -225,7 +222,7 @@ class ANIMartRIX {
         } else {
             this->radial_filter_radius = 23; // on 32x32, use 11 for 16x16
         }*/
-        this->radial_filter_radius = std::min(w,h) * 0.75;
+        this->radial_filter_radius = std::min(w,h) * 0.65;
        
         // precalculate all polar coordinates; polar origin is set to matrix centre
         render_polar_lookup_table(
@@ -353,40 +350,7 @@ class ANIMartRIX {
            
         }
     }
-    /*
-    void run_default_oscillators(float master_speed ) {
-       
-        timings.master_speed = master_speed;
-
-        // speed ratios for the oscillators, higher values = faster transitions
-
-        timings.ratio[0] = 1; 
-        timings.ratio[1] = 2;
-        timings.ratio[2] = 3;
-        timings.ratio[3] = 4;
-        timings.ratio[4] = 5;
-        timings.ratio[5] = 6;
-        timings.ratio[6] = 7;
-        timings.ratio[7] = 8;
-        timings.ratio[8] = 9;
-        timings.ratio[9] = 10;
-
-        timings.offset[0] = 000;
-        timings.offset[1] = 100;
-        timings.offset[2] = 200;
-        timings.offset[3] = 300;
-        timings.offset[4] = 400;
-        timings.offset[5] = 500;
-        timings.offset[6] = 600;
-        timings.offset[7] = 700;
-        timings.offset[8] = 800;
-        timings.offset[9] = 900;
-
-        calculate_oscillators(timings);
-
-    }
-    */
-
+ 
     //***************************************************************
 
     // Convert the 2 polar coordinates back to cartesian ones & also apply all
@@ -490,16 +454,16 @@ class ANIMartRIX {
     // find the right led index according to your LED matrix wiring
 
     // wait until new buffer is ready, measure time
-    void get_ready() { 
+    /*void get_ready() { 
         a = micros();
         logOutput();
-    }
+    }*/
 
     virtual void setPixelColorInternal(int x, int y, rgb pixel) = 0;
 
     // virtual void setPixelColorInternal(int index, rgb pixel) = 0;
 
-    void logOutput() { b = micros(); }
+    /*void logOutput() { b = micros(); }
 
     void logFrame() { c = micros(); }
 
@@ -535,66 +499,63 @@ class ANIMartRIX {
         // Serial.println(" °C");
         ANIMARTRIX_PRINT(" °C\n");
     }
-
+    */
 
     //********************************************************************************************************************
     // EFFECTS ***********************************************************************************************************
 
-    void Polar_Waves() { // nice one
+    void Polar_Waves() {
 
-        //get_ready();
+        timings.master_speed = 0.5 * cSpeed;
 
-        timings.master_speed = 0.5 * (double)cSpeed;
-
-        timings.ratio[0] = 0.0025 + (double)cRatBase/100; 
-        timings.ratio[1] = 0.0027 + (double)cRatBase/100 * (double)cRatDiff;
-        timings.ratio[2] = 0.0031 + (double)cRatBase/100 * 2 * (double)cRatDiff;
+        timings.ratio[0] = 0.0025 + cRatBase/100; 
+        timings.ratio[1] = 0.0027 + cRatBase/100 * cRatDiff;
+        timings.ratio[2] = 0.0031 + cRatBase/100 * 2 * cRatDiff;
 
         calculate_oscillators(timings);
 
         for (int x = 0; x < num_x; x++) {
             for (int y = 0; y < num_y; y++) {
 
-                animation.dist = distance[x][y] * (double)cZoom;
+                animation.dist = distance[x][y] * cZoom;
                 animation.angle =
-                    polar_theta[x][y] * (double)cAngle
+                    polar_theta[x][y] * cAngle
                     - animation.dist * 0.1
                     + move.radial[0];
                     // can add noise_angle for non-periodic rotation
                     // add multiple noise_angle for additional variation
-                animation.z = ((animation.dist * 1.5) - 10 * move.linear[0]) * (double)cZ;
-                animation.scale_x = 0.15 * (double)cScale;
-                animation.scale_y = 0.15 * (double)cScale;
+                animation.z = ((animation.dist * 1.5) - 10 * move.linear[0]) * cZ;
+                animation.scale_x = 0.15 * cScale;
+                animation.scale_y = 0.15 * cScale;
                 animation.offset_x = move.linear[0];
                 show1 = { Layer1 ? render_value(animation) : 0};
                 
                 animation.angle =
-                    polar_theta[x][y] * (double)cAngle
-                    - animation.dist * 0.1 * (double)cTwist
+                    polar_theta[x][y] * cAngle
+                    - animation.dist * 0.1 * cTwist
                     + move.radial[1];
-                animation.z = ((animation.dist * 1.5) - 10 * move.linear[1]) * (double)cZ;
+                animation.z = ((animation.dist * 1.5) - 10 * move.linear[1]) * cZ;
                 animation.offset_x = move.linear[1];
                 show2 = { Layer2 ? render_value(animation) : 0 };
 
                 animation.angle =
-                    polar_theta[x][y] * (double)cAngle
-                    - animation.dist * 0.1 * (double)cTwist
+                    polar_theta[x][y] * cAngle
+                    - animation.dist * 0.1 * cTwist
                     + move.radial[2];
-                animation.z = ((animation.dist * 1.5) - 10 * move.linear[2]) * (double)cZ;
+                animation.z = ((animation.dist * 1.5) - 10 * move.linear[2]) * cZ;
                 animation.offset_x = move.linear[2];
                 show3 = { Layer3 ? render_value(animation) : 0 };
-
                 
                 //float radial = (radius - distance[x][y]) / distance[x][y];
                 //float radialFilter = (radius - distance[x][y]) / distance[x][y];
                 
-                float radius = radial_filter_radius * (double)cRadius;
+                float radius = radial_filter_radius * cRadius;
                 radialFilterFalloff = cEdge;
                 radialDimmer = radialFilterFactor(radius, distance[x][y], radialFilterFalloff);
                
-                pixel.red = show1 * (double)cRed * radialDimmer; 
-                pixel.green = show2 * (double)cGreen * radialDimmer; 
-                pixel.blue = show3 * (double)cBlue * radialDimmer;
+                pixel.red = show1 * cRed * radialDimmer; 
+                pixel.green = show2 * cGreen * radialDimmer; 
+                pixel.blue = show3 * cBlue * radialDimmer;
 
                 pixel = rgb_sanity_check(pixel);
                 setPixelColorInternal(x, y, pixel);
@@ -607,71 +568,69 @@ class ANIMartRIX {
 
     void Spiralus() {
 
-        //get_ready();
-
-        timings.master_speed = 0.0011 * (double)cSpeed;
+        timings.master_speed = 0.0011 * cSpeed;
         
-        timings.ratio[0] = 1.5 + (double)cRatBase * 2 * (double)cRatDiff;       
-        timings.ratio[1] = 2.3 + (double)cRatBase * 2 * (double)cRatDiff;
-        timings.ratio[2] = 3 + (double)cRatBase * 2 * (double)cRatDiff;
-        timings.ratio[3] = 0.05 + (double)cRatBase/10 ;
-        timings.ratio[4] = 0.2 + (double)cRatBase/10 ;
-        timings.ratio[5] = 0.03 + (double)cRatBase/10 ;
-        timings.ratio[6] = 0.025 + (double)cRatBase/10 ;
-        timings.ratio[7] = 0.021 + (double)cRatBase/10 ;
-        timings.ratio[8] = 0.027 + (double)cRatBase/10 ;
+        timings.ratio[0] = 1.5 + cRatBase * 2 * cRatDiff;       
+        timings.ratio[1] = 2.3 + cRatBase * 2 * cRatDiff;
+        timings.ratio[2] = 3 + cRatBase * 2 * cRatDiff;
+        timings.ratio[3] = 0.05 + cRatBase/10 ;
+        timings.ratio[4] = 0.2 + cRatBase/10 ;
+        timings.ratio[5] = 0.03 + cRatBase/10 ;
+        timings.ratio[6] = 0.025 + cRatBase/10 ;
+        timings.ratio[7] = 0.021 + cRatBase/10 ;
+        timings.ratio[8] = 0.027 + cRatBase/10 ;
         
         timings.offset[0] = 0 ;
-        timings.offset[1] = 100 * (double)cOffBase;
-        timings.offset[2] = 200 * (double)cOffBase * (double)cOffDiff;
-        timings.offset[3] = 300 * (double)cOffBase * 1.25 * (double)cOffDiff;
-        timings.offset[4] = 400 * (double)cOffBase * 1.5 * (double)cOffDiff;
-        timings.offset[5] = 500 * (double)cOffBase * 1.75 * (double)cOffDiff;
-        timings.offset[6] = 600 * (double)cOffBase * 2 * (double)cOffDiff;
+        timings.offset[1] = 100 * cOffBase;
+        timings.offset[2] = 200 * cOffBase * cOffDiff;
+        timings.offset[3] = 300 * cOffBase * 1.25 * cOffDiff;
+        timings.offset[4] = 400 * cOffBase * 1.5 * cOffDiff;
+        timings.offset[5] = 500 * cOffBase * 1.75 * cOffDiff;
+        timings.offset[6] = 600 * cOffBase * 2 * cOffDiff;
 
         calculate_oscillators(timings); 
 
         for (int x = 0; x < num_x; x++) {
             for (int y = 0; y < num_y; y++) {
 
-                animation.dist = distance[x][y] * (double)cZoom;
+                animation.dist = distance[x][y] * cZoom;
                 animation.angle = 
-                    2 * polar_theta[x][y] * (double)cAngle
+                    2 * polar_theta[x][y] * cAngle
                     + move.noise_angle[5] 
-                    + move.directional[3] * move.noise_angle[6] * animation.dist / 10 * (double)cTwist;
-                animation.scale_x = 0.08 * (double)cScale;
-                animation.scale_y = 0.08 * (double)cScale;
+                    + move.directional[3] * move.noise_angle[6] * animation.dist / 10 * cTwist;
+                animation.scale_x = 0.08 * cScale;
+                animation.scale_y = 0.08 * cScale;
                 animation.scale_z = 0.02; 
                 animation.offset_y = -move.linear[0];
                 animation.offset_x = 0;
                 animation.offset_z = 0;
-                animation.z = move.linear[1] * (double)cZ;
+                animation.z = move.linear[1] * cZ;
                 show1 = { Layer1 ? render_value(animation) : 0};
 
                 animation.angle = 
-                    2 * polar_theta[x][y] * (double)cAngle
+                    2 * polar_theta[x][y] * cAngle
                     + move.noise_angle[7]
-                    + move.directional[5] * move.noise_angle[8] * animation.dist / 10 * (double)cTwist;
+                    + move.directional[5] * move.noise_angle[8] * animation.dist / 10 * cTwist;
                 animation.offset_y = -move.linear[1];
-                animation.z = move.linear[2] * (double)cZ;
+                animation.z = move.linear[2] * cZ;
                 show2 = { Layer2 ? render_value(animation) : 0};
 
                 animation.angle = 
-                    2 * polar_theta[x][y] * (double)cAngle
+                    2 * polar_theta[x][y] * cAngle
                     + move.noise_angle[6] 
-                    + move.directional[6] * move.noise_angle[7] * animation.dist / 10 * (double)cTwist;
+                    + move.directional[6] * move.noise_angle[7] * animation.dist / 10 * cTwist;
                 animation.offset_y = move.linear[2];
-                animation.z = move.linear[0] * (double)cZ;
+                animation.z = move.linear[0] * cZ;
                 show3 = { Layer3 ? render_value(animation) : 0};
 
-                float radius = radial_filter_radius * (double)cRadius;
+                float radius = radial_filter_radius * cRadius;
                 radialFilterFalloff = cEdge;
                 //radialDimmer = radialFilterFactor(radius, distance[x][y], radialFilterFalloff);
                 radialDimmer = 1;   
 
-                pixel.red =     (show1 + show2) * (double)cRed * radialDimmer;
-                pixel.green =   (show1 - show2) * (double)cGreen * radialDimmer;
-                pixel.blue =    (show3 - show1) * (double)cBlue * radialDimmer;
+                pixel.red =     (show1 + show2) * cRed * radialDimmer;
+                pixel.green =   (show1 - show2) * cGreen * radialDimmer;
+                pixel.blue =    (show3 - show1) * cBlue * radialDimmer;
 
                 pixel = rgb_sanity_check(pixel);
                 setPixelColorInternal(x, y, pixel);
@@ -683,71 +642,69 @@ class ANIMartRIX {
 
     void Caleido1() {
 
-        //get_ready();
-
-        timings.master_speed = 0.003 * (double)cSpeed;
+        timings.master_speed = 0.003 * cSpeed;
         
-        timings.ratio[0] = 0.02 + (double)cRatBase/10  ;
-        timings.ratio[1] = 0.03 + (double)cRatBase/10 * (double)cRatDiff;
-        timings.ratio[2] = 0.04 + (double)cRatBase/10 * 1.5 * (double)cRatDiff;
-        timings.ratio[3] = 0.05 + (double)cRatBase/10 * 2 * (double)cRatDiff;
-        timings.ratio[4] = 0.6 + (double)cRatBase/5 ;
+        timings.ratio[0] = 0.02 + cRatBase/10  ;
+        timings.ratio[1] = 0.03 + cRatBase/10 * cRatDiff;
+        timings.ratio[2] = 0.04 + cRatBase/10 * 1.5 * cRatDiff;
+        timings.ratio[3] = 0.05 + cRatBase/10 * 2 * cRatDiff;
+        timings.ratio[4] = 0.6 + cRatBase/5 ;
         
         timings.offset[0] = 0;
-        timings.offset[1] = 100 * (double)cOffBase;
-        timings.offset[2] = 200 * (double)cOffBase * (double)cOffDiff;
-        timings.offset[3] = 300 * (double)cOffBase * 1.25 * (double)cOffDiff;
-        timings.offset[4] = 400 * (double)cOffBase * 1.5 * (double)cOffDiff;
+        timings.offset[1] = 100 * cOffBase;
+        timings.offset[2] = 200 * cOffBase * cOffDiff;
+        timings.offset[3] = 300 * cOffBase * 1.25 * cOffDiff;
+        timings.offset[4] = 400 * cOffBase * 1.5 * cOffDiff;
 
         calculate_oscillators(timings); 
 
         for (int x = 0; x < num_x; x++) {
             for (int y = 0; y < num_y; y++) {
 
-                animation.dist = distance[x][y] * (double)cZoom * (2 + move.directional[0]) / 3;
+                animation.dist = distance[x][y] * cZoom * (2 + move.directional[0]) / 3;
                 animation.angle = 
-                    3 * polar_theta[x][y] * (double)cAngle
+                    3 * polar_theta[x][y] * cAngle
                     + 3 * move.noise_angle[0] 
                     + move.radial[4];
-                animation.scale_x = 0.1 * (double)cScale;
-                animation.scale_y = 0.1 * (double)cScale;
+                animation.scale_x = 0.1 * cScale;
+                animation.scale_y = 0.1 * cScale;
                 animation.scale_z = 0.1;
                 animation.offset_y = 2 * move.linear[0];
                 animation.offset_x = 0;
                 animation.offset_z = 0;
-                animation.z = move.linear[0] * (double)cZ;
+                animation.z = move.linear[0] * cZ;
                 show1 = { Layer1 ? render_value(animation) : 0};
 
-                animation.dist = distance[x][y] * (double)cZoom * (2 + move.directional[1]) / 3;
+                animation.dist = distance[x][y] * cZoom * (2 + move.directional[1]) / 3;
                 animation.angle = 
-                    4 * polar_theta[x][y] * (double)cAngle
+                    4 * polar_theta[x][y] * cAngle
                     + 3 * move.noise_angle[1] 
                     + move.radial[4];
                 animation.offset_x = 2 * move.linear[1];
-                animation.z = move.linear[1] * (double)cZ;
+                animation.z = move.linear[1] * cZ;
                 show2 = { Layer2 ? render_value(animation) : 0};
 
-                animation.dist = distance[x][y] * (double)cZoom * (2 + move.directional[2]) / 3;
+                animation.dist = distance[x][y] * cZoom * (2 + move.directional[2]) / 3;
                 animation.angle = 
-                    5 * polar_theta[x][y] * (double)cAngle
+                    5 * polar_theta[x][y] * cAngle
                     + 3 * move.noise_angle[2]
                     + move.radial[4];
                 animation.offset_y = 2 * move.linear[2];
-                animation.z = move.linear[2] * (double)cZ;
+                animation.z = move.linear[2] * cZ;
                 show3 = { Layer3 ? render_value(animation) : 0};
 
-                animation.dist = distance[x][y] * (double)cZoom * (2 + move.directional[3]) / 3;
+                animation.dist = distance[x][y] * cZoom * (2 + move.directional[3]) / 3;
                 animation.angle = 
-                    4 * polar_theta[x][y] * (double)cAngle
+                    4 * polar_theta[x][y] * cAngle
                     + 3 * move.noise_angle[3]
                     + move.radial[4];
                 animation.offset_x = 2 * move.linear[3];
-                animation.z = move.linear[3] * (double)cZ;
+                animation.z = move.linear[3] * cZ;
                 show4 = { Layer4 ? render_value(animation) : 0};
 
-                pixel.red = show1 * (double)cRed;
-                pixel.green = (show3 * distance[x][y] / 10) * (double)cGreen;
-                pixel.blue = ((show2 + show4) / 2) * (double)cBlue;
+                pixel.red = show1 * cRed;
+                pixel.green = (show3 * distance[x][y] / 10) * cGreen;
+                pixel.blue = ((show2 + show4) / 2) * cBlue;
 
                 pixel = rgb_sanity_check(pixel);
 
@@ -760,35 +717,33 @@ class ANIMartRIX {
 
     void Waves() {
 
-        //get_ready();
-
-        timings.master_speed = 0.01 * (double)cSpeed; 
+        timings.master_speed = 0.01 * cSpeed; 
         
-        timings.ratio[0] = 2  + (double)cRatBase; 
-        timings.ratio[1] = 2.1 + (double)cRatBase * (double)cRatDiff;
-        timings.ratio[2] = 1.2 + (double)cRatBase * (double)cRatDiff;;
+        timings.ratio[0] = 2  + cRatBase; 
+        timings.ratio[1] = 2.1 + cRatBase * cRatDiff;
+        timings.ratio[2] = 1.2 + cRatBase * cRatDiff;;
 
-        timings.offset[1] = 100 * (double)cOffBase;
-        timings.offset[2] = 200 * (double)cOffBase * (double)cOffDiff;
-        timings.offset[3] = 300 * (double)cOffBase * 1.5 * (double)cOffDiff;
+        timings.offset[1] = 100 * cOffBase;
+        timings.offset[2] = 200 * cOffBase * cOffDiff;
+        timings.offset[3] = 300 * cOffBase * 1.5 * cOffDiff;
 
         calculate_oscillators(timings);
 
         for (int x = 0; x < num_x; x++) {
             for (int y = 0; y < num_y; y++) {
 
-                animation.angle = polar_theta[x][y] *(double)cAngle;
-                animation.scale_x = 0.1 * (double)cScale;
-                animation.scale_y = 0.1 * (double)cScale;
+                animation.angle = polar_theta[x][y] *cAngle;
+                animation.scale_x = 0.1 * cScale;
+                animation.scale_y = 0.1 * cScale;
                 animation.scale_z = 0.1;
-                animation.dist = distance[x][y] * (double)cZoom;
+                animation.dist = distance[x][y] * cZoom;
                 animation.offset_y = 0;
                 animation.offset_x = 0;
-                animation.z = (2 * distance[x][y] - move.linear[0]) * (double)cZ;
+                animation.z = (2 * distance[x][y] - move.linear[0]) * cZ;
                 show1 = { Layer1 ? render_value(animation) : 0};
 
                 animation.angle = polar_theta[x][y];
-                animation.z = (2 * distance[x][y] - move.linear[1]) * (double)cZ;
+                animation.z = (2 * distance[x][y] - move.linear[1]) * cZ;
                 show2 = { Layer2 ? render_value(animation) : 0};
 
                 pixel.red = show1;
@@ -806,17 +761,15 @@ class ANIMartRIX {
 
     void Chasing_Spirals() {
 
-        //get_ready();
+        timings.master_speed = 0.01 * cSpeed; 
 
-        timings.master_speed = 0.01 * (double)cSpeed; 
+        timings.ratio[0] = 0.1 +  cRatBase/10;
+        timings.ratio[1] = 0.13 + cRatBase/10 * cRatDiff ;
+        timings.ratio[2] = 0.16 + cRatBase/10 * 2 * cRatDiff;
 
-        timings.ratio[0] = 0.1 +  (double)cRatBase/10;
-        timings.ratio[1] = 0.13 + (double)cRatBase/10 * (double)cRatDiff ;
-        timings.ratio[2] = 0.16 + (double)cRatBase/10 * 2 * (double)cRatDiff;
-
-        timings.offset[1] = 10 * (double)cOffBase;
-        timings.offset[2] = 20 * (double)cOffBase * (double)cOffDiff;
-        timings.offset[3] = 30 * (double)cOffBase * 2 * (double)cOffDiff;
+        timings.offset[1] = 10 * cOffBase;
+        timings.offset[2] = 20 * cOffBase * cOffDiff;
+        timings.offset[3] = 30 * cOffBase * 2 * cOffDiff;
 
         calculate_oscillators(timings); 
 
@@ -824,13 +777,13 @@ class ANIMartRIX {
             for (int y = 0; y < num_y; y++) {
 
                 animation.angle =
-                    3 * polar_theta[x][y] * (double)cAngle
+                    3 * polar_theta[x][y] * cAngle
                     + move.radial[0] 
-                    - distance[x][y] * (double)cTwist;
-                animation.dist = distance[x][y] * (double)cZoom;
+                    - distance[x][y] * cTwist;
+                animation.dist = distance[x][y] * cZoom;
                 animation.scale_z = .1;
-                animation.scale_y = .1 * (double)cScale;
-                animation.scale_x = .1 * (double)cScale;
+                animation.scale_y = .1 * cScale;
+                animation.scale_x = .1 * cScale;
                 animation.offset_x = move.linear[0];
                 animation.offset_y = 0;
                 animation.offset_z = 0;
@@ -838,29 +791,29 @@ class ANIMartRIX {
                 show1 = { Layer1 ? render_value(animation) : 0};
 
                 animation.angle =
-                    3 * polar_theta[x][y] * (double)cAngle
+                    3 * polar_theta[x][y] * cAngle
                     + move.radial[1] 
-                    - distance[x][y] * (double)cTwist;
+                    - distance[x][y] * cTwist;
                 animation.offset_x = move.linear[1];
                 show2 = { Layer2 ? render_value(animation) : 0};
 
                 animation.angle =
-                    3 * polar_theta[x][y] * (double)cAngle
+                    3 * polar_theta[x][y] * cAngle
                     + move.radial[2] 
-                    - distance[x][y] * (double)cTwist;
+                    - distance[x][y] * cTwist;
                 animation.offset_x = move.linear[2];
                 show3 = { Layer3 ? render_value(animation) : 0};
 
-                //float radius = radial_filter_radius + (double)cRadius;
-                //float radial_filter = (radius + (double)cEdge - distance[x][y]) / ( radius + (double)cEdge);
+                //float radius = radial_filter_radius + cRadius;
+                //float radial_filter = (radius + cEdge - distance[x][y]) / ( radius + cEdge);
 
-                float radius = radial_filter_radius * (double)cRadius;
+                float radius = radial_filter_radius * cRadius;
                 radialFilterFalloff = cEdge;
                 radialDimmer = radialFilterFactor(radius, distance[x][y], radialFilterFalloff);
 
-                pixel.red =     (3 * show1 * (double)cRed) * radialDimmer;
-                pixel.green =   (show2 * (double)cGreen) / 2 * radialDimmer;
-                pixel.blue =    (show3 * (double)cBlue) / 4 * radialDimmer;
+                pixel.red =     (3 * show1 * cRed) * radialDimmer;
+                pixel.green =   (show2 * cGreen) / 2 * radialDimmer;
+                pixel.blue =    (show3 * cBlue) / 4 * radialDimmer;
 
                 pixel = rgb_sanity_check(pixel);
 
@@ -873,30 +826,28 @@ class ANIMartRIX {
 
      void Complex_Kaleido_6() {
 
-        //get_ready();
+        timings.master_speed = 0.01 * cSpeed; 
 
-        timings.master_speed = 0.01 * (double)cSpeed; 
-
-        timings.ratio[0] = 0.025 + (double)cRatBase/10; 
-        timings.ratio[1] = 0.027 + (double)cRatBase/10 * (double)cRatDiff;
-        timings.ratio[2] = 0.031 + (double)cRatBase/10 * 1.2 * (double)cRatDiff;
-        timings.ratio[3] = 0.033 + (double)cRatBase/10 * 1.4 * (double)cRatDiff;
-        timings.ratio[4] = 0.037 + (double)cRatBase/10 * 1.6 * (double)cRatDiff;
-        timings.ratio[5] = 0.038 + (double)cRatBase/10 * 1.8 * (double)cRatDiff;
-        timings.ratio[6] = 0.041 + (double)cRatBase/10 * 2 * (double)cRatDiff;
+        timings.ratio[0] = 0.025 + cRatBase/10; 
+        timings.ratio[1] = 0.027 + cRatBase/10 * cRatDiff;
+        timings.ratio[2] = 0.031 + cRatBase/10 * 1.2 * cRatDiff;
+        timings.ratio[3] = 0.033 + cRatBase/10 * 1.4 * cRatDiff;
+        timings.ratio[4] = 0.037 + cRatBase/10 * 1.6 * cRatDiff;
+        timings.ratio[5] = 0.038 + cRatBase/10 * 1.8 * cRatDiff;
+        timings.ratio[6] = 0.041 + cRatBase/10 * 2 * cRatDiff;
 
         calculate_oscillators(timings);
 
         for (int x = 0; x < num_x; x++) {
             for (int y = 0; y < num_y; y++) {
 
-                animation.dist = distance[x][y] * (double)cZoom;
+                animation.dist = distance[x][y] * cZoom;
                 animation.angle = 
-                    16 * polar_theta[x][y] * (double)cAngle 
+                    16 * polar_theta[x][y] * cAngle 
                     + 16 * move.radial[0];
-                animation.z = 5 * (double)cZ;
-                animation.scale_x = 0.06 * (double)cScale;
-                animation.scale_y = 0.06 * (double)cScale;
+                animation.z = 5 * cZ;
+                animation.scale_x = 0.06 * cScale;
+                animation.scale_y = 0.06 * cScale;
                 animation.offset_z = -10 * move.linear[0];
                 animation.offset_y = 10 * move.noise_angle[0];
                 animation.offset_x = 10 * move.noise_angle[4];
@@ -904,11 +855,11 @@ class ANIMartRIX {
                 show1 = { Layer1 ? render_value(animation) : 0};
 
                 animation.angle = 
-                    16 * polar_theta[x][y] * (double)cAngle
+                    16 * polar_theta[x][y] * cAngle
                     + 16 * move.radial[1];
-                animation.z = 500 * (double)cZ;
-                animation.scale_x = 0.06 * (double)cScale;;
-                animation.scale_y = 0.06 * (double)cScale;;
+                animation.z = 500 * cZ;
+                animation.scale_x = 0.06 * cScale;;
+                animation.scale_y = 0.06 * cScale;;
                 animation.offset_z = -10 * move.linear[1];
                 animation.offset_y = 10 * move.noise_angle[1];
                 animation.offset_x = 10 * move.noise_angle[3];
@@ -919,7 +870,7 @@ class ANIMartRIX {
                 // brightness filter float radial =
                 // (radius-distance[x][y])/distance[x][y];
                 
-                float radius = radial_filter_radius * (double)cRadius;
+                float radius = radial_filter_radius * cRadius;
                 radialFilterFalloff = cEdge;
                 radialDimmer = radialFilterFactor(radius, distance[x][y], radialFilterFalloff);
 
@@ -938,17 +889,15 @@ class ANIMartRIX {
 
     void Water() {
 
-        //get_ready();
+        timings.master_speed = 0.037 * cSpeed;
 
-        timings.master_speed = 0.037 * (double)cSpeed;
-
-        timings.ratio[0] = 0.025 + (double)cRatBase/10; 
-        timings.ratio[1] = 0.027 + (double)cRatBase/10 * (double)cRatDiff;
-        timings.ratio[2] = 0.031 + (double)cRatBase/10 * 1.25* (double)cRatDiff;
-        timings.ratio[3] = 0.033 + (double)cRatBase/10 * 1.5 * (double)cRatDiff; 
-        timings.ratio[4] = 0.037 + (double)cRatBase/10 * 1.75 * (double)cRatDiff;
-        timings.ratio[5] = 0.1 + (double)cRatBase/5;
-        timings.ratio[6] = 0.41 + (double)cRatBase/5;
+        timings.ratio[0] = 0.025 + cRatBase/10; 
+        timings.ratio[1] = 0.027 + cRatBase/10 * cRatDiff;
+        timings.ratio[2] = 0.031 + cRatBase/10 * 1.25* cRatDiff;
+        timings.ratio[3] = 0.033 + cRatBase/10 * 1.5 * cRatDiff; 
+        timings.ratio[4] = 0.037 + cRatBase/10 * 1.75 * cRatDiff;
+        timings.ratio[5] = 0.1 + cRatBase/5;
+        timings.ratio[6] = 0.41 + cRatBase/5;
 
         calculate_oscillators(timings);
 
@@ -960,9 +909,9 @@ class ANIMartRIX {
                     4 * FL_SIN_F(move.directional[5] * PI ) +
                     4 * FL_COS_F(move.directional[6] * PI );
                 animation.angle = 1 * polar_theta[x][y] * double(cAngle) ;
-                animation.z = 5 * (double)cZ;
-                animation.scale_x = 0.06 * (double)cScale;
-                animation.scale_y = 0.06 * (double)cScale;
+                animation.z = 5 * cZ;
+                animation.scale_x = 0.06 * cScale;
+                animation.scale_y = 0.06 * cScale;
                 animation.offset_z = -10 * move.linear[0];
                 animation.offset_y = 10;
                 animation.offset_x = 10;
@@ -973,9 +922,9 @@ class ANIMartRIX {
                     (10 + move.directional[0]) * FL_SIN_F(-move.radial[5] + 
                     move.radial[0] + (distance[x][y] / (3)));
                 animation.angle = 1 * polar_theta[x][y] * double(cAngle) ;
-                animation.z = 5 * (double)cZ;
-                animation.scale_x = 0.1 * (double)cScale;
-                animation.scale_y = 0.1 * (double)cScale;
+                animation.z = 5 * cZ;
+                animation.scale_x = 0.1 * cScale;
+                animation.scale_y = 0.1 * cScale;
                 animation.offset_z = -10;
                 animation.offset_y = 20 * move.linear[0];
                 animation.offset_x = 10;
@@ -986,9 +935,9 @@ class ANIMartRIX {
                     (10 + move.directional[1]) * FL_SIN_F(-move.radial[5] + 
                     move.radial[1] + (distance[x][y] / (3)));
                 animation.angle = 1 * polar_theta[x][y] * double(cAngle) ;
-                animation.z = 500 * (double)cZ;
-                animation.scale_x = 0.1 * (double)cScale;
-                animation.scale_y = 0.1 * (double)cScale;
+                animation.z = 500 * cZ;
+                animation.scale_x = 0.1 * cScale;
+                animation.scale_y = 0.1 * cScale;
                 animation.offset_z = -10;
                 animation.offset_y = 20 * move.linear[1];
                 animation.offset_x = 10;
@@ -999,9 +948,9 @@ class ANIMartRIX {
                     (10 + move.directional[2]) * FL_SIN_F(-move.radial[5] + 
                     move.radial[2] + (distance[x][y] / (3)));
                 animation.angle = 1 * polar_theta[x][y] * double(cAngle) ;
-                animation.z = 500 * (double)cZ;
-                animation.scale_x = 0.1 * (double)cScale;
-                animation.scale_y = 0.1 * (double)cScale;
+                animation.z = 500 * cZ;
+                animation.scale_x = 0.1 * cScale;
+                animation.scale_y = 0.1 * cScale;
                 animation.offset_z = -10;
                 animation.offset_y = 20 * move.linear[2];
                 animation.offset_x = 10;
@@ -1028,31 +977,29 @@ class ANIMartRIX {
 
     //*******************************************************************************
     
-    void EXPERIMENT_SM1() { // nice one
+    void EXPERIMENT_SM1() { 
 
-        //get_ready();
+        timings.master_speed = 0.02 * cSpeed;
 
-        timings.master_speed = 0.02 * (double)cSpeed;
-
-        timings.ratio[0] = 0.0025 + (double)cRatBase/100 ; 
-        timings.ratio[1] = 0.0027 + (double)cRatBase/100 * 1.2 * (double)cRatDiff;
-        timings.ratio[2] = 0.0031 + (double)cRatBase/100 * 1.4 * (double)cRatDiff;
-        timings.ratio[3] = 0.0033 + (double)cRatBase/100 * 1.6 * (double)cRatDiff; 
-        timings.ratio[4] = 0.0036 + (double)cRatBase/100 * 1.8 * (double)cRatDiff;
-        timings.ratio[5] = 0.0039 + (double)cRatBase/100 * 2 * (double)cRatDiff;
+        timings.ratio[0] = 0.0025 + cRatBase/100 ; 
+        timings.ratio[1] = 0.0027 + cRatBase/100 * 1.2 * cRatDiff;
+        timings.ratio[2] = 0.0031 + cRatBase/100 * 1.4 * cRatDiff;
+        timings.ratio[3] = 0.0033 + cRatBase/100 * 1.6 * cRatDiff; 
+        timings.ratio[4] = 0.0036 + cRatBase/100 * 1.8 * cRatDiff;
+        timings.ratio[5] = 0.0039 + cRatBase/100 * 2 * cRatDiff;
 
         calculate_oscillators(timings);
 
         for (int x = 0; x < num_x ; x++) {
             for (int y = 0; y < num_y ; y++) {
 
-                animation.dist = distance[x][y] * (double)cZoom;
+                animation.dist = distance[x][y] * cZoom;
                 animation.angle = 
                     polar_theta[x][y] * double(cAngle) 
                     + 5 * move.noise_angle[0];
-                animation.z = 5 * (double)cZ;
-                animation.scale_x = 0.1 * (double)cScale;
-                animation.scale_y = 0.1 * (double)cScale;
+                animation.z = 5 * cZ;
+                animation.scale_x = 0.1 * cScale;
+                animation.scale_y = 0.1 * cScale;
                 animation.offset_z = 50 * move.linear[0];
                 animation.offset_x = 150 * move.directional[0];
                 animation.offset_y = 150 * move.directional[1];
@@ -1061,9 +1008,9 @@ class ANIMartRIX {
                 animation.angle = 
                     polar_theta[x][y] * double(cAngle) 
                     + 4 * move.noise_angle[1];
-                animation.z = 15 * (double)cZ;
-                animation.scale_x = 0.15 * (double)cScale;
-                animation.scale_y = 0.15 * (double)cScale;
+                animation.z = 15 * cZ;
+                animation.scale_x = 0.15 * cScale;
+                animation.scale_y = 0.15 * cScale;
                 animation.offset_z = 50 * move.linear[1];
                 animation.offset_x = 150 * move.directional[1];
                 animation.offset_y = 150 * move.directional[2];
@@ -1072,9 +1019,9 @@ class ANIMartRIX {
                 animation.angle = 
                     polar_theta[x][y] * double(cAngle) 
                     + 5 * move.noise_angle[2];
-                animation.z = 25 * (double)cZ;
-                animation.scale_x = 0.1 * (double)cScale;
-                animation.scale_y = 0.1 * (double)cScale;
+                animation.z = 25 * cZ;
+                animation.scale_x = 0.1 * cScale;
+                animation.scale_y = 0.1 * cScale;
                 animation.offset_z = 50 * move.linear[2];
                 animation.offset_x = 150 * move.directional[2];
                 animation.offset_y = 150 * move.directional[3];
@@ -1083,9 +1030,9 @@ class ANIMartRIX {
                 animation.angle = 
                     polar_theta[x][y] * double(cAngle) 
                     + 5 * move.noise_angle[3];
-                animation.z = 35 * (double)cZ;
-                animation.scale_x = 0.15 * (double)cScale;
-                animation.scale_y = 0.15 * (double)cScale;
+                animation.z = 35 * cZ;
+                animation.scale_x = 0.15 * cScale;
+                animation.scale_y = 0.15 * cScale;
                 animation.offset_z = 50 * move.linear[3];
                 animation.offset_x = 150 * move.directional[3];
                 animation.offset_y = 150 * move.directional[4];
@@ -1094,17 +1041,17 @@ class ANIMartRIX {
                 animation.angle = 
                     polar_theta[x][y] * double(cAngle) 
                     + 5 * move.noise_angle[4];
-                animation.z = 45 * (double)cZ;
-                animation.scale_x = 0.2 * (double)cScale;
-                animation.scale_y = 0.2 * (double)cScale;
+                animation.z = 45 * cZ;
+                animation.scale_x = 0.2 * cScale;
+                animation.scale_y = 0.2 * cScale;
                 animation.offset_z = 50 * move.linear[4];
                 animation.offset_x = 150 * move.directional[4];
                 animation.offset_y = 150 * move.directional[5];
                 show5 = { Layer5 ? render_value(animation) : 0};
 
-                pixel.red = (show1 + show2) * (double)cRed;
-                pixel.green = (show3 + show4) * (double)cGreen;
-                pixel.blue = show5 * (double)cBlue;
+                pixel.red = (show1 + show2) * cRed;
+                pixel.green = (show3 + show4) * cGreen;
+                pixel.blue = show5 * cBlue;
 
                 pixel = rgb_sanity_check(pixel);
                 //leds[xyMap(x, y)] = CRGB(pixel.red, pixel.green, pixel.blue);
@@ -1114,32 +1061,30 @@ class ANIMartRIX {
                 //setPixelColorInternal(x, (num_y - 1) - y, pixel);
             }
         }
-        // show_frame();
+
     }
 
     //*******************************************************************************
 
     void Experiment10() {
 
-        //get_ready();
+        timings.master_speed = 0.01 * cSpeed; 
 
-        timings.master_speed = 0.01 * (double)cSpeed; 
-
-        timings.ratio[0] = 0.01 + (double)cRatBase/10;
-        timings.ratio[1] = 0.011 + (double)cRatBase/10;
-        timings.ratio[2] = 0.013 + (double)cRatBase/10;
-        timings.ratio[3] = 0.33 + (double)cRatBase * (double)cRatDiff;
-        timings.ratio[4] = 0.36 + (double)cRatBase * (double)cRatDiff; 
-        timings.ratio[5] = 0.38 + (double)cRatBase * (double)cRatDiff;
+        timings.ratio[0] = 0.01 + cRatBase/10;
+        timings.ratio[1] = 0.011 + cRatBase/10;
+        timings.ratio[2] = 0.013 + cRatBase/10;
+        timings.ratio[3] = 0.33 + cRatBase * cRatDiff;
+        timings.ratio[4] = 0.36 + cRatBase * cRatDiff; 
+        timings.ratio[5] = 0.38 + cRatBase * cRatDiff;
         timings.ratio[6] = 0.0003; // master rotation
 
         timings.offset[0] = 0;
-        timings.offset[1] = 100 * (double)cOffBase * (double)cOffDiff;
-        timings.offset[2] = 200 * (double)cOffBase * 1.2 * (double)cOffDiff;
-        timings.offset[3] = 300 * (double)cOffBase * 1.4 * (double)cOffDiff;
-        timings.offset[4] = 400 * (double)cOffBase * 1.6 * (double)cOffDiff;
-        timings.offset[5] = 500 * (double)cOffBase * 1.8 * (double)cOffDiff;
-        timings.offset[6] = 600 * (double)cOffBase * 2 * (double)cOffDiff;
+        timings.offset[1] = 100 * cOffBase * cOffDiff;
+        timings.offset[2] = 200 * cOffBase * 1.2 * cOffDiff;
+        timings.offset[3] = 300 * cOffBase * 1.4 * cOffDiff;
+        timings.offset[4] = 400 * cOffBase * 1.6 * cOffDiff;
+        timings.offset[5] = 500 * cOffBase * 1.8 * cOffDiff;
+        timings.offset[6] = 600 * cOffBase * 2 * cOffDiff;
 
         calculate_oscillators(timings);
 
@@ -1153,12 +1098,12 @@ class ANIMartRIX {
                     3 * FL_SIN_F(0.25 * distance[x][y] 
                     - move.radial[3]);
                 animation.angle = 
-                    polar_theta[x][y] * (double)cAngle
+                    polar_theta[x][y] * cAngle
                     + move.noise_angle[0] 
                     + move.noise_angle[6];
-                animation.z = 5 * (double)cZ;
-                animation.scale_x = 0.1 * (double)cScale;
-                animation.scale_y = 0.1 * (double)cScale;
+                animation.z = 5 * cZ;
+                animation.scale_x = 0.1 * cScale;
+                animation.scale_y = 0.1 * cScale;
                 animation.offset_z = 10 * move.linear[0];
                 animation.offset_y = -5 * r * move.linear[0];
                 animation.offset_x = 10;
@@ -1170,12 +1115,12 @@ class ANIMartRIX {
                     4 * FL_SIN_F(0.24 * distance[x][y]
                     - move.radial[4]);
                 animation.angle = 
-                    polar_theta[x][y] * (double)cAngle
+                    polar_theta[x][y] * cAngle
                     + move.noise_angle[1] 
                     + move.noise_angle[6];
-                animation.z = 5 * (double)cZ;
-                animation.scale_x = 0.1 * (double)cScale;
-                animation.scale_y = 0.1 * (double)cScale;
+                animation.z = 5 * cZ;
+                animation.scale_x = 0.1 * cScale;
+                animation.scale_y = 0.1 * cScale;
                 animation.offset_z = 0.1 * move.linear[1];
                 animation.offset_y = -5 * r * move.linear[1];
                 animation.offset_x = 100;
@@ -1187,12 +1132,12 @@ class ANIMartRIX {
                     + 5 * FL_SIN_F(0.23 * distance[x][y] 
                     - move.radial[5]);
                 animation.angle = 
-                    polar_theta[x][y] * (double)cAngle 
+                    polar_theta[x][y] * cAngle 
                     + move.noise_angle[2] 
                     + move.noise_angle[6];
-                animation.z = 5 * (double)cZ;
-                animation.scale_x = 0.1 * (double)cScale;
-                animation.scale_y = 0.1 * (double)cScale;
+                animation.z = 5 * cZ;
+                animation.scale_x = 0.1 * cScale;
+                animation.scale_y = 0.1 * cScale;
                 animation.offset_z = 0.1 * move.linear[2];
                 animation.offset_y = -5 * r * move.linear[2];
                 animation.offset_x = 1000;
@@ -1203,7 +1148,7 @@ class ANIMartRIX {
 
                 //float rad = FL_SIN_F(PI / 2 + distance[x][y] / 14); // better radial filter?!
 
-                float radius = radial_filter_radius * (double)cRadius;
+                float radius = radial_filter_radius * cRadius;
                 radialFilterFalloff = cEdge;
                 radialDimmer = radialFilterFactor(radius, distance[x][y], radialFilterFalloff);
 
@@ -1221,9 +1166,9 @@ class ANIMartRIX {
                 uint8_t a = getTime() / 100;
                 CRGB p = CRGB(CHSV(((a + show1 + show2) + show3), 255, 255));
                 rgb pixel;
-                pixel.red = p.red * (double)cRed;
-                pixel.green = p.green * (double)cGreen;
-                pixel.blue = p.blue * (double)cBlue;
+                pixel.red = p.red * cRed;
+                pixel.green = p.green * cGreen;
+                pixel.blue = p.blue * cBlue;
                 setPixelColorInternal(x, y, pixel);
             }
         }
@@ -1231,31 +1176,30 @@ class ANIMartRIX {
 
     //*******************************************************************************
 
-
     void Test() {
 
-        timings.master_speed = 0.01 * (double)cSpeed; 
+        timings.master_speed = 0.01 * cSpeed; 
 
-        timings.ratio[0] = 0.01 + (double)cRatBase/10;
-        timings.ratio[1] = 0.011 + (double)cRatBase/10;
-        timings.ratio[2] = 0.013 + (double)cRatBase/10;
-        timings.ratio[3] = 0.33 + (double)cRatBase * (double)cRatDiff;
+        timings.ratio[0] = 0.01 + cRatBase/10;
+        timings.ratio[1] = 0.011 + cRatBase/10;
+        timings.ratio[2] = 0.013 + cRatBase/10;
+        timings.ratio[3] = 0.33 + cRatBase * cRatDiff;
         
         timings.offset[0] = 0;
-        timings.offset[1] = 100 * (double)cOffBase * (double)cOffDiff;
-        timings.offset[2] = 200 * (double)cOffBase * 1.2 * (double)cOffDiff;
-        timings.offset[3] = 300 * (double)cOffBase * 1.4 * (double)cOffDiff;
+        timings.offset[1] = 100 * cOffBase * cOffDiff;
+        timings.offset[2] = 200 * cOffBase * 1.2 * cOffDiff;
+        timings.offset[3] = 300 * cOffBase * 1.4 * cOffDiff;
         
         calculate_oscillators(timings);
 
         for (int x = 0; x < num_x; x++) {
             for (int y = 0; y < num_y; y++) {
 
-                animation.dist = distance[x][y] * (double)cZoom;
-                animation.angle = polar_theta[x][y] * (double)cAngle;
-                animation.z = 5 * (double)cZ;
-                animation.scale_x = 0.1 * (double)cScale;
-                animation.scale_y = 0.1 * (double)cScale;
+                animation.dist = distance[x][y] * cZoom;
+                animation.angle = polar_theta[x][y] * cAngle;
+                animation.z = 5 * cZ;
+                animation.scale_x = 0.1 * cScale;
+                animation.scale_y = 0.1 * cScale;
                 animation.offset_x = 100 * move.linear[0];
                 animation.offset_y = 0;
                 animation.offset_z = 10 * move.linear[0];
@@ -1267,7 +1211,7 @@ class ANIMartRIX {
 
                 //show3 = { Layer3 ? render_value(animation) : 0};
 
-                float radius = radial_filter_radius * (double)cRadius;
+                float radius = radial_filter_radius * cRadius;
                 radialFilterFalloff = cEdge;
                 radialDimmer = radialFilterFactor(radius, distance[x][y], radialFilterFalloff);
                
