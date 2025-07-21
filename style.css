@@ -39,8 +39,8 @@ button {
     color: #bebebe;
     text-align: center;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: 1fr 3fr 1fr 1fr;
+    grid-template-columns: 2fr 3fr 1fr ;
+    grid-template-rows: 1fr 3fr 1fr 1fr ;
 }
 .section1 { /*connection*/
     padding: 5px;
@@ -73,11 +73,18 @@ button {
 .section5 { /*pattern control*/
     padding: 5px;
     grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 4; 
+}
+.section6 { /*presets*/
+    padding: 5px;
+    grid-column-start: 3;
     grid-column-end: 4;
     grid-row-start: 2;
     grid-row-end: 4; 
 }
-.section6 { /*last value sent*/
+.section7 { /*last value sent*/
     padding: 5px;
     grid-column-start: 1;
     grid-column-end: 4;

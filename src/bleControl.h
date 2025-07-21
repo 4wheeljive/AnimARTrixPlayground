@@ -23,15 +23,13 @@ bool debug = true;
 uint16_t debugDelay = 100;
 bool pauseAnimation = false;
 
-uint8_t initialFxIndex = 0;
-
 uint8_t dummy = 1;
 
 // UI Elements *************************************************************************************
 
 #ifdef SCREEN_TEST
 
-   //I have not used the Screen Test/ WASM functionality in some time. Certain variables/UI elements may be broken/missing/disconnected
+   // *** CURRENTLY INOPERABLE. SEE NOTES IN README.MD *** 
 
    using namespace fl;
 
@@ -66,12 +64,10 @@ uint8_t dummy = 1;
    using namespace ArduinoJson;
 
    bool rotateAnimations = false;
-   
-   String cPresetName;
 
+   uint8_t cFxIndex = 0;
    uint8_t cBright = 75;
    uint8_t cColOrd = 0;                  
-   uint8_t cFxIndex = initialFxIndex;
 
    float cSpeed = 1.f;
    float cZoom = 1.f;
@@ -96,6 +92,7 @@ uint8_t dummy = 1;
    bool Layer5 = true;
 
    struct Preset {
+      String pPresetID;
       String pPresetName;
       uint8_t pFxIndex;
       uint8_t pBright;
@@ -117,14 +114,42 @@ uint8_t dummy = 1;
       float pBlue;   
    };
 
-   Preset presetD = { };
+   Preset presetD = {
+      .pPresetID = "presetD",
+      .pPresetName = "Default",
+      .pFxIndex = 0,
+      .pBright = 75,
+      .pColOrd = 0, 
+      .pSpeed = 1.f,
+      .pZoom = 1.f,
+      .pScale = 1.f,
+      .pAngle = 1.f,
+      .pRadius = 1.f,
+      .pEdge = 1.f,
+      .pZ = 1.f,
+      .pRatBase = 0.f,
+      .pRatDiff = 1.f,
+      .pOffBase = 1.f,
+      .pOffDiff = 1.f,
+      .pRed = 1.f,
+      .pGreen = 1.f, 
+      .pBlue = 1.f,
+   
+   };
 
-   Preset preset1 = {.pPresetName ="preset1"};
-   Preset preset2 = {.pPresetName ="preset2"};
-   Preset preset3 = {.pPresetName ="preset3"};
-
+   Preset preset1 = {.pPresetID = "Preset1"};
+   Preset preset2 = {.pPresetID = "Preset2"};
+   Preset preset3 = {.pPresetID = "Preset3"};
+   Preset preset4 = {.pPresetID = "Preset4"};
+   Preset preset5 = {.pPresetID = "Preset5"};
+   Preset preset6 = {.pPresetID = "Preset6"};
+   Preset preset7 = {.pPresetID = "Preset7"};
+   Preset preset8 = {.pPresetID = "Preset8"};
+   Preset preset9 = {.pPresetID = "Preset9"};
+   Preset preset10 = {.pPresetID = "Preset10"};
+   
    void capturePreset(Preset &preset);
-   void retrievePreset(const char* name, Preset &preset);
+   void retrievePreset(const char* presetID, Preset &preset);
 
    ArduinoJson::JsonDocument sendDoc;
    ArduinoJson::JsonDocument receivedJSON;
@@ -138,7 +163,7 @@ BLEServer* pServer = NULL;
 BLECharacteristic* pButtonCharacteristic = NULL;
 BLECharacteristic* pCheckboxCharacteristic = NULL;
 BLECharacteristic* pNumberCharacteristic = NULL;
-//BLECharacteristic* pPresetCharacteristic = NULL;
+
 bool deviceConnected = false;
 bool wasConnected = false;
 
@@ -146,15 +171,16 @@ bool wasConnected = false;
 #define BUTTON_CHARACTERISTIC_UUID     "19b10001-e8f2-537e-4f6c-d104768a1214"
 #define CHECKBOX_CHARACTERISTIC_UUID   "19b10002-e8f2-537e-4f6c-d104768a1214"
 #define NUMBER_CHARACTERISTIC_UUID     "19b10003-e8f2-537e-4f6c-d104768a1214"
-//#define PRESET_CHARACTERISTIC_UUID     "19b10004-e8f2-537e-4f6c-d104768a1214"
 
 BLEDescriptor pButtonDescriptor(BLEUUID((uint16_t)0x2902));
 BLEDescriptor pCheckboxDescriptor(BLEUUID((uint16_t)0x2902));
 BLEDescriptor pNumberDescriptor(BLEUUID((uint16_t)0x2902));
-//BLEDescriptor pPresetDescriptor(BLEUUID((uint16_t)0x2902));
 
 //*******************************************************************************
 // CONTROL FUNCTIONS ************************************************************
+
+
+
 
 
 // UI update functions ***********************************************
@@ -217,74 +243,118 @@ void sendReceiptNumber(String receivedID, float receivedValue) {
    }
 }
 
+//***********************************************************************
+
+void resetAll(const Preset &preset) {
+
+   pauseAnimation = true;
+
+   if (cSpeed != preset.pSpeed){
+      cSpeed = preset.pSpeed;
+      sendReceiptNumber("inSpeed",cSpeed);
+   };   
+
+   if (cZoom != preset.pZoom){
+      cZoom = preset.pZoom;
+      sendReceiptNumber("inZoom",cZoom);
+   };   
+
+   if (cScale != preset.pScale){
+      cScale = preset.pScale;
+      sendReceiptNumber("inScale",cScale);
+   };   
+
+   if (cAngle != preset.pAngle){
+      cAngle = preset.pAngle;
+      sendReceiptNumber("inAngle",cAngle);
+   };   
+
+   if (cTwist != preset.pTwist){
+      cTwist = preset.pTwist;
+      sendReceiptNumber("inTwist",cTwist);
+   };   
+
+   if (cRadius != preset.pRadius){
+      cRadius = preset.pRadius;
+      sendReceiptNumber("inRadius",cRadius);
+      };   
+
+   if (cEdge != preset.pEdge){
+      cEdge = preset.pEdge;
+      sendReceiptNumber("inEdge",cEdge);
+      };   
+
+   if (cZ != preset.pZ){
+      cZ = preset.pZ;
+      sendReceiptNumber("inZ",cZ);
+      };   
+
+   if (cRatBase != preset.pRatBase){
+      cRatBase = preset.pRatBase;
+      sendReceiptNumber("inRatBase",cRatBase);
+      };   
+
+   if (cRatDiff != preset.pRatDiff){
+      cRatDiff = preset.pRatDiff;
+      sendReceiptNumber("inRatDiff",cRatDiff);
+      };   
+
+   if (cOffBase != preset.pOffBase){
+      cOffBase = preset.pOffBase;
+      sendReceiptNumber("inOffBase",cOffBase);
+   };   
+
+   if (cOffDiff != preset.pOffDiff){
+      cOffDiff = preset.pOffDiff;
+      sendReceiptNumber("inOffDiff",cOffDiff);
+   };   
+
+   pauseAnimation = false;
+
+}
 
 // Handle UI request functions ***********************************************
 
-
 void processButton(uint8_t receivedValue) {
- 
-   if (receivedValue != 99) {
-         
-      if (receivedValue < 20) {
 
-         if (receivedValue == 1) { //polar waves
-            cFxIndex = 0;
-         }
-         if (receivedValue == 2) { // spiralus
-            cFxIndex = 1;
-         }
-         if (receivedValue == 3) { // caleido1
-            cFxIndex = 2;
-         }
-         if (receivedValue == 4) { // waves
-            cFxIndex = 3;
-         }
-         if (receivedValue == 5) { // chasing spirals
-            cFxIndex = 4;
-         }
-         if (receivedValue == 6) { // complex kaleido 6 
-            cFxIndex = 5;
-         }
-         if (receivedValue == 7) { // water
-            cFxIndex = 6;
-         }
-         if (receivedValue == 8) { // experiment 10
-            cFxIndex = 7;
-         }
-         if (receivedValue == 9) { // experiment sm1
-            cFxIndex = 8;
-         }
-         if (receivedValue == 10) { // test
-            cFxIndex = 9;
-         }
-
-         displayOn = true;
+   sendReceiptButton(receivedValue);
       
-      }
-         
-      if (receivedValue >= 20 && receivedValue < 30) {
-
-         if (receivedValue == 20) { capturePreset(preset1); }
-
-         if (receivedValue == 21) { retrievePreset("preset1", preset1); }
-
-         if (receivedValue == 22) { capturePreset(preset2); }
-
-         if (receivedValue == 23) { retrievePreset("preset2", preset2); }
-
-      }
-
-      sendReceiptButton(receivedValue);
-
+   if (receivedValue > 20 && receivedValue < 41) { // Animation selection
+      cFxIndex = receivedValue - 21; 
+      displayOn = true;
    }
 
-   if (receivedValue == 99) { //off
-      displayOn = false;
-   }
+   if (receivedValue == 51) { capturePreset(preset1); }
+   if (receivedValue == 52) { capturePreset(preset2); }
+   if (receivedValue == 53) { capturePreset(preset3); }
+   if (receivedValue == 54) { capturePreset(preset4); }
+   if (receivedValue == 55) { capturePreset(preset5); }
+   if (receivedValue == 56) { capturePreset(preset6); }
+   if (receivedValue == 57) { capturePreset(preset7); }
+   if (receivedValue == 58) { capturePreset(preset8); }
+   if (receivedValue == 59) { capturePreset(preset9); }
+   if (receivedValue == 60) { capturePreset(preset10); }
+   if (receivedValue == 71) { retrievePreset("Preset1",preset1); }
+   if (receivedValue == 72) { retrievePreset("Preset2",preset2); }
+   if (receivedValue == 73) { retrievePreset("Preset3",preset3); }
+   if (receivedValue == 74) { retrievePreset("Preset4",preset4); }
+   if (receivedValue == 75) { retrievePreset("Preset5",preset5); }
+   if (receivedValue == 76) { retrievePreset("Preset6",preset6); }
+   if (receivedValue == 77) { retrievePreset("Preset7",preset7); }
+   if (receivedValue == 78) { retrievePreset("Preset8",preset8); }
+   if (receivedValue == 79) { retrievePreset("Preset9",preset9); }
+   if (receivedValue == 80) { retrievePreset("Preset10",preset10); }
+
+   if (receivedValue == 95) { resetAll(presetD); }
+   
+   if (receivedValue == 98) { displayOn = true; }
+   if (receivedValue == 99) { displayOn = false; }
 
 }
 
 void processNumber(String receivedID, float receivedValue ) {
+
+   sendReceiptNumber(receivedID, receivedValue);
 
    if (receivedID == "inBright") {cBright = receivedValue;};
    if (receivedID == "inColOrd") {cColOrd = receivedValue;};
@@ -303,12 +373,12 @@ void processNumber(String receivedID, float receivedValue ) {
    if (receivedID == "inRed") {cRed = receivedValue;};	
    if (receivedID == "inGreen") {cGreen = receivedValue;};	
    if (receivedID == "inBlue") {cBlue = receivedValue;};
-   
-   sendReceiptNumber(receivedID, receivedValue);
 
 }
 
 void processCheckbox(String receivedID, bool receivedValue ) {
+ 
+   sendReceiptCheckbox(receivedID, receivedValue);
 
    if (receivedID == "cxRotateAnim") {rotateAnimations = receivedValue;};
    if (receivedID == "cxLayer1") {Layer1 = receivedValue;};
@@ -317,19 +387,15 @@ void processCheckbox(String receivedID, bool receivedValue ) {
    if (receivedID == "cxLayer4") {Layer4 = receivedValue;};
    if (receivedID == "cxLayer5") {Layer5 = receivedValue;};
     
-   sendReceiptCheckbox(receivedID, receivedValue);
 }
 
 //*******************************************************************************
 // PRESETS **********************************************************************
 
-//String pPresetName;
-
-
-void savePreset(const char* name, const Preset &preset) {
+void savePreset(const char* presetID, const Preset &preset) {
       
    String path = "/";
-   path += name;
+   path += presetID;
    path += ".txt"; 
    File file = LittleFS.open(path, "w");
 
@@ -338,6 +404,7 @@ void savePreset(const char* name, const Preset &preset) {
       Serial.println(path);
    }
 
+   file.printf("%s\n", preset.pPresetName);
    file.printf("%d\n", preset.pFxIndex);
    file.printf("%d\n", preset.pBright);
    file.printf("%d\n", preset.pColOrd);
@@ -363,6 +430,8 @@ void savePreset(const char* name, const Preset &preset) {
 
 }
 
+//***************************************************************
+
 void capturePreset(Preset &preset) {
   
    pauseAnimation = true;
@@ -386,11 +455,13 @@ void capturePreset(Preset &preset) {
    preset.pGreen = cGreen; 	
    preset.pBlue = cBlue; 
    
-   savePreset(preset.pPresetName.c_str(), preset);
+   savePreset(preset.pPresetID.c_str(), preset);
 
    pauseAnimation = false;
 
 }
+
+//***************************************************************
 
 void applyPreset(const Preset &preset) {
    
@@ -398,7 +469,7 @@ void applyPreset(const Preset &preset) {
 
    if (cFxIndex != preset.pFxIndex){
       cFxIndex = preset.pFxIndex;
-      sendReceiptButton(cFxIndex);
+      sendReceiptButton(cFxIndex);  
    };   
 
    if (cBright != preset.pBright){
@@ -490,9 +561,11 @@ void applyPreset(const Preset &preset) {
 
 }
 
-void retrievePreset(const char* name, Preset &preset) {
+//***************************************************************
+
+void retrievePreset(const char* presetID, Preset &preset) {
    String path = "/";
-   path += name;
+   path += presetID;
    path += ".txt"; 
    File file = LittleFS.open(path, "r");
 
@@ -501,6 +574,7 @@ void retrievePreset(const char* name, Preset &preset) {
       Serial.println(path);
    }
   
+   preset.pPresetName = file.readStringUntil('\n');
    preset.pFxIndex = file.readStringUntil('\n').toInt();
    preset.pBright = file.readStringUntil('\n').toInt();
    preset.pColOrd = file.readStringUntil('\n').toInt();
@@ -618,27 +692,6 @@ class NumberCharacteristicCallbacks : public BLECharacteristicCallbacks {
    }
 };
 
-/*
-class PresetCharacteristicCallbacks : public BLECharacteristicCallbacks {
-   void onWrite(BLECharacteristic *characteristic) {
-      
-      String receivedValue = characteristic->getValue();
-      
-      if (receivedValue.length() > 0) {
-      
-         if (debug) {
-            Serial.print("Received value: ");
-            Serial.println(receivedValue);
-         }
-      
-         newPreset = receivedValue;
-
-         //loadPreset(newPreset);
-      }
-   }
-};
-*/
-
 //*******************************************************************************
 // BLE SETUP FUNCTION ***********************************************************
 
@@ -680,19 +733,6 @@ void bleSetup() {
    pNumberCharacteristic->setCallbacks(new NumberCharacteristicCallbacks());
    pNumberCharacteristic->setValue(String(dummy).c_str());
    pNumberCharacteristic->addDescriptor(new BLE2902());
-
-      
-   /*
-   pPresetCharacteristic = pService->createCharacteristic(
-                     PRESET_CHARACTERISTIC_UUID,
-                     BLECharacteristic::PROPERTY_WRITE |
-                     BLECharacteristic::PROPERTY_READ |
-                     BLECharacteristic::PROPERTY_NOTIFY
-                  );
-   pPresetCharacteristic->setCallbacks(new PresetCharacteristicCallbacks());
-   pPresetCharacteristic->setValue(String(preset).c_str());
-   pPresetCharacteristic->addDescriptor(new BLE2902());
-   */
       
    //**********************************************************
 

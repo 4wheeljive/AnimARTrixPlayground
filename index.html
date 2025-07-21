@@ -23,8 +23,8 @@
     
         <div class="section1">
             <div class="card">
-                <button id="connectBleButton" class="connectButton"> Connect</button>
-                <button id="disconnectBleButton" class="disconnectButton"> Disconnect</button>
+                <button id="btn1" data-my-number="1" class="connectButton" > Connect</button>
+                <button id="btn2" data-my-number="2" class="disconnectButton" > Disconnect</button>
                 <p class="gray-label">Status: <strong><span id="bleState" style="color:#d13a30;">Disconnected</span></strong></p>
             </div>
         </div>
@@ -32,17 +32,17 @@
 		<div class="section2">
             <div class="card">
 
-                <button id="polarWavesButton" class="onButton">POLAR WAVES</button> 
-                <button id="spiralusButton" class="onButton">SPIRALUS</button>
-                <button id="caleido1Button" class="onButton">CALEIDO1</button>
-                <button id="wavesButton" class="onButton">WAVES</button>
-                <button id="chasingSpiralsButton" class="onButton">CHASING SPIRALS</button>
-                <button id="complexKaleidoButton" class="onButton">COMPLEX KALEIDO 6</button>
-                <button id="waterButton" class="onButton">WATER</button>
-                <button id="experiment10Button" class="onButton">EXPERIMENT 10</button>
-                <button id="experimentSM1Button" class="onButton">EXPERIMENT SM1</button>
-                <button id="testButton" class="onButton">TEST</button>
-                <button id="offButton" class="offButton">OFF</button>
+                <button id="btn21" data-my-number="21" class="onButton">POLAR WAVES</button> 
+                <button id="btn22" data-my-number="22" class="onButton">SPIRALUS</button>
+                <button id="btn23" data-my-number="23" class="onButton">CALEIDO1</button>
+                <button id="btn24" data-my-number="24" class="onButton">WAVES</button>
+                <button id="btn25" data-my-number="25" class="onButton">CHASING SPIRALS</button>
+                <button id="btn26" data-my-number="26" class="onButton">COMPLEX KALEIDO 6</button>
+                <button id="btn27" data-my-number="27" class="onButton">WATER</button>
+                <button id="btn28" data-my-number="28" class="onButton">EXPERIMENT 10</button>
+                <button id="btn29" data-my-number="29" class="onButton">EXPERIMENT SM1</button>
+                <button id="btn30" data-my-number="30" class="onButton">TEST</button>
+
 
                 <div class="table">
                     <div class="tr">
@@ -59,6 +59,17 @@
         
         <div class="section3">
             <div class="card">
+
+                <div class="table">
+                    <div class="tr">
+                        <span class="td"><h2>Display</h2></span>
+                        <span class="td">
+                            <button id="btn98" data-my-number="98" class="offButton">ON</button>
+                            <button id="btn99" data-my-number="99" class="offButton">OFF</button>
+                        </span>
+                        <span class="td"></span>
+                    </div>
+                </div>
 
                 <h3>Brightness</h3>
  
@@ -136,9 +147,13 @@
         <div class="section5">
             <div class="card">
 
-                <h2>Pattern Control</h2>
-
                 <div class="table">
+                    
+                    <div class="tr">
+                    <span class="td"><h2>Pattern Control</h2></span>
+                    <span class="td"></span>
+                    <span class="td"><button id="btn95" data-my-number="95" class="resetButton">RESET ALL</button></span>
+                    </div>
 
                     <div class="tr">
                         <span class="td"><h3>Parameter</h3></span>
@@ -149,8 +164,8 @@
                         <form id="formSpeed" class="tr">
                             <span class="td">Speed: </span>
                             <span class="td">
-                                <input type="range" id="inSpeed" name="inSpeed" min=".1" max="3" step=".1" value="1">
-                                <span id="valSpeed">1.0</span>
+                              <input type="range" id="inSpeed" name="inSpeed" min=".1" max="3" step=".1" value="1">
+                              <span id="valSpeed">1.0</span>
                             </span>
                             <span class="td"><button id="rstSpeed" class="resetButton">&#8634</button></span>
                         </form> 
@@ -210,7 +225,7 @@
                         </form>
 
                         <form id="formZ" class="tr">
-                            <span class="td">Magic Z: </span>
+                            <span class="td">Z: </span>
                             <span class="td">
                                 <input type="range" id="inZ" name="inZ" min=".1" max="10" step=".1" value="1">
                                 <span id="valZ">1.0</span>
@@ -253,37 +268,96 @@
                             </span>
                             <span class="td"><button id="rstOffDiff" class="resetButton">&#8634</button></span>
                         </form>
-                <!--
-                        <form id="formPreset" class="tr">
-                            <span class="td">Preset: </span>    
-                            <span class="td"><input type="text" type="submit" id="inputPreset" name="inputPreset"> </span>
-                            <span id="valuePreset">presetName</span>
-                        </form>
-
-                        
-                        <form id="formResetAll" class="tr">
-                            <span class="td">Reset All: </span>
-                            <span class="td"><button id="buttonResetAll" class="resetButton">&#8634</button></span>
-                        </form>
-                    -->
 
                     </div> 
             </div> 
         </div>
-    
+
         <div class="section6">
-            <p class="gray-label" ><i>Last value sent: <span id="valueSent"></span></i></p>
-            <p>
-                <button id="presetSaveButton1" class="onButton">SAVE PRESET 1</button>
-                <button id="presetLoadButton1" class="onButton">LOAD PRESET 1</button>
-                <button id="presetSaveButton2" class="onButton">SAVE PRESET 2</button>
-                <button id="presetLoadButton2" class="onButton">LOAD PRESET 2</button>
-            </p>                
+
+            <div class="card">
+
+                <h2>Presets</h2>
+
+                <div class="table">
+
+                    <div class="tr">
+                        <span class="td"><h3>Preset</h3></span>
+                        <span class="td"><h3>Save</h3></span>
+                        <span class="td"><h3>Load</h3></span>
+                    </div>
+
+                    <div class="tr">
+                        <span class="td">1</span>
+                        <span class="td"><button id="btn51" data-my-number="51" class="resetButton">&#x2935</button></span>
+                        <span class="td"><button id="btn71" data-my-number="71" class="resetButton">&#x2934</button></span>
+                    </div>
+                    <div class="tr">
+                        <span class="td">2</span>
+                        <span class="td"><button id="btn52" data-my-number="52"class="resetButton">&#x2935</button></span>
+                        <span class="td"><button id="btn72" data-my-number="72"class="resetButton">&#x2934</button></span>
+                    </div> 
+
+                    <div class="tr">
+                        <span class="td">3</span>
+                        <span class="td"><button id="btn53" data-my-number="53"class="resetButton">&#x2935</button></span>
+                        <span class="td"><button id="btn73" data-my-number="73"class="resetButton">&#x2934</button></span>
+                    </div> 
+
+                    <div class="tr">
+                        <span class="td">4</span>
+                        <span class="td"><button id="btn54" data-my-number="54"class="resetButton">&#x2935</button></span>
+                        <span class="td"><button id="btn74" data-my-number="74"class="resetButton">&#x2934</button></span>
+                    </div> 
+
+                    <div class="tr">
+                        <span class="td">5</span>
+                        <span class="td"><button id="btn55" data-my-number="55"class="resetButton">&#x2935</button></span>
+                        <span class="td"><button id="btn75" data-my-number="75"class="resetButton">&#x2934</button></span>
+                    </div> 
+
+                    <div class="tr">
+                        <span class="td">6</span>
+                        <span class="td"><button id="btn56" data-my-number="56"class="resetButton">&#x2935</button></span>
+                        <span class="td"><button id="btn76" data-my-number="76"class="resetButton">&#x2934</button></span>
+                    </div> 
+
+                    <div class="tr">
+                        <span class="td">7</span>
+                        <span class="td"><button id="btn57" data-my-number="57"class="resetButton">&#x2935</button></span>
+                        <span class="td"><button id="btn77" data-my-number="77"class="resetButton">&#x2934</button></span>
+                    </div> 
+
+                    <div class="tr">
+                        <span class="td">8</span>
+                        <span class="td"><button id="btn58" data-my-number="58"class="resetButton">&#x2935</button></span>
+                        <span class="td"><button id="btn78" data-my-number="78"class="resetButton">&#x2934</button></span>
+                    </div> 
+
+                    <div class="tr">
+                        <span class="td">9</span>
+                        <span class="td"><button id="btn59" data-my-number="59"class="resetButton">&#x2935</button></span>
+                        <span class="td"><button id="btn79" data-my-number="79"class="resetButton">&#x2934</button></span>
+                    </div> 
+
+                    <div class="tr">
+                        <span class="td">10</span>
+                        <span class="td"><button id="btn60" data-my-number="60"class="resetButton">&#x2935</button></span>
+                        <span class="td"><button id="btn80" data-my-number="80"class="resetButton">&#x2934</button></span>
+                    </div> 
+                </div>
+           
+            </div>
+
         </div>
 
+        <div class="section7">
+
+            <p class="gray-label" ><i>Last value sent: <span id="valueSent"></span></i></p>
+
+        </div>
 
     </div>
-
 
 <script src="script.js"></script>
 </body>

@@ -1,47 +1,44 @@
-const connectButton = document.getElementById('connectBleButton');
-const disconnectButton = document.getElementById('disconnectBleButton');
 
-const polarWavesButton = document.getElementById('polarWavesButton');
-const spiralusButton = document.getElementById('spiralusButton');
-const caleido1Button = document.getElementById('caleido1Button');
-const wavesButton = document.getElementById('wavesButton');
-const chasingSpiralsButton = document.getElementById('chasingSpiralsButton');
-const testButton = document.getElementById('testButton');
-const complexKaleidoButton = document.getElementById('complexKaleidoButton');
-const waterButton = document.getElementById('waterButton');
-const experiment10Button = document.getElementById('experiment10Button');
-const experimentSM1Button = document.getElementById('experimentSM1Button');
-const offButton = document.getElementById('offButton');
-const presetSaveButton1 = document.getElementById('presetSaveButton1');
-const presetLoadButton1 = document.getElementById('presetLoadButton1');
-const presetSaveButton2 = document.getElementById('presetSaveButton2');
-const presetLoadButton2 = document.getElementById('presetLoadButton2');
-
-
+const latestValueSent = document.getElementById('valueSent');
+const bleStateContainer = document.getElementById('bleState');
 const valAnim = document.getElementById('valAnim');
+const debounceDelay = 300;
 
 
-//const formResetAll = document.getElementById('formResetAll');
-//const buttonResetAll = document.getElementById('buttonResetAll');
+// Button controls ****************************************************** 
 
+const buttons = [ '1', '2', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '95', '98', '99' ] 
 
-// Checkbox controls ********************************************** 
+function processButton(buttonVal){
+    if (buttonVal == 1) { 
+        if (isWebBluetoothEnabled()){ connectToDevice(); }
+    }
+    if (buttonVal == 2) { disconnectDevice(); }
+
+    if (buttonVal > 20) { sendButtonCharacteristic(buttonVal); }
+}
+
+buttons.forEach(buttonNum => {
+    const button = document.getElementById(`btn${buttonNum}`);
+    button.addEventListener('click', () => {
+        const buttonVal = button.dataset.myNumber;
+        processButton(buttonVal)
+    });
+});
+
+// Checkbox controls ****************************************************
 
 var checkboxStatus = true;
 const checkboxes = [ 'RotateAnim', 'Layer1', 'Layer2', 'Layer3', 'Layer4', 'Layer5' ]
 
 checkboxes.forEach(name => {
-
     const checkbox = document.getElementById(`cx${name}`);
-
     checkbox.addEventListener('change', () => {
         if (checkbox.checked) {checkboxStatus=true}            
         else {checkboxStatus=false} 
         sendCheckboxCharacteristic(checkbox.id,checkboxStatus);
     });
-
 });
-
 
 // Parameter slider controls ********************************************** 
 
@@ -64,6 +61,7 @@ parameters.forEach(name => {
 
     const form = document.getElementById(`form${name}`);
     const input = document.getElementById(`in${name}`);
+    //const slider = document.getElementById(`slider${name}`);
     const value = document.getElementById(`val${name}`);
     const reset = document.getElementById(`rst${name}`);
     controlsById[input.id] = { input, value };
@@ -87,18 +85,6 @@ parameters.forEach(name => {
         });
     }
 });
-
-
-/*const formPreset = document.getElementById('formPreset');
-const inputPreset = document.getElementById('inputPreset');
-const valuePreset = document.getElementById('valuePreset');
-*/
-
-const latestValueSent = document.getElementById('valueSent');
-const bleStateContainer = document.getElementById('bleState');
-
-const debounceDelay = 300;
-
 
 // BLE *******************************************************************************
 
@@ -136,19 +122,11 @@ function ab2str(buf) {
     return String.fromCharCode.apply(null, new Uint8Array(buf));
 }
 
-// Create a send buffer for the NumberCharacteristic
+// SEND INPUT FUNCTIONS ***********************************************************
 
-/*
-function sendButtonCharacteristic(inputID, inputValue) {
-        var sendDoc = {
-            "id" : inputID,
-            "val" : inputValue
-        }
-        sendString = JSON.stringify(sendDoc);
-        sendBuffer = str2ab(sendString);        
-        writeNumberCharacteristic(sendBuffer);
+function sendButtonCharacteristic(buttonVal) {
+    writeButtonCharacteristic(buttonVal);
 }
-*/
 
 function sendNumberCharacteristic(inputID, inputValue) {
         var sendDoc = {
@@ -170,20 +148,27 @@ function sendCheckboxCharacteristic(inputID, inputValue) {
         writeCheckboxCharacteristic(sendBuffer);
 }
 
-
-
-// handler for any incoming BLE update:
+// FUNCTIONS TO APPLY NOTIFICATIONS FROM PROGRAM ***************************************
 
 function applyReceivedButton(changeReceived){
-    if (changeReceived < 20) {
-        var newAnimation = changeReceived - 1;
+ 
+    // Change in fxIndex due to preset load
+    if ( changeReceived < 20 ) {
+        var newAnimation = changeReceived ;
         valAnim.innerHTML = newAnimation;
         console.log('New animation:', newAnimation);
     }
+
+    // Change in fxIndex due to direct selection
+    if ( changeReceived > 20 && changeReceived < 41 ) {
+        var newAnimation = changeReceived - 21;
+        valAnim.innerHTML = newAnimation;
+        console.log('New animation:', newAnimation);
+    }
+
 }
 
 function applyReceivedCheckbox(receivedDoc) {}
-
 
 function applyReceivedNumber(receivedDoc) {
   const ctrl = controlsById[receivedDoc.id];
@@ -195,58 +180,6 @@ function applyReceivedNumber(receivedDoc) {
   ctrl.value.innerHTML   = receivedDoc.val;
 
 }
-
-/*
-function resetAll() {
-    parameters.forEach((parameter) => {
-        if (parameter.input.value != parameter.input.defaultValue) {
-            sendNumberCharacteristic(parameter.input.id, parameter.input.defaultValue);
-            parameter.value.innerHTML = parameter.input.defaultValue;
-        }
-    });
- }
-    */
-
-
-// ADD EVENT LISTENERS *************************************************************
-
-// Connect Button (search for BLE Devices only if BLE is available)
-    connectButton.addEventListener('click', (event) => {
-        if (isWebBluetoothEnabled()){ connectToDevice(); }
-    });
-
-// Disconnect Button
-    disconnectButton.addEventListener('click', disconnectDevice);
-
-// Animation Selection (Buttons)
-    polarWavesButton.addEventListener('click', () => writeButtonCharacteristic(1));
-    spiralusButton.addEventListener('click', () => writeButtonCharacteristic(2));
-    caleido1Button.addEventListener('click', () => writeButtonCharacteristic(3));
-    wavesButton.addEventListener('click', () => writeButtonCharacteristic(4));
-    chasingSpiralsButton.addEventListener('click', () => writeButtonCharacteristic(5));
-    complexKaleidoButton.addEventListener('click', () => writeButtonCharacteristic(6));
-    waterButton.addEventListener('click', () => writeButtonCharacteristic(7));
-    experiment10Button.addEventListener('click', () => writeButtonCharacteristic(8));
-    experimentSM1Button.addEventListener('click', () => writeButtonCharacteristic(9));
-    testButton.addEventListener('click', () => writeButtonCharacteristic(10));
-    offButton.addEventListener('click', () => writeButtonCharacteristic(99));
-
-// Presets
-    presetSaveButton1.addEventListener('click', () => writeButtonCharacteristic(20));
-    presetLoadButton1.addEventListener('click', () => writeButtonCharacteristic(21));
-    presetSaveButton2.addEventListener('click', () => writeButtonCharacteristic(22));
-    presetLoadButton2.addEventListener('click', () => writeButtonCharacteristic(23));
-
-/*
-    formPreset.addEventListener('submit', (event) => {
-        event.preventDefault();
-        writePresetCharacteristic(inputPreset.value);
-    });
-*/        
-       
-
-//	buttonResetAll.addEventListener('click', (event) => resetAll());
-
 
 // BLE CONNECTION *******************************************************************************
 
@@ -310,20 +243,8 @@ function connectToDevice(){
                 numberCharacteristicFound = characteristic;
                 characteristic.addEventListener('characteristicvaluechanged', handleNumberCharacteristicChange);
                 characteristic.startNotifications();				
-                })
-    
-            /*
-            service.getCharacteristic(PresetCharacteristic)
-            .then(characteristic => {
-                presetCharacteristicFound = characteristic;
-                characteristic.addEventListener('characteristicvaluechanged', handlePresetCharacteristicChange);
-                characteristic.startNotifications();				
-                })
-            */
-
-                
+                })      
     })
-     
 }
 
 // DISCONNECT FUNCTIONS ************************************************************
@@ -347,10 +268,8 @@ function disconnectDevice() {
 
 // HANDLE CHARACTERISTIC CHANGE FUNCTIONS *************************************************************
 
-
 function handleButtonCharacteristicChange(event){
     const changeReceived = new TextDecoder().decode(event.target.value);
-    //const receivedDoc = JSON.parse(changeReceived); 
     console.log("Server receipt: Button value - ",changeReceived);
     applyReceivedButton(changeReceived);
 }
@@ -433,26 +352,3 @@ function writeNumberCharacteristic(sendBuffer){
         window.alert("Bluetooth is not connected. Cannot write to characteristic. \n Connect to BLE first!")
     }
 }
-
-/*
-function writePresetCharacteristic(value){
-    if (bleServer && bleServer.connected) {
-        bleServiceFound.getCharacteristic(PresetCharacteristic)
-        .then(characteristic => {
-            return characteristic.writeValue(value);
-        })
-        .then(() => {
-            const decodedBuffer = new TextDecoder().decode(value);
-            latestValueSent.innerHTML = decodedBuffer;
-            console.log("Value written to Preset characteristic: ", decodedBuffer);
-        })
-        .catch(error => {
-            console.error("Error writing to Preset characteristic: ", error);
-        });
-    } 
-    else {
-        console.error ("Bluetooth is not connected. Cannot write to characteristic.")
-        window.alert("Bluetooth is not connected. Cannot write to characteristic. \n Connect to BLE first!")
-    }
-}
-*/

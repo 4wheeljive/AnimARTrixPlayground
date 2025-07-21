@@ -17,7 +17,7 @@ BASIC FRAMEWORK:
 - There are currently about 15 variables set up for the user to control various parameters within each of the animations
 - The playground can be used in two different ways:
   - To drive a physical LED panel from MCU using web BLE and a custom UI        
-  - To drive FastLED's WASM compiler/browser with built-in FastLED UI controls
+  - To drive FastLED's WASM compiler/browser with built-in FastLED UI controls //*** CURRENTLY INPOERABLE SEE NOTE BELOW ***//
 
 LED PANEL MODE:
     
@@ -51,10 +51,12 @@ When BIG_BOARD is undefined:
 - Custom LED mapping may be unnecessary
 
 FASTLED COMPILER MODE:
+***CURRENTLY INOPERABLE***
+This mode is basically inoperable since the earliest commits. My personal focus is on learning (and sharing) how someone with no greater know-how than me can:
+  - Get a tiny MCU to make a real led panel do really cool stuff, perhaps
+  - [based on artistic input] [sent wirelessly (e.g., BLE)] from [virtually any web-enabled device] [operated by][a user of virtually any technical or artistic skill level].     
 
-I have not used the Screen Test/ WASM functionality since very early development of the playground. Certain variables/UI elements may be broken/missing/disconnected. Known current/potential issues for using the compiler:
-  - The UINumberField controls for fxIndex and colorOrder were producing floats. It seemed to work better for me for those paramaters to be uint8_t, so that's how everything else is currently set up.
-  - I have not updated the min/max/step values for the UISliders to reflect the current settings I have in the index.html file for BLE control
+I know others might get use from a WASM version of whatever functionality I develop here. So I'm keeping some renants as comments basically as a reminder that a WASM mode is part of the overall vision for the Playground. I will happily undertake to update and enable that functionality if I learn that anyone out there might actually value that in this project.
 
 
 PARAMETER CONTROLS
@@ -71,20 +73,29 @@ USES
 
 
 TODO
+
 - Get UI to reflect current controller parameters on BLE reconnect :: In progress
-- Create framework for saving and retrieving animation presets :: In progress
 
 - Provide for more precise inputs (sliders are great for exploration, but not refinement!)
+
+- Add Layer toggles to presets
 
 - Fine-tune parameter:
   - functions (how they affect an animation)
   - values (ranges/steps/etc.)
   - control (e.g., add oscilation?)
+
 - UI feedback/indication of which parameters do/do not affect the current animation
-- Identify/resolve issues to get SCREEN_TEST mode working with current program structure   
+
+- Identify/constrain parameter triggers that do nothing other than reset animation positions
+
+- Add alternate/custom color palette functionality
+
+- Identify/resolve issues to get SCREEN_TEST mode working with current program structure :: Probably won't happen for a while   
+
+- Long-term: identify critical resonance factors, and implement guardrails 
 
 
 DISCUSSION
-
 Since there is some apparently-unsolvable problem with my Reddit account, I've enabled Discussions for this repo (https://github.com/4wheeljive/AnimARTrixPlayground/discussions) so that I can, you know, participate like a normal human.
 
