@@ -16,6 +16,9 @@ function processButton(buttonVal){
     if (buttonVal == 2) { disconnectDevice(); }
 
     if (buttonVal > 20) { sendButtonCharacteristic(buttonVal); }
+
+    if (buttonVal == 91) { updateParametersUsed(); }  // update parametersUsed when refreshing UI 
+
 }
 
 buttons.forEach(buttonNum => {
@@ -52,13 +55,12 @@ parameters.forEach(name => {
     const form = document.getElementById(`form${name}`);
     const input = document.getElementById(`in${name}`);
     const slider = document.getElementById(`slider${name}`);
-    //const value = document.getElementById(`val${name}`);
     const reset = document.getElementById(`rst${name}`);
    
-    controlsById[input.id] = { input, value };
-    controls[name] = { form, input, slider, reset }; // value,
+    controlsById[input.id] = { input };     
+    controls[name] = { form, input, slider, reset };
     
-    let timer;
+    let timer;  
 
     // When the user types a number (immediate send)
     input.addEventListener('keydown', (e) => {
@@ -92,6 +94,33 @@ parameters.forEach(name => {
     }
 });
 
+// Function to indicate parameters used ****************************** 
+
+let parameterUsed = [
+[true, true, true, true, true, true, true, true, true, false, false],
+[true, true, true, true, false, false, true, true, true, true, true],
+[true, true, true, false, false, false, true, true, true, true, true],
+[true, true, true, false, false, false, true, true, true, true, true],
+[true, true, true, true, true, true, false, true, true, true, true],
+[true, true, true, false, true, true, true, true, true, false, false],
+[true, true, true, false, false, false, true, true, true, false, false],
+[true, true, true, false, false, false, true, true, true, false, false],
+[true, true, true, true, true, true, true, true, true, true, true],
+[true, true, true, false, true, true, true, true, true, true, true]
+];
+
+function updateParametersUsed() {
+    const fxIndex = parseInt(valAnim.textContent); // Get current animation index
+    const forms = document.querySelectorAll('form[data-index]');
+
+    forms.forEach(form => {
+        const index = parseInt(form.getAttribute('data-index'));
+        const isUsed = parameterUsed[fxIndex]?.[index]; // Optional chaining to avoid errors
+        if (typeof isUsed !== 'undefined') {
+            form.setAttribute('data-used', isUsed ? 'true' : 'false');
+        }
+    });
+}
 
 // BLE *******************************************************************************
 
@@ -101,6 +130,7 @@ var bleService =                '19b10000-e8f2-537e-4f6c-d104768a1214';
 var ButtonCharacteristic =      '19b10001-e8f2-537e-4f6c-d104768a1214';
 var CheckboxCharacteristic =    '19b10002-e8f2-537e-4f6c-d104768a1214';
 var NumberCharacteristic =      '19b10003-e8f2-537e-4f6c-d104768a1214';
+//var ControlCharacteristic =      '19b10004-e8f2-537e-4f6c-d104768a1214';
 
 //Declare Global Variables to Handle Bluetooth
 var bleDevice;
@@ -109,7 +139,7 @@ var bleServiceFound;
 var buttonCharacteristicFound;
 var checkboxCharacteristicFound;
 var numberCharacteristicFound;
-//var presetCharacteristicFound;
+//var controlCharacteristicFound;
 
 // UTILITY FUNCTIONS *******************************************************************
 
@@ -128,7 +158,7 @@ function ab2str(buf) {
     return String.fromCharCode.apply(null, new Uint8Array(buf));
 }
 
-// SEND INPUT FUNCTIONS ***********************************************************
+// SEND USER INPUT FUNCTIONS ***********************************************************
 
 function sendButtonCharacteristic(buttonVal) {
     writeButtonCharacteristic(buttonVal);
@@ -162,6 +192,7 @@ function applyReceivedButton(changeReceived){
     if ( changeReceived < 20 ) {
         var newAnimation = changeReceived ;
         valAnim.innerHTML = newAnimation;
+        updateParametersUsed();
         console.log('New animation:', newAnimation);
     }
 
@@ -169,12 +200,12 @@ function applyReceivedButton(changeReceived){
     if ( changeReceived > 20 && changeReceived < 41 ) {
         var newAnimation = changeReceived - 21;
         valAnim.innerHTML = newAnimation;
+        updateParametersUsed();
         console.log('New animation:', newAnimation);
     }
-
 }
 
-function applyReceivedCheckbox(receivedDoc) {}
+//function applyReceivedCheckbox(receivedDoc) {}
 
 function applyReceivedNumber(receivedDoc) {
   const ctrl = controlsById[receivedDoc.id];
@@ -183,9 +214,9 @@ function applyReceivedNumber(receivedDoc) {
     return;
   }
   ctrl.input.value     	 = receivedDoc.val;
-  //ctrl.value.innerHTML   = receivedDoc.val;
-
 }
+
+//function applyReceivedControl(receivedDoc) {}
 
 // BLE CONNECTION *******************************************************************************
 
@@ -251,7 +282,12 @@ function connectToDevice(){
                 characteristic.startNotifications();				
                 })      
   
-  
+            /*service.getCharacteristic(ControlCharacteristic)
+            .then(characteristic => {
+                controlCharacteristicFound = characteristic;
+                characteristic.addEventListener('characteristicvaluechanged', handleControlCharacteristicChange);
+                characteristic.startNotifications();				
+                })*/      
     })
 
 }
@@ -287,7 +323,7 @@ function handleCheckboxCharacteristicChange(event){
     const changeReceived = new TextDecoder().decode(event.target.value);
     const receivedDoc = JSON.parse(changeReceived);
     console.log("Server receipt: ",receivedDoc.id," - ",receivedDoc.val);
-	applyReceivedCheckbox(receivedDoc);
+	//applyReceivedCheckbox(receivedDoc);
 }
 
 function handleNumberCharacteristicChange(event){
@@ -296,6 +332,14 @@ function handleNumberCharacteristicChange(event){
     console.log("Server receipt: ",receivedDoc.id," - ",receivedDoc.val);
 	applyReceivedNumber(receivedDoc);
 }
+
+/*function handleControlCharacteristicChange(event){
+    const changeReceived = new TextDecoder().decode(event.target.value);
+    const receivedDoc = JSON.parse(changeReceived);
+    console.log("Server receipt: ...");
+	applyReceivedControl(receivedDoc);
+}*/
+
 
 // WRITE TO CHARACTERISTIC FUNCTIONS *************************************************
 

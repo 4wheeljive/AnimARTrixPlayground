@@ -905,10 +905,10 @@ class ANIMartRIX {
             for (int y = 0; y < num_y; y++) {
 
                 animation.dist =
-                    distance[x][y] +
+                    distance[x][y] * cZoom +
                     4 * FL_SIN_F(move.directional[5] * PI ) +
                     4 * FL_COS_F(move.directional[6] * PI );
-                animation.angle = 1 * polar_theta[x][y] * double(cAngle) ;
+                animation.angle = 1 * polar_theta[x][y] * cAngle ;
                 animation.z = 5 * cZ;
                 animation.scale_x = 0.06 * cScale;
                 animation.scale_y = 0.06 * cScale;
@@ -921,7 +921,7 @@ class ANIMartRIX {
                 animation.dist = 
                     (10 + move.directional[0]) * FL_SIN_F(-move.radial[5] + 
                     move.radial[0] + (distance[x][y] / (3)));
-                animation.angle = 1 * polar_theta[x][y] * double(cAngle) ;
+                animation.angle = 1 * polar_theta[x][y] * cAngle ;
                 animation.z = 5 * cZ;
                 animation.scale_x = 0.1 * cScale;
                 animation.scale_y = 0.1 * cScale;
@@ -934,7 +934,7 @@ class ANIMartRIX {
                 animation.dist = 
                     (10 + move.directional[1]) * FL_SIN_F(-move.radial[5] + 
                     move.radial[1] + (distance[x][y] / (3)));
-                animation.angle = 1 * polar_theta[x][y] * double(cAngle) ;
+                animation.angle = 1 * polar_theta[x][y] * cAngle ;
                 animation.z = 500 * cZ;
                 animation.scale_x = 0.1 * cScale;
                 animation.scale_y = 0.1 * cScale;
@@ -947,7 +947,7 @@ class ANIMartRIX {
                 animation.dist = 
                     (10 + move.directional[2]) * FL_SIN_F(-move.radial[5] + 
                     move.radial[2] + (distance[x][y] / (3)));
-                animation.angle = 1 * polar_theta[x][y] * double(cAngle) ;
+                animation.angle = 1 * polar_theta[x][y] * cAngle ;
                 animation.z = 500 * cZ;
                 animation.scale_x = 0.1 * cScale;
                 animation.scale_y = 0.1 * cScale;
@@ -995,7 +995,7 @@ class ANIMartRIX {
 
                 animation.dist = distance[x][y] * cZoom;
                 animation.angle = 
-                    polar_theta[x][y] * double(cAngle) 
+                    polar_theta[x][y] * cAngle 
                     + 5 * move.noise_angle[0];
                 animation.z = 5 * cZ;
                 animation.scale_x = 0.1 * cScale;
@@ -1006,7 +1006,7 @@ class ANIMartRIX {
                 show1 = { Layer1 ? render_value(animation) : 0};
 
                 animation.angle = 
-                    polar_theta[x][y] * double(cAngle) 
+                    polar_theta[x][y] * cAngle 
                     + 4 * move.noise_angle[1];
                 animation.z = 15 * cZ;
                 animation.scale_x = 0.15 * cScale;
@@ -1017,7 +1017,7 @@ class ANIMartRIX {
                 show2 = { Layer2 ? render_value(animation) : 0};
 
                 animation.angle = 
-                    polar_theta[x][y] * double(cAngle) 
+                    polar_theta[x][y] * cAngle 
                     + 5 * move.noise_angle[2];
                 animation.z = 25 * cZ;
                 animation.scale_x = 0.1 * cScale;
@@ -1028,7 +1028,7 @@ class ANIMartRIX {
                 show3 = { Layer3 ? render_value(animation) : 0};
 
                 animation.angle = 
-                    polar_theta[x][y] * double(cAngle) 
+                    polar_theta[x][y] * cAngle 
                     + 5 * move.noise_angle[3];
                 animation.z = 35 * cZ;
                 animation.scale_x = 0.15 * cScale;
@@ -1039,7 +1039,7 @@ class ANIMartRIX {
                 show4 = { Layer4 ? render_value(animation) : 0};
 
                 animation.angle = 
-                    polar_theta[x][y] * double(cAngle) 
+                    polar_theta[x][y] * cAngle 
                     + 5 * move.noise_angle[4];
                 animation.z = 45 * cZ;
                 animation.scale_x = 0.2 * cScale;
@@ -1094,8 +1094,8 @@ class ANIMartRIX {
                 float r = 1.5; // scroll speed
 
                 animation.dist =
-                    3 + distance[x][y] +
-                    3 * FL_SIN_F(0.25 * distance[x][y] 
+                    3 + distance[x][y] * cZoom +
+                    3 * FL_SIN_F(0.25 * distance[x][y] * cZoom
                     - move.radial[3]);
                 animation.angle = 
                     polar_theta[x][y] * cAngle
@@ -1111,8 +1111,8 @@ class ANIMartRIX {
                 show1 = { Layer1 ? render_value(animation) : 0};
 
                 animation.dist =
-                    4 + distance[x][y] +
-                    4 * FL_SIN_F(0.24 * distance[x][y]
+                    4 + distance[x][y] * cZoom +
+                    4 * FL_SIN_F(0.24 * distance[x][y] * cZoom
                     - move.radial[4]);
                 animation.angle = 
                     polar_theta[x][y] * cAngle

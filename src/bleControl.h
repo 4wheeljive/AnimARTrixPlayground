@@ -153,6 +153,8 @@ uint8_t dummy = 1;
 
    ArduinoJson::JsonDocument sendDoc;
    ArduinoJson::JsonDocument receivedJSON;
+   //ArduinoJson::JsonDocument jsonDocParameters;
+   //JsonArray parameterArray = jsonDocParameters.createNestedArray();
 
 #endif
 
@@ -163,6 +165,7 @@ BLEServer* pServer = NULL;
 BLECharacteristic* pButtonCharacteristic = NULL;
 BLECharacteristic* pCheckboxCharacteristic = NULL;
 BLECharacteristic* pNumberCharacteristic = NULL;
+//BLECharacteristic* pControlCharacteristic = NULL;
 
 bool deviceConnected = false;
 bool wasConnected = false;
@@ -171,10 +174,12 @@ bool wasConnected = false;
 #define BUTTON_CHARACTERISTIC_UUID     "19b10001-e8f2-537e-4f6c-d104768a1214"
 #define CHECKBOX_CHARACTERISTIC_UUID   "19b10002-e8f2-537e-4f6c-d104768a1214"
 #define NUMBER_CHARACTERISTIC_UUID     "19b10003-e8f2-537e-4f6c-d104768a1214"
+//#define CONTROL_CHARACTERISTIC_UUID    "19b10004-e8f2-537e-4f6c-d104768a1214"
 
 BLEDescriptor pButtonDescriptor(BLEUUID((uint16_t)0x2902));
 BLEDescriptor pCheckboxDescriptor(BLEUUID((uint16_t)0x2902));
 BLEDescriptor pNumberDescriptor(BLEUUID((uint16_t)0x2902));
+//BLEDescriptor pControlDescriptor(BLEUUID((uint16_t)0x2902));
 
 //*******************************************************************************
 // CONTROL FUNCTIONS ************************************************************
@@ -334,6 +339,30 @@ void resetAll() {
 
 }
 
+
+/*
+void sendParametersUsed(){
+
+   for (uint8_t i = 0; i < 10; i++) {
+       parameterArray.add(parameterUsed[cFxIndex][i]);
+   }
+   
+   String jsonString;
+   serializeJson(jsonDocParameters, jsonString);
+
+   // Set the value of the characteristic
+   pControlCharacteristic->setValue(jsonString);
+   
+   // Notify connected clients
+   pControlCharacteristic->notify();
+   
+   if (debug) {
+      Serial.print("Parameters sent ");
+      Serial.println(parameterArray);
+   }
+}
+*/
+
 // Handle UI request functions ***********************************************
 
 void processButton(uint8_t receivedValue) {
@@ -341,7 +370,8 @@ void processButton(uint8_t receivedValue) {
    sendReceiptButton(receivedValue);
       
    if (receivedValue > 20 && receivedValue < 41) { // Animation selection
-      cFxIndex = receivedValue - 21; 
+      cFxIndex = receivedValue - 21;
+      //sendParametersUsed(); 
       displayOn = true;
    }
 
@@ -755,6 +785,18 @@ void bleSetup() {
    pNumberCharacteristic->setCallbacks(new NumberCharacteristicCallbacks());
    pNumberCharacteristic->setValue(String(dummy).c_str());
    pNumberCharacteristic->addDescriptor(new BLE2902());
+
+	/*
+   pControlCharacteristic = pService->createCharacteristic(
+                     CONTROL_CHARACTERISTIC_UUID,
+                     BLECharacteristic::PROPERTY_WRITE |
+                     BLECharacteristic::PROPERTY_READ |
+                     BLECharacteristic::PROPERTY_NOTIFY
+                  );
+   //pControlCharacteristic->setCallbacks(new ControlCharacteristicCallbacks());
+   pControlCharacteristic->setValue(String(dummy).c_str());
+   pControlCharacteristic->addDescriptor(new BLE2902());
+   */
       
    //**********************************************************
 

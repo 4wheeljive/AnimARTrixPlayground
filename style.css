@@ -112,16 +112,10 @@ input[type=range] {
     padding: 5px;
 }
 .onButton{
-    background-color: #a7a7a7;
+    background-color: #7f7f7f;
 }
 .offButton{
     background-color: #5c5c5c;
-}
-.connectButton{
-    background-color: #24af37;
-}
-.disconnectButton{
-    background-color: #d13a30;
 }
 .resetButton{
     background-color: #000000;
@@ -138,10 +132,13 @@ input[type=range] {
     font-size: 1rem;
     text-align: center;
 }
-.reading {
-    font-size: 1.8rem;
-}
 .credits {
     color: #aaaaaa;
     font-size: .8rem;
+}
+[data-used="true"] {
+  color: white;
+}
+[data-used="false"] {
+  color: #3e3e3e;
 }

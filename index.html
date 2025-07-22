@@ -26,7 +26,7 @@
      
     <div class="wrapper">
     
-        <div class="section1">
+        <div class="section1">  
             <div class="card">
                 <button id="btn1" data-my-number="1" class="onButton" > Connect</button>
                 <button id="btn2" data-my-number="2" class="onButton" > Disconnect</button>
@@ -170,21 +170,21 @@
                         <span class="td"><button id="rstSpeed" class="resetButton">&#8634;</button></span>
                     </form>
 
-                    <form id="formZoom" class="tr">
+                    <form id="formZoom" class="tr" data-index="0" data-used="true">
                         <span class="td">Zoom:</span>
                         <span class="td"><input type="range" id="sliderZoom" name="sliderZoom" min="0.1" max="3" step="0.1" value="1"></span>
                         <span class="td"><input type="number" id="inZoom" name="inZoom" min="0.1" max="3" step="0.1" value="1"></span>
                         <span class="td"><button id="rstZoom" class="resetButton">&#8634;</button></span>
                     </form>
 
-                    <form id="formScale" class="tr">
+                    <form id="formScale" class="tr" data-index="1" data-used="true">
                         <span class="td">Scale:</span>
                         <span class="td"><input type="range" id="sliderScale" name="sliderScale" min="0.1" max="3" step="0.1" value="1"></span>
                         <span class="td"><input type="number" id="inScale" name="inScale" min="0.1" max="3" step="0.1" value="1"></span>
                         <span class="td"><button id="rstScale" class="resetButton">&#8634;</button></span>
                     </form>
 
-                    <form id="formAngle" class="tr">
+                    <form id="formAngle" class="tr" data-index="2" data-used="true">
                         <span class="td">Angle:</span>
                         <span class="td"><input type="range" id="sliderAngle" name="sliderAngle" min="0.1" max="3" step="0.1" value="1"></span>
                         <span class="td"><input type="number" id="inAngle" name="inAngle" min="0.1" max="3" step="0.1" value="1"></span>
@@ -192,14 +192,14 @@
                     </form>
 
 
-                    <form id="formTwist" class="tr">
+                    <form id="formTwist" class="tr" data-index="3" data-used="true">
                         <span class="td">Twist:</span>
                         <span class="td"><input type="range" id="sliderTwist" name="sliderTwist" min="-3" max="3" step="0.1" value="1"></span>
                         <span class="td"><input type="number" id="inTwist" name="inTwist" min="-3" max="3" step="0.1" value="1"></span>
                         <span class="td"><button id="rstTwist" class="resetButton">&#8634;</button></span>
                     </form>
 
-                    <form id="formRadius" class="tr">
+                    <form id="formRadius" class="tr" data-index="4" data-used="true">
                         <span class="td">Radius:</span>
                         <span class="td"><input type="range" id="sliderRadius" name="sliderRadius" min="0.1" max="2" step="0.1" value="1"></span>
                         <span class="td"><input type="number" id="inRadius" name="inRadius" min="0.1" max="2" step="0.1" value="1"></span>
@@ -207,7 +207,7 @@
                     </form>
 
 
-                    <form id="formEdge" class="tr">
+                    <form id="formEdge" class="tr" data-index="5" data-used="true">
                         <span class="td">Edge:</span>
                         <span class="td"><input type="range" id="sliderEdge" name="sliderEdge" min="0.1" max="5" step="0.1" value="1"></span>
                         <span class="td"><input type="number" id="inEdge" name="inEdge" min="0.1" max="5" step="0.1" value="1"></span>
@@ -215,7 +215,7 @@
                     </form>
 
 
-                    <form id="formZ" class="tr">
+                    <form id="formZ" class="tr" data-index="6" data-used="true">
                         <span class="td">Z:</span>
                         <span class="td"><input type="range" id="sliderZ" name="sliderZ" min="0.1" max="10" step="0.1" value="1"></span>
                         <span class="td"><input type="number" id="inZ" name="inZ" min="0.1" max="10" step="0.1" value="1"></span>
@@ -223,28 +223,28 @@
                     </form>
 
 
-                    <form id="formRatBase" class="tr">
+                    <form id="formRatBase" class="tr" data-index="7" data-used="true">
                         <span class="td">Ratios Base:</span>
                         <span class="td"><input type="range" id="sliderRatBase" name="sliderRatBase" min="-0.25" max="0.5" step="0.01" value="0"></span>
                         <span class="td"><input type="number" id="inRatBase" name="inRatBase" min="-0.25" max="0.5" step="0.01" value="0"></span>
                         <span class="td"><button id="rstRatBase" class="resetButton">&#8634;</button></span>
                     </form>
 
-                    <form id="formRatDiff" class="tr">
+                    <form id="formRatDiff" class="tr" data-index="8" data-used="true">
                         <span class="td">Ratios Diff:</span>
                         <span class="td"><input type="range" id="sliderRatDiff" name="sliderRatDiff" min="0.1" max="5" step="0.1" value="1"></span>
                         <span class="td"><input type="number" id="inRatDiff" name="inRatDiff" min="0.1" max="5" step="0.1" value="1"></span>
                         <span class="td"><button id="rstRatDiff" class="resetButton">&#8634;</button></span>
                     </form>
 
-                    <form id="formOffBase" class="tr">
+                    <form id="formOffBase" class="tr" data-index="9" data-used="true">
                         <span class="td">Offsets Base:</span>
                         <span class="td"><input type="range" id="sliderOffBase" name="sliderOffBase" min="0.1" max="5" step="0.1" value="1"></span>
                         <span class="td"><input type="number" id="inOffBase" name="inOffBase" min="0.1" max="5" step="0.1" value="1"></span>
                         <span class="td"><button id="rstOffBase" class="resetButton">&#8634;</button></span>
                     </form>
 
-                    <form id="formOffDiff" class="tr">
+                    <form id="formOffDiff" class="tr" data-index="10" data-used="true">
                         <span class="td">Offsets Diff:</span>
                         <span class="td"><input type="range" id="sliderOffDiff" name="sliderOffDiff" min="0.1" max="5" step="0.1" value="1"></span>
                         <span class="td"><input type="number" id="inOffDiff" name="inOffDiff" min="0.1" max="5" step="0.1" value="1"></span>
