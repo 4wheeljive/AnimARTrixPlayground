@@ -79,8 +79,8 @@ When BIG_BOARD is undefined:
 //#define SCREEN_TEST    // *** SCREEN_TEST MODE CURRENTLY INOPERABLE. SEE NOTES IN README.MD *** 
 #undef SCREEN_TEST
 
-//#define BIG_BOARD
-#undef BIG_BOARD
+#define BIG_BOARD
+//#undef BIG_BOARD
 
 #define CUSTOM_MAP
 //#undef CUSTOM_MAP
@@ -232,9 +232,7 @@ void setup() {
         Serial.println("LittleFS mount failed!");
         return;
     }
-    Serial.println("LittleFS mounted successfully.");
-
-    //savePreset("PresetD", presetD);
+    Serial.println("LittleFS mounted successfully.");   
 
  }
 

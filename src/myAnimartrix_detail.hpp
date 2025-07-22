@@ -780,7 +780,7 @@ class ANIMartRIX {
                     3 * polar_theta[x][y] * cAngle
                     + move.radial[0] 
                     - distance[x][y] * cTwist;
-                animation.dist = distance[x][y] * cZoom;
+                animation.dist = distance[x][y] / 4 * cZoom;
                 animation.scale_z = .1;
                 animation.scale_y = .1 * cScale;
                 animation.scale_x = .1 * cScale;

@@ -5,26 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="style.css">
     <meta charset="UTF-8">
+    <style>
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
 </head>
 <body>
     <div class="topnav">
         <h1>AnimARTrix Playground</h1>
-
-    <p class="credits">My personal learning playground for working with FastLED Adapter for the AnimARTrix fx library.
-    Copyright Stefan Petrick 2023. <br>
-    Adapted to C++ by Netmindz 2023. Adapted to FastLED by Zach Vorhies 2024. 
-    For details on the AnimARTrix library and licensing information, see <a href="url">https://github.com/FastLED/FastLED/blob/master/src/fx/2d/animartrix_detail.hpp</a>
-    </p>
-
-
     </div>
      
     <div class="wrapper">
     
         <div class="section1">
             <div class="card">
-                <button id="btn1" data-my-number="1" class="connectButton" > Connect</button>
-                <button id="btn2" data-my-number="2" class="disconnectButton" > Disconnect</button>
+                <button id="btn1" data-my-number="1" class="onButton" > Connect</button>
+                <button id="btn2" data-my-number="2" class="onButton" > Disconnect</button>
                 <p class="gray-label">Status: <strong><span id="bleState" style="color:#d13a30;">Disconnected</span></strong></p>
             </div>
         </div>
@@ -67,22 +72,22 @@
                             <button id="btn98" data-my-number="98" class="offButton">ON</button>
                             <button id="btn99" data-my-number="99" class="offButton">OFF</button>
                         </span>
-                        <span class="td"></span>
+                        <span class="td"><button id="btn91" data-my-number="91" class="onButton">REFRESH UI</button></span>
                     </div>
                 </div>
 
-                <h3>Brightness</h3>
- 
-                    <form id="formBright">
-                        <input type="range" id="inBright" name="inBright"  min="25" max="150" step="5" value="75"/>
-                        <span id="valBright">75</span>
+               
+                    <form id="formBright" class="tr">
+                        <span class="td"><h3>Brightness:</h3></span>
+                        <span class="td"><input type="range" id="sliderBright" name="sliderBright" min="25" max="150" step="5" value="75"></span>
+                        <span class="td"><input type="number" id="inBright" name="inBright" min="25" max="150" step="5" value="75"></span>    
                     </form>
                         
-                <h3>Color Order</h3>
-        
-                    <form id="formColOrd">
-                        <input type="range" id="inColOrd" name="inColOrd"  min="0" max="5" step="1" value="0"/>
-                        <span id="valColOrd">0</span>
+               
+                    <form id="formColOrd" class="tr">
+                        <span class="td"><h3>Color Order:</h3></span>
+                        <span class="td"><input type="range" id="sliderColOrd" name="sliderColOrd" min="0" max="5" step="1" value="0"></span>
+                        <span class="td"><input type="number" id="inColOrd" name="inColOrd" min="0" max="5" step="1" value="0"></span>
                     </form>
 
                     <p></p>                    
@@ -92,35 +97,30 @@
                         <div class="tr">
                             <span class="td"><h3>Color</h3></span>
                             <span class="td"><h3>Multiplier</h3></span>
+                            <span class="td"></span>
                             <span class="td"><h3>Reset</h3></span>
                         </div>
 
                         <form id="formRed" class="tr">
-                            <span class="td">Red: </span>
-                            <span class="td">
-                                <input type="range" id="inRed" name="inRed" min=".1" max="5" step=".1" value="1">
-                                <span id="valRed">1.0</span>
-                            </span>
-                            <span class="td"><button id="rstRed" class="resetButton">&#8634</button></span>
+                            <span class="td">Red:</span>
+                            <span class="td"><input type="range" id="sliderRed" name="sliderRed" min="0.1" max="5" step="0.1" value="1"></span>
+                            <span class="td"><input type="number" id="inRed" name="inRed" min="0.1" max="5" step="0.1" value="1"></span>
+                            <span class="td"><button id="rstRed" class="resetButton">&#8634;</button></span>
                         </form>
-                        
+
                         <form id="formGreen" class="tr">
-                            <span class="td">Green: </span>
-                            <span class="td">
-                                <input type="range" id="inGreen" name="inGreen" min=".1" max="5" step=".1" value="1">
-                                <span id="valGreen">1.0</span>
-                            </span>
-                            <span class="td"><button id="rstGreen" class="resetButton">&#8634</button></span>
+                            <span class="td">Green:</span>
+                            <span class="td"><input type="range" id="sliderGreen" name="sliderGreen" min="0.1" max="5" step="0.1" value="1"></span>
+                            <span class="td"><input type="number" id="inGreen" name="inGreen" min="0.1" max="5" step="0.1" value="1"></span>
+                            <span class="td"><button id="rstGreen" class="resetButton">&#8634;</button></span>
                         </form>
-                        
+
                         <form id="formBlue" class="tr">
-                            <span class="td">Blue: </span>
-                            <span class="td">
-                                <input type="range" id="inBlue" name="inBlue" min=".1" max="5" step=".1" value="1">
-                                <span id="valBlue">1.0</span>
-                            </span>
-                            <span class="td"><button id="rstBlue" class="resetButton">&#8634</button></span>
-                        </form> 
+                            <span class="td">Blue:</span>
+                            <span class="td"><input type="range" id="sliderBlue" name="sliderBlue" min="0.1" max="5" step="0.1" value="1"></span>
+                            <span class="td"><input type="number" id="inBlue" name="inBlue" min="0.1" max="5" step="0.1" value="1"></span>
+                            <span class="td"><button id="rstBlue" class="resetButton">&#8634;</button></span>
+                        </form>
                     
                     </div>
 
@@ -148,8 +148,9 @@
             <div class="card">
 
                 <div class="table">
-                    
+
                     <div class="tr">
+                    <span class="td"></span>
                     <span class="td"><h2>Pattern Control</h2></span>
                     <span class="td"></span>
                     <span class="td"><button id="btn95" data-my-number="95" class="resetButton">RESET ALL</button></span>
@@ -158,116 +159,97 @@
                     <div class="tr">
                         <span class="td"><h3>Parameter</h3></span>
                         <span class="td"><h3>Value</h3></span>
+                        <span class="td"></span>
                         <span class="td"><h3>Reset</h3></span>
                     </div>
 
-                        <form id="formSpeed" class="tr">
-                            <span class="td">Speed: </span>
-                            <span class="td">
-                              <input type="range" id="inSpeed" name="inSpeed" min=".1" max="3" step=".1" value="1">
-                              <span id="valSpeed">1.0</span>
-                            </span>
-                            <span class="td"><button id="rstSpeed" class="resetButton">&#8634</button></span>
-                        </form> 
-												
-						<form id="formZoom" class="tr">
-                            <span class="td">Zoom: </span>
-                            <span class="td">
-                                <input type="range" id="inZoom" name="inZoom" min=".1" max="3" step=".1" value="1">
-                                <span id="valZoom">1.0</span>
-                            </span>
-                            <span class="td"><button id="rstZoom" class="resetButton">&#8634</button></span>
-                        </form>
+                    <form id="formSpeed" class="tr">
+                        <span class="td">Speed:</span>
+                        <span class="td"><input type="range" id="sliderSpeed" name="sliderSpeed" min="0.1" max="3" step="0.1" value="1"></span>
+                        <span class="td"><input type="number" id="inSpeed" name="inSpeed" min="0.1" max="3" step="0.1" value="1"></span>
+                        <span class="td"><button id="rstSpeed" class="resetButton">&#8634;</button></span>
+                    </form>
 
-                        <form id="formScale" class="tr">
-                            <span class="td">Scale: </span>
-                            <span class="td">
-                                <input type="range" id="inScale" name="inScale" min=".1" max="3" step=".1" value="1">
-                                <span id="valScale">1.0</span>
-                            </span>
-                            <span class="td"><button id="rstScale" class="resetButton">&#8634</button></span>
-                        </form>
-                        
-                        <form id="formAngle" class="tr">
-                            <span class="td">Angle: </span>
-                            <span class="td">
-                                <input type="range" id="inAngle" name="inAngle" min=".1" max="3" step=".1" value="1">
-                                <span id="valAngle">1.0</span>
-                            </span>
-                            <span class="td"><button id="rstAngle" class="resetButton">&#8634</button></span>
-                        </form> 
-						
-                        <form id="formTwist" class="tr">
-                            <span class="td">Twist: </span>
-                            <span class="td">
-                                <input type="range" id="inTwist" name="inTwist" min="-3" max="3" step=".1" value="1">
-                                <span id="valTwist">1</span>
-                            </span>
-                            <span class="td"><button id="rstTwist" class="resetButton">&#8634</button></span>
-                        </form>
-						
-                        <form id="formRadius" class="tr">
-                            <span class="td">Radius: </span>
-                            <span class="td">
-                                <input type="range" id="inRadius" name="inRadius" min=".1" max="2" step=".1" value="1">
-                                <span id="valRadius">1</span>
-                            </span>
-                            <span class="td"><button id="rstRadius" class="resetButton">&#8634</button></span>
-                        </form> 
-						
-                        <form id="formEdge" class="tr">
-                            <span class="td">Edge: </span>
-                            <span class="td">
-                                <input type="range" id="inEdge" name="inEdge" min=".1" max="5" step=".1" value="1">
-                                <span id="valEdge">1</span>
-                            </span>
-                            <span class="td"><button id="rstEdge" class="resetButton">&#8634</button></span>
-                        </form>
+                    <form id="formZoom" class="tr">
+                        <span class="td">Zoom:</span>
+                        <span class="td"><input type="range" id="sliderZoom" name="sliderZoom" min="0.1" max="3" step="0.1" value="1"></span>
+                        <span class="td"><input type="number" id="inZoom" name="inZoom" min="0.1" max="3" step="0.1" value="1"></span>
+                        <span class="td"><button id="rstZoom" class="resetButton">&#8634;</button></span>
+                    </form>
 
-                        <form id="formZ" class="tr">
-                            <span class="td">Z: </span>
-                            <span class="td">
-                                <input type="range" id="inZ" name="inZ" min=".1" max="10" step=".1" value="1">
-                                <span id="valZ">1.0</span>
-                            </span>
-                            <span class="td"><button id="rstZ" class="resetButton">&#8634</button></span>
-                        </form> 
-						
-						<form id="formRatBase" class="tr">
-                            <span class="td">Ratios Base: </span>
-                            <span class="td">
-                                <input type="range" id="inRatBase" name="inRatBase" min="-.25" max=".5" step=".01" value="0">
-                                <span id="valRatBase">0</span>
-                            </span>
-                            <span class="td"><button id="rstRatBase" class="resetButton">&#8634</button></span>
-                        </form> 
-						
-						<form id="formRatDiff" class="tr">
-                            <span class="td">Ratios Diff: </span>
-                            <span class="td">
-                                <input type="range" id="inRatDiff" name="inRatDiff" min=".1" max="5" step=".1" value="1">
-                                <span id="valRatDiff">1.0</span>
-                            </span>
-                            <span class="td"><button id="rstRatDiff" class="resetButton">&#8634</button></span>
-                        </form> 
-						
-						<form id="formOffBase" class="tr">
-                            <span class="td">Offsets Base: </span>
-                            <span class="td">
-                                <input type="range" id="inOffBase" name="inOffBase" min=".1" max="5" step=".1" value="1">
-                                <span id="valOffBase">1.0</span>
-                            </span>
-                            <span class="td"><button id="rstOffBase" class="resetButton">&#8634</button></span>
-                        </form> 
-						
-						<form id="formOffDiff" class="tr">
-                            <span class="td">Offsets Diff: </span>
-                            <span class="td">
-                                <input type="range" id="inOffDiff" name="inOffDiff" min=".1" max="5" step=".1" value="1">
-                                <span id="valOffDiff">1.0</span>
-                            </span>
-                            <span class="td"><button id="rstOffDiff" class="resetButton">&#8634</button></span>
-                        </form>
+                    <form id="formScale" class="tr">
+                        <span class="td">Scale:</span>
+                        <span class="td"><input type="range" id="sliderScale" name="sliderScale" min="0.1" max="3" step="0.1" value="1"></span>
+                        <span class="td"><input type="number" id="inScale" name="inScale" min="0.1" max="3" step="0.1" value="1"></span>
+                        <span class="td"><button id="rstScale" class="resetButton">&#8634;</button></span>
+                    </form>
+
+                    <form id="formAngle" class="tr">
+                        <span class="td">Angle:</span>
+                        <span class="td"><input type="range" id="sliderAngle" name="sliderAngle" min="0.1" max="3" step="0.1" value="1"></span>
+                        <span class="td"><input type="number" id="inAngle" name="inAngle" min="0.1" max="3" step="0.1" value="1"></span>
+                        <span class="td"><button id="rstAngle" class="resetButton">&#8634;</button></span>
+                    </form>
+
+
+                    <form id="formTwist" class="tr">
+                        <span class="td">Twist:</span>
+                        <span class="td"><input type="range" id="sliderTwist" name="sliderTwist" min="-3" max="3" step="0.1" value="1"></span>
+                        <span class="td"><input type="number" id="inTwist" name="inTwist" min="-3" max="3" step="0.1" value="1"></span>
+                        <span class="td"><button id="rstTwist" class="resetButton">&#8634;</button></span>
+                    </form>
+
+                    <form id="formRadius" class="tr">
+                        <span class="td">Radius:</span>
+                        <span class="td"><input type="range" id="sliderRadius" name="sliderRadius" min="0.1" max="2" step="0.1" value="1"></span>
+                        <span class="td"><input type="number" id="inRadius" name="inRadius" min="0.1" max="2" step="0.1" value="1"></span>
+                        <span class="td"><button id="rstRadius" class="resetButton">&#8634;</button></span>
+                    </form>
+
+
+                    <form id="formEdge" class="tr">
+                        <span class="td">Edge:</span>
+                        <span class="td"><input type="range" id="sliderEdge" name="sliderEdge" min="0.1" max="5" step="0.1" value="1"></span>
+                        <span class="td"><input type="number" id="inEdge" name="inEdge" min="0.1" max="5" step="0.1" value="1"></span>
+                        <span class="td"><button id="rstEdge" class="resetButton">&#8634;</button></span>
+                    </form>
+
+
+                    <form id="formZ" class="tr">
+                        <span class="td">Z:</span>
+                        <span class="td"><input type="range" id="sliderZ" name="sliderZ" min="0.1" max="10" step="0.1" value="1"></span>
+                        <span class="td"><input type="number" id="inZ" name="inZ" min="0.1" max="10" step="0.1" value="1"></span>
+                        <span class="td"><button id="rstZ" class="resetButton">&#8634;</button></span>
+                    </form>
+
+
+                    <form id="formRatBase" class="tr">
+                        <span class="td">Ratios Base:</span>
+                        <span class="td"><input type="range" id="sliderRatBase" name="sliderRatBase" min="-0.25" max="0.5" step="0.01" value="0"></span>
+                        <span class="td"><input type="number" id="inRatBase" name="inRatBase" min="-0.25" max="0.5" step="0.01" value="0"></span>
+                        <span class="td"><button id="rstRatBase" class="resetButton">&#8634;</button></span>
+                    </form>
+
+                    <form id="formRatDiff" class="tr">
+                        <span class="td">Ratios Diff:</span>
+                        <span class="td"><input type="range" id="sliderRatDiff" name="sliderRatDiff" min="0.1" max="5" step="0.1" value="1"></span>
+                        <span class="td"><input type="number" id="inRatDiff" name="inRatDiff" min="0.1" max="5" step="0.1" value="1"></span>
+                        <span class="td"><button id="rstRatDiff" class="resetButton">&#8634;</button></span>
+                    </form>
+
+                    <form id="formOffBase" class="tr">
+                        <span class="td">Offsets Base:</span>
+                        <span class="td"><input type="range" id="sliderOffBase" name="sliderOffBase" min="0.1" max="5" step="0.1" value="1"></span>
+                        <span class="td"><input type="number" id="inOffBase" name="inOffBase" min="0.1" max="5" step="0.1" value="1"></span>
+                        <span class="td"><button id="rstOffBase" class="resetButton">&#8634;</button></span>
+                    </form>
+
+                    <form id="formOffDiff" class="tr">
+                        <span class="td">Offsets Diff:</span>
+                        <span class="td"><input type="range" id="sliderOffDiff" name="sliderOffDiff" min="0.1" max="5" step="0.1" value="1"></span>
+                        <span class="td"><input type="number" id="inOffDiff" name="inOffDiff" min="0.1" max="5" step="0.1" value="1"></span>
+                        <span class="td"><button id="rstOffDiff" class="resetButton">&#8634;</button></span>
+                    </form>
 
                     </div> 
             </div> 
@@ -352,12 +334,17 @@
         </div>
 
         <div class="section7">
-
-            <p class="gray-label" ><i>Last value sent: <span id="valueSent"></span></i></p>
-
+            <span class="gray-label" ><i>Last value sent: <span id="valueSent"></span></i></span>
         </div>
 
     </div>
+
+    <div class="credits">My personal learning playground for working with FastLED Adapter for the AnimARTrix fx library.
+    Copyright Stefan Petrick 2023. <br>
+    Adapted to C++ by Netmindz 2023. Adapted to FastLED by Zach Vorhies 2024. 
+    For details on the AnimARTrix library and licensing information, see <a href="url">https://github.com/FastLED/FastLED/blob/master/src/fx/2d/animartrix_detail.hpp</a>
+    </div>
+
 
 <script src="script.js"></script>
 </body>

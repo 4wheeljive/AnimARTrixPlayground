@@ -241,6 +241,31 @@ void sendReceiptNumber(String receivedID, float receivedValue) {
 
 //***********************************************************************
 
+void updateUI() {
+
+   pauseAnimation = true;
+   sendReceiptButton(cFxIndex);  
+   sendReceiptNumber("inBright",cBright);
+   sendReceiptNumber("inColOrd",cColOrd);
+   sendReceiptNumber("inSpeed",cSpeed);
+   sendReceiptNumber("inZoom",cZoom);
+   sendReceiptNumber("inScale",cScale);
+   sendReceiptNumber("inAngle",cAngle);
+   sendReceiptNumber("inTwist",cTwist);
+   sendReceiptNumber("inRadius",cRadius);
+   sendReceiptNumber("inEdge",cEdge);
+   sendReceiptNumber("inZ",cZ);
+   sendReceiptNumber("inRatBase",cRatBase);
+   sendReceiptNumber("inRatDiff",cRatDiff);
+   sendReceiptNumber("inOffBase",cOffBase);
+   sendReceiptNumber("inOffDiff",cOffDiff);
+   sendReceiptNumber("inRed",cRed);
+   sendReceiptNumber("inGreen",cGreen);
+   sendReceiptNumber("inBlue",cBlue);
+   pauseAnimation = false;
+
+}
+
 void resetAll() {
 
    pauseAnimation = true;
@@ -341,6 +366,7 @@ void processButton(uint8_t receivedValue) {
    if (receivedValue == 79) { retrievePreset("Preset9",preset9); }
    if (receivedValue == 80) { retrievePreset("Preset10",preset10); }
 
+   if (receivedValue == 91) { updateUI(); }
    if (receivedValue == 95) { resetAll(); }
    
    if (receivedValue == 98) { displayOn = true; }

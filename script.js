@@ -7,7 +7,7 @@ const debounceDelay = 300;
 
 // Button controls ****************************************************** 
 
-const buttons = [ '1', '2', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '95', '98', '99' ] 
+const buttons = [ '1', '2', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '91', '95', '98', '99' ] 
 
 function processButton(buttonVal){
     if (buttonVal == 1) { 
@@ -40,51 +40,58 @@ checkboxes.forEach(name => {
     });
 });
 
-// Parameter slider controls ********************************************** 
+// Parameter controls ********************************************** 
 
 const parameters = [ 'Bright', 'Speed', 'ColOrd', 'Red', 'Green', 'Blue', 'Scale', 'Angle', 'Zoom', 'Twist', 'Radius', 'Edge', 'Z', 'RatBase', 'RatDiff', 'OffBase', 'OffDiff' ];
 
 const controls = {};  
 const controlsById = {};
 
-const debounce = (inputID, inputValue) => {
-    let timer;
-    return (inputID, inputValue) =>{
-        clearTimeout(timer);
-        timer = setTimeout(() => {
-            sendNumberCharacteristic(inputID, inputValue);
-        }, debounceDelay);
-    };
-};
-
 parameters.forEach(name => {
 
     const form = document.getElementById(`form${name}`);
     const input = document.getElementById(`in${name}`);
-    //const slider = document.getElementById(`slider${name}`);
-    const value = document.getElementById(`val${name}`);
+    const slider = document.getElementById(`slider${name}`);
+    //const value = document.getElementById(`val${name}`);
     const reset = document.getElementById(`rst${name}`);
+   
     controlsById[input.id] = { input, value };
-
-    controls[name] = { form, input, value, reset };
-
-    const debounced = debounce(input.id, input.value);
-    controls[name].debounced = debounced;
+    controls[name] = { form, input, slider, reset }; // value,
     
-    form.addEventListener('input', () => {
-        value.innerHTML = input.value;
-        debounced(input.id, input.value);
+    let timer;
+
+    // When the user types a number (immediate send)
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const val = input.value;
+            slider.value = val;
+            sendNumberCharacteristic(input.id, val);
+        }
     });
 
+    // When the user moves the slider (debounced send)
+    slider.addEventListener('input', () => {
+        const val = slider.value;
+        input.value = val;
+
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            sendNumberCharacteristic(input.id, val);
+        }, debounceDelay);
+    });
+    
     if (reset) {
         reset.addEventListener('click', (event) => {
             event.preventDefault();
-            sendNumberCharacteristic(input.id, input.defaultValue);
-            form.reset();
-            value.innerHTML = input.defaultValue;
+            const defVal = input.defaultValue;
+            input.value = defVal;
+            slider.value = defVal;
+            sendNumberCharacteristic(input.id, defVal);
         });
     }
 });
+
 
 // BLE *******************************************************************************
 
@@ -94,7 +101,6 @@ var bleService =                '19b10000-e8f2-537e-4f6c-d104768a1214';
 var ButtonCharacteristic =      '19b10001-e8f2-537e-4f6c-d104768a1214';
 var CheckboxCharacteristic =    '19b10002-e8f2-537e-4f6c-d104768a1214';
 var NumberCharacteristic =      '19b10003-e8f2-537e-4f6c-d104768a1214';
-//var PresetCharacteristic =      '19b10004-e8f2-537e-4f6c-d104768a1214';
 
 //Declare Global Variables to Handle Bluetooth
 var bleDevice;
@@ -177,7 +183,7 @@ function applyReceivedNumber(receivedDoc) {
     return;
   }
   ctrl.input.value     	 = receivedDoc.val;
-  ctrl.value.innerHTML   = receivedDoc.val;
+  //ctrl.value.innerHTML   = receivedDoc.val;
 
 }
 
@@ -244,7 +250,10 @@ function connectToDevice(){
                 characteristic.addEventListener('characteristicvaluechanged', handleNumberCharacteristicChange);
                 characteristic.startNotifications();				
                 })      
+  
+  
     })
+
 }
 
 // DISCONNECT FUNCTIONS ************************************************************

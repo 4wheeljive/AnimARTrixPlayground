@@ -40,7 +40,7 @@ button {
     text-align: center;
     display: grid;
     grid-template-columns: 2fr 3fr 1fr ;
-    grid-template-rows: 1fr 3fr 1fr 1fr ;
+    grid-template-rows: .75fr 2.5fr 1.5fr .3fr ;
 }
 .section1 { /*connection*/
     padding: 5px;
@@ -96,21 +96,20 @@ DIV.table {
     table-layout: fixed;
     width: 100%;
 }
-FORM.tr, DIV.tr
-{
+FORM.tr, DIV.tr {
     display:table-row;
-    padding: 5px;
+    padding: 2px;
 }
-SPAN.td
-{
+SPAN.td {
     display:table-cell; 
+    padding: 2px;
 }
 input[type=range] {
-  width: 75%;
+  width: 100%;
 }
 .card {
     background-color: rgb(36, 36, 36);
-    padding: 10px;
+    padding: 5px;
 }
 .onButton{
     background-color: #a7a7a7;
