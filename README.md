@@ -5,10 +5,12 @@ https://github.com/FastLED/FastLED/tree/master/examples/Animartrix
 
 This is all very rough, experimental, etc.
 
-Following are links to a couple of low-tech demos:
-- This one shows some of the different animation modes and roughly demonstrates the major adjustment factors:
+Following are links to several low-tech demo videos:
+- Quick demo of functionality as of 250723:
+  https://youtu.be/wpcCtugdXd4
+- Very early-stage demo showing some of the different animation modes and roughly demonstrating the major adjustment factors:
   https://youtu.be/bHqvAAaftNA
-- This one shows more deliberate fine-tuning of a particular animation (particularly after around 3:30):  
+- Very early-stage demo showing more deliberate fine-tuning of a particular animation (particularly after around 3:30):  
   https://youtu.be/l7NDfyx3RAU
 
 BASIC FRAMEWORK:
