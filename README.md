@@ -76,9 +76,9 @@ USES
 
 TODO
 
-- Get UI to reflect current controller parameters on BLE reconnect :: In progress
+- Get UI to reflect current controller parameters on BLE reconnect :: DONE
 
-- Provide for more precise inputs (sliders are great for exploration, but not refinement!)
+- Provide for more precise inputs (sliders are great for exploration, but not refinement!) DONE
 
 - Add Layer toggles to presets
 
@@ -87,7 +87,7 @@ TODO
   - values (ranges/steps/etc.)
   - control (e.g., add oscilation?)
 
-- UI feedback/indication of which parameters do/do not affect the current animation
+- UI feedback/indication of which parameters do/do not affect the current animation DONE
 
 - Identify/constrain parameter triggers that do nothing other than reset animation positions
 

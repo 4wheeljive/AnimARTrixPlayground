@@ -2,7 +2,7 @@
 const latestValueSent = document.getElementById('valueSent');
 const bleStateContainer = document.getElementById('bleState');
 const valAnim = document.getElementById('valAnim');
-const debounceDelay = 300;
+
 
 
 // Button controls ****************************************************** 
@@ -57,10 +57,11 @@ parameters.forEach(name => {
     const slider = document.getElementById(`slider${name}`);
     const reset = document.getElementById(`rst${name}`);
    
-    controlsById[input.id] = { input };     
+    controlsById[input.id] = { input, slider };     
     controls[name] = { form, input, slider, reset };
     
     let timer;  
+    const debounceDelay = 300;
 
     // When the user types a number (immediate send)
     input.addEventListener('keydown', (e) => {
@@ -105,7 +106,7 @@ let parameterUsed = [
 [true, true, true, false, true, true, true, true, true, false, false],
 [true, true, true, false, false, false, true, true, true, false, false],
 [true, true, true, false, false, false, true, true, true, false, false],
-[true, true, true, true, true, true, true, true, true, true, true],
+[true, true, true, false, true, true, true, true, true, true, true],
 [true, true, true, false, true, true, true, true, true, true, true]
 ];
 
@@ -115,7 +116,7 @@ function updateParametersUsed() {
 
     forms.forEach(form => {
         const index = parseInt(form.getAttribute('data-index'));
-        const isUsed = parameterUsed[fxIndex]?.[index]; // Optional chaining to avoid errors
+        const isUsed = parameterUsed[fxIndex]?.[index];
         if (typeof isUsed !== 'undefined') {
             form.setAttribute('data-used', isUsed ? 'true' : 'false');
         }
@@ -214,6 +215,7 @@ function applyReceivedNumber(receivedDoc) {
     return;
   }
   ctrl.input.value     	 = receivedDoc.val;
+  ctrl.slider.value      = receivedDoc.val;
 }
 
 //function applyReceivedControl(receivedDoc) {}
