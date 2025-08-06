@@ -138,6 +138,12 @@ struct modulators {
     float noise_angle[num_oscillators]; // returns 0 to 2*PI
 };
 
+struct filters {
+  // ripple
+  // shimmer
+  // blur??
+};
+
 struct rgb {
     float red, green, blue;
 };
@@ -186,6 +192,7 @@ class ANIMartRIX {
     oscillators timings;         // all speed settings in one place
     modulators move; // all oscillator based movers and shifters at one place
     rgb pixel;
+    filters filter;
 
     fl::HeapVector<fl::HeapVector<float>>
         polar_theta; // look-up table for polar angles
@@ -808,11 +815,11 @@ class ANIMartRIX {
         for (int x = 0; x < num_x; x++) {
             for (int y = 0; y < num_y; y++) {
 
+                animation.dist = distance[x][y] / 4 * cZoom;
                 animation.angle =
                     3 * polar_theta[x][y] * cAngle
                     + move.radial[0] 
-                    - distance[x][y] * Twister;
-                animation.dist = distance[x][y] / 4 * cZoom;
+                    - distance[x][y]; // * Twister;
                 animation.scale_z = .1;
                 animation.scale_y = .1 * cScale;
                 animation.scale_x = .1 * cScale;
@@ -870,13 +877,17 @@ class ANIMartRIX {
 
         calculate_oscillators(timings);
 
+        float Twister = cAngle * move.directional[0] / 10;
+
         for (int x = 0; x < num_x; x++) {
             for (int y = 0; y < num_y; y++) {
 
                 animation.dist = distance[x][y] * cZoom;
                 animation.angle = 
-                    16 * polar_theta[x][y] * cAngle 
-                    + 16 * move.radial[0];
+                    4 * polar_theta[x][y] * cAngle 
+                    + 16 * move.radial[0]
+                    - distance[x][y] * Twister * move.noise_angle[5] 
+                    + move.directional[3]; 
                 animation.z = 5 * cZ;
                 animation.scale_x = 0.06 * cScale;
                 animation.scale_y = 0.06 * cScale;

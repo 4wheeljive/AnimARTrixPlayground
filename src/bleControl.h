@@ -339,30 +339,6 @@ void resetAll() {
 
 }
 
-
-/*
-void sendParametersUsed(){
-
-   for (uint8_t i = 0; i < 10; i++) {
-       parameterArray.add(parameterUsed[cFxIndex][i]);
-   }
-   
-   String jsonString;
-   serializeJson(jsonDocParameters, jsonString);
-
-   // Set the value of the characteristic
-   pControlCharacteristic->setValue(jsonString);
-   
-   // Notify connected clients
-   pControlCharacteristic->notify();
-   
-   if (debug) {
-      Serial.print("Parameters sent ");
-      Serial.println(parameterArray);
-   }
-}
-*/
-
 // Handle UI request functions ***********************************************
 
 void processButton(uint8_t receivedValue) {

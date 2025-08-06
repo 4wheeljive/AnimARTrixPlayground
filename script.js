@@ -98,16 +98,20 @@ parameters.forEach(name => {
 // Function to indicate parameters used ****************************** 
 
 let parameterUsed = [
-[true, true, true, true, true, true, true, true, true, false, false],
-[true, true, true, true, false, false, true, true, true, true, true],
-[true, true, true, false, false, false, true, true, true, true, true],
-[true, true, true, false, false, false, true, true, true, true, true],
-[true, true, true, true, true, true, false, true, true, true, true],
-[true, true, true, false, true, true, true, true, true, false, false],
-[true, true, true, false, false, false, true, true, true, false, false],
-[true, true, true, false, false, false, true, true, true, false, false],
-[true, true, true, false, true, true, true, true, true, true, true],
-[true, true, true, false, true, true, true, true, true, true, true]
+
+/*
+{Zoom, Scale, Angle, Twist, Radius, Edge, Z, RatBase, RatDiff, OffBase, OffDiff]    
+*/
+[true, true, true, true, true, true, true, true, true, false, false], //  POLAR_WAVES
+[true, true, true, true, false, false, true, true, true, true, true], //  SPIRALUS
+[true, true, true, false, false, false, true, true, true, true, true], //  CALEIDO1
+[true, true, true, false, false, false, true, true, true, true, true], //  WAVES
+[true, true, true, true, true, true, false, true, true, true, true], //  CHASING_SPIRALS
+[true, true, true, true, true, true, true, true, true, false, false], //  COMPLEX_KALEIDO_6
+[true, true, true, false, false, false, true, true, true, false, false], //  WATER
+[true, true, true, false, false, false, true, true, true, false, false], //  EXPERIMENT10
+[true, true, true, false, true, true, true, true, true, true, true], //  EXPERIMENT_SM1
+[true, true, true, false, true, true, true, true, true, true, true], //  TEST
 ];
 
 function updateParametersUsed() {
