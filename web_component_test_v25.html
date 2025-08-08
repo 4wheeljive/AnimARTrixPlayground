@@ -1,3 +1,10 @@
+<!-- 
+TODO:
+- refactor/enable parameters used highlighting
+- refactor/enable refreshUI function
+- fix spacing of preset labels/buttons
+-->
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,189 +14,350 @@
     <style>
         body {
             font-family: sans-serif;
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #000;
+            background-color: #000000;
             color: #bebebe;
         }
-
         h1 {
             color: white;
             text-align: center;
+            font-size: 1.5em;
         }
-
         .section {
-            border: 2px solid #4a9eff;
-            background-color: rgba(74, 158, 255, 0.1);
+            border: 1px solid #696969;
+            background-color: #000000;
             padding: 20px;
-            margin: 20px 0;
+            margin: 5px 0;  
             border-radius: 8px;
         }
-
         .label {
-            color: #4a9eff;
-            font-weight: bold;
+            color: white;
             margin-bottom: 10px;
-            font-size: 1.1em;
+            font-size: 1em;
         }
-
         ble-connection-panel {
             display: block;
             margin-bottom: 20px;
         }
-
         animation-selector {
             display: block;
         }
-
         layer-controls {
             display: block;
         }
-
+        preset-controls {
+            display: block;
+        }
         .status {
-            margin-top: 20px;
+            margin-top: 5px;
             padding: 10px;
             background-color: #333;
             border-radius: 4px;
             font-family: monospace;
             font-size: 0.9em;
         }
+        .maingrid {
+            display: grid;
+            grid-template-columns: 1fr 1fr ;
+            grid-template-rows: .75fr 2.5fr .5fr .5fr;
+            font-size: .9em;
+        }
+        .section.section1 { /*connection/display*/
+            padding: 5px;
+            text-align: center;
+            grid-column-start: 1;
+            grid-column-end: 2;
+            grid-row-start: 1;
+            grid-row-end: 2;  
+        }
+        .section.section2 { /*animation*/
+            padding: 5px;
+            grid-column-start: 2;
+            grid-column-end: 3;
+            grid-row-start: 1;
+            grid-row-end: 2; 
+        }
+        .section.section3 { /*brightness/color/layers*/
+            padding: 5px;
+            grid-column-start: 1;
+            grid-column-end: 2;
+            grid-row-start: 2;
+            grid-row-end: 3; 
+        }
+        .section.section4 { /*pattern control*/
+            padding: 5px;
+            grid-column-start: 2;
+            grid-column-end: 3;
+            grid-row-start: 2;
+            grid-row-end: 3; 
+        }
+        .section.section5 { /*presets*/
+            padding: 5px;
+            grid-column-start: 2;
+            grid-column-end: 3;
+            grid-row-start: 3;
+            grid-row-end: 4; 
+        }
+        .section.section6 { /*unused*/
+            padding: 5px;
+            grid-column-start: 1;
+            grid-column-end: 2;
+            grid-row-start: 3;
+            grid-row-end: 4; 
+        }
+        .credits {
+            text-align: center;
+            margin-top: 10px;
+            color: #aaaaaa;
+            font-size: .8rem;
+            padding: 5px;
+            grid-column-start: 1;
+            grid-column-end: 3;
+            grid-row-start: 4;
+            grid-row-end: 5; 
+        }
     </style>
 </head>
-
+<!-- *********************************************************************************** -->
 <body>
+   
     <h1>AnimARTrix Playground</h1>
 
-    <!-- Connection Panel Component -->
-    <ble-connection-panel device-name="AnimARTrix Playground"></ble-connection-panel>
+    <div class="maingrid">
 
-    <!-- Animation Selector Component -->
-    <div class="section">
-        <div class="label">Animation Selection:</div>
-        <animation-selector current="0"></animation-selector>
-    </div>
+        <!-- Connection Panel Component -->
+        <div class="section section1">
+            <ble-connection-panel device-name="AnimARTrix Playground"></ble-connection-panel>
+            <div class="label">Display: 
+                <control-button 
+                    label="On" 
+                    data-my-number="98">
+                </control-button>
+                <control-button 
+                    label="Off" 
+                    data-my-number="99">
+                </control-button>
+                <control-button 
+                    label="Refresh UI" 
+                    data-my-number="91">
+                </control-button>
+            </div>
+        </div> 
 
-    <!-- Display Controls -->
-    <div class="section">
-        <div class="label">Display: 
+        <!-- Animation Selector Component -->
+        <div class="section section2">
+            <!--<div class="label">Animation Selection:</div>-->
+            <animation-selector current="0"></animation-selector>
+        </div>
 
-            <control-button 
-                label="On" 
-                data-my-number="98">
-            </control-button>
+        <!-- Display Controls -->
+        <div class="section section3">
+            <parameter-slider 
+                label="Brightness" 
+                parameter-id="inBright"
+                min="25" 
+                max="150" 
+                step="5" 
+                default-value="75"
+                data-used="true">
+            </parameter-slider>
+            <parameter-slider 
+                label="Color Order" 
+                parameter-id="inColOrd"
+                min="0" 
+                max="5" 
+                step="1" 
+                default-value="0"
+                data-used="true">
+            </parameter-slider>
+            <parameter-slider 
+                label="Red" 
+                parameter-id="inRed"
+                min=".1" 
+                max="3" 
+                step=".1" 
+                default-value="1"
+                data-used="true">
+            </parameter-slider>
+            <parameter-slider 
+                label="Green" 
+                parameter-id="inGreen"
+                min=".1" 
+                max="3" 
+                step=".1" 
+                default-value="1"
+                data-used="true">
+            </parameter-slider>
+                    <parameter-slider 
+                label="Blue" 
+                parameter-id="inBlue"
+                min=".1" 
+                max="3" 
+                step=".1" 
+                default-value="1"
+                data-used="true">
+            </parameter-slider>
 
-            <control-button 
-                label="Off" 
-                data-my-number="99">
-            </control-button>
+            <!-- Layer Controls -->
+            <layer-controls></layer-controls>
 
-            <control-button 
-                label="Refresh UI" 
-                data-my-number="91">
-            </control-button>
+
+            <!-- Status Display -->
+            <div class="status" >
+                <div><strong>Last BLE Message Sent:</strong> <span id="lastMessage">None</span></div>
+                <div><strong>Component Events:</strong></div>
+                <div id="eventLog" style="max-height: 225px; overflow-y: auto;"></div>
+            </div>
 
         </div>
 
-        <parameter-slider 
-            label="Brightness" 
-            parameter-id="inBright"
-            min="25" 
-            max="150" 
-            step="5" 
-            default-value="75">
-        </parameter-slider>
+        <!-- Pattern Control Parameters -->
+        <div class="section section4">
 
-        <parameter-slider 
-            label="Color Order" 
-            parameter-id="inColOrd"
-            min="0" 
-            max="5" 
-            step="1" 
-            default-value="0">
-        </parameter-slider>
-        
-    </div>
+            <parameter-slider 
+                label="Speed" 
+                parameter-id="inSpeed"
+                min="0.1" 
+                max="3" 
+                step="0.1" 
+                default-value="1"
+                data-used="true">
+            </parameter-slider>
+            <parameter-slider 
+                label="Zoom" 
+                parameter-id="inZoom"
+                min="0.1" 
+                max="3" 
+                step="0.1" 
+                default-value="1"
+                data-index="0"
+                data-used="true">
+            </parameter-slider>
+            <parameter-slider 
+                label="Scale" 
+                parameter-id="inScale"
+                min="0.1" 
+                max="3" 
+                step="0.1" 
+                default-value="1"
+                data-index="1"
+                data-used="true">
+            </parameter-slider>
+            <parameter-slider 
+                label="Angle" 
+                parameter-id="inAngle"
+                min="0.1" 
+                max="3" 
+                step="0.1" 
+                default-value="1"
+                data-index="2"
+                data-used="true">
+            </parameter-slider>
+            <parameter-slider 
+                label="Twist" 
+                parameter-id="inTwist"
+                min="-3" 
+                max="3" 
+                step="0.1" 
+                default-value="1"
+                data-index="3"
+                data-used="true">
+            </parameter-slider>
+            <parameter-slider 
+                label="Radius" 
+                parameter-id="inRadius"
+                min="0.1" 
+                max="2" 
+                step="0.1" 
+                default-value="4"
+                data-used="true">
+            </parameter-slider>
+            <parameter-slider 
+                label="Edge" 
+                parameter-id="inEdge"
+                min="0.1" 
+                max="5" 
+                step="0.1" 
+                default-value="1"
+                data-index="5"
+                data-used="true">
+            </parameter-slider>
+            <parameter-slider 
+                label="Z" 
+                parameter-id="inZ"
+                min="0.1" 
+                max="10" 
+                step="0.1" 
+                default-value="1"
+                data-index="6"
+                data-used="true">
+            </parameter-slider>
+            <parameter-slider 
+                label="RatBase" 
+                parameter-id="inRatBase"
+                min="-.25" 
+                max=".5" 
+                step="0.01" 
+                default-value="0"
+                data-index="7"
+                data-used="true">
+            </parameter-slider>
+            <parameter-slider 
+                label="RatDiff" 
+                parameter-id="inRatDiff"
+                min="0.1" 
+                max="5" 
+                step="0.1" 
+                default-value="1"
+                data-index="8"
+                data-used="true">
+            </parameter-slider>
+            <parameter-slider 
+                label="OffBase" 
+                parameter-id="inOffBase"
+                min="0.1" 
+                max="5" 
+                step="0.1" 
+                default-value="9"
+                data-used="true">
+            </parameter-slider>
+            <parameter-slider 
+                label="OffDiff" 
+                parameter-id="inOffDiff"
+                min="0.1" 
+                max="5" 
+                step="0.1" 
+                default-value="1"
+                data-index="10"
+                data-used="true">
+            </parameter-slider>
 
-    <!-- Pattern Control Parameters -->
-    <div class="section">
-        <div class="label">Pattern Control Parameters:
-
-            <control-button 
-                label="Reset All" 
-                data-my-number="95">
-            </control-button>
+            <span style="display: flex; justify-content: flex-end;">
+                <control-button 
+                    label="Reset All" 
+                    data-my-number="95">
+                </control-button>
+            </span>
 
         </div>
-        
-        <parameter-slider 
-            label="Speed" 
-            parameter-id="inSpeed"
-            min="0.1" 
-            max="3" 
-            step="0.1" 
-            default-value="1">
-        </parameter-slider>
 
-        <parameter-slider 
-            label="Angle" 
-            parameter-id="inAngle"
-            min="0.1" 
-            max="3" 
-            step="0.1" 
-            default-value="1">
-        </parameter-slider>
+        <!-- Presets -->
+        <div class="section section5">
+            <preset-controls></preset-controls>
+        </div>
 
-        <parameter-slider 
-            label="Scale" 
-            parameter-id="inScale"
-            min="0.1" 
-            max="3" 
-            step="0.1" 
-            default-value="1">
-        </parameter-slider>
-
-        <parameter-slider 
-            label="Zoom" 
-            parameter-id="inZoom"
-            min="0.1" 
-            max="3" 
-            step="0.1" 
-            default-value="1">
-        </parameter-slider>
-
-        <parameter-slider 
-            label="Twist" 
-            parameter-id="inTwist"
-            min="-3" 
-            max="3" 
-            step="0.1" 
-            default-value="1">
-        </parameter-slider>
-
-        <parameter-slider 
-            label="Radius" 
-            parameter-id="inRadius"
-            min="0.1" 
-            max="2" 
-            step="0.1" 
-            default-value="1">
-        </parameter-slider>
-
+        <div class="credits">My personal learning playground for working with FastLED Adapter for the AnimARTrix fx library.
+        Copyright Stefan Petrick 2023. <br>
+        Adapted to C++ by Netmindz 2023. Adapted to FastLED by Zach Vorhies 2024. 
+        For details on the AnimARTrix library and <br>
+        licensing information, see <a href="url" style="color:#787c9e">https://github.com/FastLED/FastLED/blob/master/src/fx/2d/animartrix_detail.hpp</a>
+        </div>
+    
     </div>
 
-    <!-- Layer Controls -->
-    <div class="section">
-        <div class="label">Layer Controls:</div>
-        <layer-controls></layer-controls>
-    </div>
-
-    <!-- Status Display -->
-    <div class="status">
-        <div><strong>Last BLE Message Sent:</strong> <span id="lastMessage">None</span></div>
-        <div><strong>Component Events:</strong></div>
-        <div id="eventLog" style="max-height: 200px; overflow-y: auto;"></div>
-    </div>
+    <!-- ***************************************************************************************************************** -->
 
     <script>
         
@@ -211,7 +379,8 @@
         let deviceConnected = false;
         let lastValueSent = '';
 
-        // Utility functions
+        // UTILITY FUNCTIONS ************************************
+
         function str2ab(str) {
             var buf = new ArrayBuffer(str.length*2);
             var bufView = new Uint8Array(buf);
@@ -239,7 +408,7 @@
             return true;
         }
 
-        // Connect to BLE Device - Enhanced to get all characteristics
+        // Connect to BLE Device
         function connectToDevice() {
             if (!isWebBluetoothEnabled()) {
                 return;
@@ -294,14 +463,14 @@
                 
                 deviceConnected = true;
                 logEvent("✅ BLE Connected with all characteristics ready!");
-                updateBLEStatus('Connected and ready!', '#24af37');
+                updateBLEStatus(`Connected and ready!`, '#24af37');
             })
             .catch(error => {
                 console.log('Something went wrong. ' + error);
                 logEvent(`❌ Connection failed: ${error.message}`);
                 updateBLEStatus(`Connection failed: ${error.message}`, '#d13a30');
             });
-        }
+        } // connectToDevice
 
         function onDisconnected(event) {
             console.log('Device Disconnected:', event.target.device.name);
@@ -330,6 +499,7 @@
             const changeReceived = new TextDecoder().decode(event.target.value);
             console.log("Button receipt:", changeReceived);
             logEvent(`Button confirmed: ${changeReceived}`);
+            applyReceivedButton(changeReceived);
         }
 
         function handleCheckboxCharacteristicChange(event) {
@@ -344,9 +514,11 @@
             const receivedDoc = JSON.parse(changeReceived);
             console.log("Number receipt:", receivedDoc.id, "-", receivedDoc.val);
             logEvent(`Number confirmed: ${receivedDoc.id} = ${receivedDoc.val}`);
+            //applyReceivedNumber(receivedDoc);
         }
 
-        // BLE SEND FUNCTIONS - GLOBAL SCOPE
+        // BLE SEND FUNCTIONS ***********************************************
+        
         window.sendButtonCharacteristic = function(buttonValue) {
             if (!deviceConnected || !buttonCharacteristicFound) {
                 console.error("Bluetooth is not connected. Cannot write to button characteristic.");
@@ -368,6 +540,8 @@
                     logEvent(`❌ Button send failed: ${error.message}`);
                 });
         };
+
+        // ****************************************************
 
         window.sendCheckboxCharacteristic = function(checkboxId, value) {
             if (!deviceConnected || !checkboxCharacteristicFound) {
@@ -396,6 +570,8 @@
                 });
         };
 
+        // ****************************************************
+
         window.sendNumberCharacteristic = function(inputID, inputValue) {
             if (!deviceConnected || !numberCharacteristicFound) {
                 console.error("Bluetooth is not connected. Cannot write to number characteristic.");
@@ -423,6 +599,8 @@
                 });
         };
 
+        // ****************************************************
+
         // Update the global BLE status display
         window.updateBLEStatus = function(status, color) {
             console.log('updateBLEStatus called:', status, color);
@@ -441,10 +619,82 @@
         };
 
         logEvent('Page loaded - ready for testing');
+
+        // ****************************************************
+
+        // FUNCTIONS TO APPLY NOTIFICATIONS FROM PROGRAM ***************************************
+
+        function applyReceivedButton(changeReceived){
+        
+            // Change in fxIndex due to preset load
+            if ( changeReceived < 20 ) {
+                const animationSelector = document.querySelector('animation-selector');
+                if (animationSelector) {
+                    // Use requestAnimationFrame to ensure DOM is ready
+                    requestAnimationFrame(() => {
+                        animationSelector.updateDisplayAnimation(changeReceived);
+                    });
+                }
+                updateParametersUsed();
+            }
+        }
+
+        //function applyReceivedCheckbox(receivedDoc) {}
+
+        /*
+        function applyReceivedNumber(receivedDoc) {
+        const ctrl = controlsById[receivedDoc.id];
+        if (!ctrl) {
+            console.warn('Unknown parameter id:', receivedDoc.id);
+            return;
+        }
+        ctrl.input.value     	 = receivedDoc.val;
+        ctrl.slider.value      = receivedDoc.val;
+        }
+        */
+
+
+        // Function to indicate parameters used ****************************** 
+        
+        let parameterUsed = [
+        //{Zoom, Scale, Angle, Twist, Radius, Edge, Z, RatBase, RatDiff, OffBase, OffDiff]    
+        [true, true, true, true, true, true, true, true, true, false, false], //  POLAR_WAVES
+        [true, true, true, true, false, false, true, true, true, true, true], //  SPIRALUS
+        [true, true, true, false, false, false, true, true, true, true, true], //  CALEIDO1
+        [true, true, true, false, false, false, true, true, true, true, true], //  WAVES
+        [true, true, true, true, true, true, false, true, true, true, true], //  CHASING_SPIRALS
+        [true, true, true, true, true, true, true, true, true, false, false], //  COMPLEX_KALEIDO_6
+        [true, true, true, false, false, false, true, true, true, false, false], //  WATER
+        [true, true, true, false, false, false, true, true, true, false, false], //  EXPERIMENT10
+        [true, true, true, false, true, true, true, true, true, true, true], //  EXPERIMENT_SM1
+        [true, true, true, false, true, true, true, true, true, true, true], //  TEST
+        ];
+
+        function updateParametersUsed() {
+            
+            const animationSelector = document.querySelector('animation-selector');
+            if (!animationSelector) return;
+
+            const fxIndex = animationSelector.currentAnimation;
+            console.log(`updateParametersUsed: fxIndex=${fxIndex}`);
+
+            const sliders = document.querySelectorAll('parameter-slider[data-index]');
+            sliders.forEach(slider => {
+                const index = parseInt(slider.getAttribute('data-index'));
+                const isUsed = parameterUsed[fxIndex]?.[index];
+                console.log(`Slider ${index}: isUsed=${isUsed}`);
+                if (typeof isUsed !== 'undefined') {
+                    slider.setAttribute('data-used', isUsed ? 'true' : 'false');
+                    slider.isUsed = isUsed;
+                    slider.render();
+                }
+            });
+        }
+
     </script>
 
-<!-- ********************************************************************************************************** -->
-    <!-- Web Component Definitions -->
+    <!-- ********************************************************************************************************** -->
+    <!-- WEB COMPONENT DEFINITIONS ******************************************************************************** -->
 
     <script>
     
@@ -462,17 +712,17 @@
                 logEvent('BLE Connection Panel initialized');
             }
 
-            render() {
+            render() {  
                 this.innerHTML = `
                     <div style="
                         background-color: rgb(36, 36, 36);
                         padding: 15px;
                         border-radius: 4px;
                         text-align: center;
-                        border: 2px solid #4a9eff;
+                        border: 1px solid #696969;
                     ">
                         <button class="connect-btn" style="
-                            background-color: #4a9eff;
+                            background-color: #7f7f7f;
                             color: white;
                             border: none;
                             border-radius: 4px;
@@ -482,7 +732,7 @@
                         ">Connect to ESP32</button>
                         
                         <button class="disconnect-btn" style="
-                            background-color: #7f7f7f;
+                            background-color: #2e2e2e;
                             color: white;
                             border: none;
                             border-radius: 4px;
@@ -492,7 +742,7 @@
                         ">Disconnect</button>
                         
                         <div style="margin-top: 10px; color: white;">
-                            Status: <span class="ble-status" style="color: #d13a30; font-weight: bold;">Disconnected</span>
+                            Status: <span class="ble-status" style="color: #d13a30; ">Disconnected</span>
                         </div>
                     </div>
                 `;
@@ -523,21 +773,16 @@
                     console.error('❌ BLE status element not found in component');
                 }
             }
-        }
+        } // BLEConnectionPanel
 
-
-
-
-        // ===== CONTROL BUTTON COMPONENT =====
+        // CONTROL BUTTON COMPONENT *******************************************
 
 		class ControlButton extends HTMLElement {
             constructor() {
                 super();
-                
                 // Get attributes
                 this.label = this.getAttribute('label') ;
                 this.buttonNumber = this.getAttribute('data-my-number');
-
             }
 
             connectedCallback() {
@@ -550,8 +795,7 @@
                 this.innerHTML = `
 			
 					<button class="con-button" style="
-						flex: 0 0 40px;
-						background-color: #4a9eff;
+						background-color: #7f7f7f;
 						color: white;
 						border: none;
 						border-radius: 4px;
@@ -566,7 +810,6 @@
                 const buttons = this.querySelectorAll('.con-button');
                 buttons.forEach(button => {
                     button.addEventListener('click', (e) => {
-                        //const buttonVal = parseInt(e.target.getAttribute('data-my-number'));
                         const buttonVal = parseInt(this.buttonNumber);
                         logEvent(`Button pressed: ${this.label} (button ${buttonVal})`);
                         this.processButton(buttonVal);
@@ -578,12 +821,12 @@
 
                 if (buttonVal > 20) { sendButtonCharacteristic(buttonVal); }
 
-                //if (buttonVal == 91) { updateParametersUsed(); }  // update parametersUsed when refreshing UI 
+                if (buttonVal == 91) { updateParametersUsed(); }  // update parametersUsed when refreshing UI 
 
             }
-        }
+        } // ControlButton
 
-        // ===== ANIMATION SELECTOR COMPONENT =====
+        // ANIMATION SELECTOR COMPONENT ***************************************************
        
         class AnimationSelector extends HTMLElement {
             constructor() {
@@ -604,24 +847,24 @@
             render() {
                 const buttonGrid = this.animations.map((name, index) => `
                     <button class="anim-btn" data-index="${index}" style="
-                        background-color: ${index === this.currentAnimation ? '#4a9eff' : '#7f7f7f'};
+                        background-color: ${index === this.currentAnimation ? '#7f7f7f' : '#2e2e2e'};
                         color: white;
                         border: none;
                         border-radius: 4px;
                         padding: 8px 12px;
                         margin: 4px;
                         cursor: pointer;
-                        font-size: 0.9em;
-                        min-width: 140px;
+                        font-size: 0.8em;
+                        min-width: 100px;
                     ">${name}</button>
                 `).join('');
 
                 this.innerHTML = `
                     <div style="
-                        background-color: rgb(36, 36, 36);
-                        padding: 15px;
+                        background-color: #000000;
+                        padding: 10px;
                         border-radius: 4px;
-                        border: 2px solid #4a9eff;
+                        border: none;
                     ">
                         <div style="
                             display: flex;
@@ -632,8 +875,8 @@
                         ">
                             ${buttonGrid}
                         </div>
-                        <div style="text-align: center; color: #4a9eff;">
-                            Current Animation: <span class="current-anim" style="color: white; font-weight: bold;">${this.currentAnimation}</span>
+                        <div style="text-align: center; color: #a0a0a0;">
+                            Current Animation: <span class="current-anim" style="color: white;">${this.currentAnimation}</span>
                         </div>
                     </div>
                 `;
@@ -645,33 +888,51 @@
                     button.addEventListener('click', (e) => {
                         const newIndex = parseInt(e.target.getAttribute('data-index'));
                         this.selectAnimation(newIndex);
+                        this.updateDisplayAnimation(newIndex);
                     });
                 });
             }
 
             selectAnimation(index) {
-                this.currentAnimation = index;
                 
-                // Update button styles
-                const buttons = this.querySelectorAll('.anim-btn');
-                buttons.forEach((button, i) => {
-                    button.style.backgroundColor = i === index ? '#4a9eff' : '#7f7f7f';
-                });
-
-                // Update current display
-                const currentDisplay = this.querySelector('.current-anim');
-                if (currentDisplay) {
-                    currentDisplay.textContent = index;
-                }
+                this.currentAnimation = index;
 
                 // Send BLE command (button value 21-30 maps to animations 0-9)
                 const buttonValue = 21 + index;
                 window.sendButtonCharacteristic(buttonValue);
                 logEvent(`Animation selected: ${this.animations[index]} (button ${buttonValue})`);
+              
             }
-        }
 
-        // ===== LAYER CONTROLS COMPONENT =====
+            updateDisplayAnimation(index) {
+                
+                // Convert to number to ensure proper comparison
+                const numIndex = parseInt(index);
+                this.currentAnimation = numIndex;
+                
+                // Update button styles
+                const buttons = this.querySelectorAll('.anim-btn');
+                console.log(`updateDisplayAnimation: index=${numIndex}, found ${buttons.length} buttons`);
+                buttons.forEach((button, i) => {
+                    const newColor = i === numIndex ? '#7f7f7f' : '#2e2e2e';
+                    button.style.backgroundColor = newColor;
+                    console.log(`Button ${i}: color set to ${newColor}`);
+                });
+
+                // Update current display
+                const currentDisplay = this.querySelector('.current-anim');
+                if (currentDisplay) {
+                    currentDisplay.textContent = numIndex;
+                }
+                
+                updateParametersUsed();
+            
+            }
+
+
+        } // AnimationSelector
+
+        // LAYER CONTROLS COMPONENT ***************************************************************
 
         class LayerControls extends HTMLElement {
             constructor() {
@@ -697,23 +958,23 @@
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        color: #4a9eff;
+                        color: #a0a0a0;
                         cursor: pointer;
                         margin: 0 10px;
                     ">
-                        <span style="margin-bottom: 5px; font-weight: bold;">Layer ${num}</span>
+                        <span style="margin-bottom: 5px; ">Layer ${num}</span>
                         <input type="checkbox" class="layer-checkbox" data-layer="layer${num}" 
                                ${this.layers[`layer${num}`] ? 'checked' : ''}
-                               style="transform: scale(1.3);">
+                               style="transform: scale(1.2);">
                     </label>
                 `).join('');
 
                 this.innerHTML = `
                     <div style="
                         background-color: rgb(36, 36, 36);
-                        padding: 15px;
+                        padding: 10px;
                         border-radius: 4px;
-                        border: 2px solid #4a9eff;
+                        border: ;
                     ">
                         <div style="
                             display: flex;
@@ -743,9 +1004,9 @@
                     });
                 });
             }
-        }
+        } // LayerControls
 
-        // ===== PARAMETER SLIDER COMPONENT =====
+        // PARAMETER SLIDER COMPONENT *************************************************************
 
         class ParameterSlider extends HTMLElement {
             constructor() {
@@ -757,12 +1018,16 @@
                 this.min = parseFloat(this.getAttribute('min')) || 0;
                 this.max = parseFloat(this.getAttribute('max')) || 100;
                 this.step = parseFloat(this.getAttribute('step')) || 1;
-                this.defaultValue = parseFloat(this.getAttribute('default-value')) || this.min;
-                
+                this.defaultValue = parseFloat(this.getAttribute('default-value'));
+                this.dataIndex = parseFloat(this.getAttribute('data-index'));
+                this.dataUsed = this.getAttribute('data-used');
+                                
                 // Internal state
                 this.currentValue = this.defaultValue;
                 this.debounceTimer = null;
                 this.isSending = false;
+                this.isUsed = Boolean(this.dataUsed === 'true');
+
             }
 
             connectedCallback() {
@@ -777,17 +1042,17 @@
                         display: flex;
                         align-items: center;
                         gap: 15px;
-                        padding: 10px;
+                        padding: 5px;
                         background-color: rgb(36, 36, 36);
                         border-radius: 4px;
-                        border: 1px solid ${this.isSending ? '#ffa500' : '#4a9eff'};
-                        margin-bottom: 5px;
+                        border: 1px solid ${this.isSending ? '#ffa500' : '#696969'};
+                        margin-bottom: 3px;
                         transition: border-color 0.3s ease;
                     ">
-                        <label style="
-                            flex: 0 0 120px;
-                            color: #4a9eff;
-                            font-weight: bold;
+                        <label style="  
+                            flex: 0 0 100px;
+                            color: ${this.isUsed ? '#d1d1d1' : '#3d3d3d'};
+
                         ">${this.label}:</label>
                         
                         <input type="range" 
@@ -811,7 +1076,7 @@
                                 flex: 0 0 80px;
                                 background-color: #2a2a2a;
                                 color: white;
-                                border: 1px solid #4a9eff;
+                                border: 1px solid #696969;
                                 border-radius: 3px;
                                 padding: 5px;
                                 text-align: center;
@@ -819,11 +1084,11 @@
                         
                         <button class="param-reset" style="
                             flex: 0 0 40px;
-                            background-color: #4a9eff;
+                            background-color: #1d1d1d;
                             color: white;
                             border: none;
                             border-radius: 4px;
-                            padding: 5px;
+                            padding: 4px;
                             cursor: pointer;
                         ">↻</button>
                     </div>
@@ -910,7 +1175,134 @@
             getValue() {
                 return this.currentValue;
             }
-        }
+        } // ParameterSlider
+
+        // PRESETS COMPONENT ********************************************************************************
+       
+        class Presets extends HTMLElement {
+            constructor() {
+                super();
+                this.presets = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+            }
+
+            connectedCallback() {
+                this.render();
+                this.attachEventListeners();
+                logEvent('Presets initialized');
+            }
+
+            render() {
+                const buttonGrid_presetsSave = this.presets.map((name, index) => `
+                    <button class="preset-save" data-index="${index}" style="
+                        background-color: #1d1d1d;
+                        color: white;
+                        border: none;
+                        border-radius: 4px;
+                        padding: 6px;
+                        margin: 4px;
+                        cursor: pointer;
+                        font-size: 1em;
+                        min-width: 15px;
+                    ">&#x2935</button>
+                `).join('');
+
+
+                const buttonGrid_presetsLoad = this.presets.map((name, index) => `
+                    <button class="preset-load" data-index="${index}" style="
+                        background-color: #1d1d1d;
+                        color: white;
+                        border: none;
+                        border-radius: 4px;
+                        padding: 6px;
+                        margin: 4px;
+                        cursor: pointer;
+                        font-size:1em;
+                        min-width: 15px;
+                    ">&#x2934</button>
+                `).join('');
+
+                this.innerHTML = `
+                    <div style="
+                        background-color: #000000;
+                        padding: 5px;
+                        border-radius: 4px;
+                        border: none;
+                    ">
+                      
+                        <div style="
+                            display: flex;
+                            justify-content: space-evenly;
+                            align-items: center;
+                            gap: 4px;
+                            margin-bottom: 0px;
+                        ">
+                            <span style="width: 45px;">Presets:</span>
+                            <div style="display: flex; justify-content: space-evenly; flex: 1; gap: 4px;">
+                                <span>1</span> <span>2</span> <span>3</span> <span>4</span> <span>5</span>
+                                <span>6</span> <span>7</span> <span>8</span> <span>9</span> <span>10</span>
+                            </div>
+                        </div>
+                    
+                        <div style="
+                            display: flex;  
+                            justify-content: space-evenly;
+                            align-items: center;
+                            gap: 4px;
+                            margin-bottom: 0px;
+                        ">
+                            <span style="width: 45px;">Save:</span>     
+                            ${buttonGrid_presetsSave}
+                        </div>
+                       
+                        <div style="
+                            display: flex;
+                            justify-content: space-evenly;
+                            align-items: center;
+                            gap: 4px;
+                            margin-bottom: 0px;
+                        ">
+                            <span style="width: 45px;">Load:</span>    
+                            ${buttonGrid_presetsLoad}
+                        </div>
+
+                    </div>
+                `;
+            }
+
+            attachEventListeners() {
+                const saveButtons = this.querySelectorAll('.preset-save');
+                saveButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const presetNumber = parseInt(e.target.getAttribute('data-index'));
+                        this.savePreset(presetNumber);
+                    });
+                });
+
+                const loadButtons = this.querySelectorAll('.preset-load');
+                loadButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const presetNumber = parseInt(e.target.getAttribute('data-index'));
+                        this.loadPreset(presetNumber);
+                    });
+                });
+            }
+
+            savePreset(presetNumber){
+                // Send BLE command (button value 51-60 maps to animations 1-10)
+                const buttonValue = 51 + presetNumber;
+                window.sendButtonCharacteristic(buttonValue);
+                logEvent(`Preset saved: ${presetNumber}`);
+            }
+
+            loadPreset(presetNumber){
+                // Send BLE command (button value 71-80 maps to animations 1-10)
+                const buttonValue = 71 + presetNumber;
+                window.sendButtonCharacteristic(buttonValue);
+                logEvent(`Preset loaded: ${presetNumber}`);
+            }
+        } // Presets
+
+        //**********************************************************************************************************
 
         // Register all custom elements
         customElements.define('ble-connection-panel', BLEConnectionPanel);
@@ -918,14 +1310,17 @@
         customElements.define('layer-controls', LayerControls);
         customElements.define('parameter-slider', ParameterSlider);
         customElements.define('control-button', ControlButton);
+        customElements.define('preset-controls', Presets);
 
         // Wait for all components to be ready
         function waitForComponents() {
             const requiredComponents = [
                 'ble-connection-panel',
                 'control-button',
-                'animation-selector', 
-                'layer-controls'
+                'animation-selector',
+                'parameter-slider', 
+                'layer-controls',
+                'preset-controls'
             ];
             
             const allReady = requiredComponents.every(tag => {
@@ -936,8 +1331,7 @@
             if (allReady) {
                 console.log('✅ All Web Components are ready');
                 logEvent('✅ All Web Components loaded and ready');
-                logEvent('🚀 Animation buttons and layer controls are now fully functional with REAL BLE!');
-            } else {
+               } else {
                 console.log('⚠️ Waiting for Web Components to initialize...');
                 setTimeout(waitForComponents, 100);
             }
@@ -945,6 +1339,7 @@
         
         // Start component readiness check
         setTimeout(waitForComponents, 100);
+    
     </script>
 
 </body>

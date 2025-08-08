@@ -347,7 +347,6 @@ void processButton(uint8_t receivedValue) {
       
    if (receivedValue > 20 && receivedValue < 41) { // Animation selection
       cFxIndex = receivedValue - 21;
-      //sendParametersUsed(); 
       displayOn = true;
    }
 
